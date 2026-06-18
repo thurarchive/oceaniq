@@ -38,7 +38,7 @@ export default function HeroSection() {
         </div>
 
         <h1 className="text-5xl md:text-7xl font-extrabold leading-tight tracking-tight mb-6">
-          <span className="text-foreground">Monitoring Indonesia&apos;s</span>
+          <span className="text-foreground">Monitoring Indonesia's</span>
           <br />
           <span className="text-gradient-ocean">Marine Waste</span>
           <br />

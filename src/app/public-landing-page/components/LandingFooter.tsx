@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import AppLogo from '@/components/ui/AppLogo';
+import AppImage from '@/components/ui/AppImage';
 import { Mail } from 'lucide-react';
 
 const footerLinks = {
@@ -31,7 +32,7 @@ export default function LandingFooter() {
           {/* Brand */}
           <div className="xl:col-span-2">
             <div className="flex items-center gap-2.5 mb-4">
-              <AppLogo size={28} />
+              <AppLogo size={32} />
               <span className="font-bold text-base tracking-tight text-gradient-ocean">Oceaniq</span>
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed mb-5 max-w-xs">
@@ -40,35 +41,25 @@ export default function LandingFooter() {
             </p>
             <div className="flex items-center gap-2">
               <a
-                href="https://github.com/oceaniq"
+                href="https://github.com/"
                 className="w-8 h-8 rounded-lg glass-card flex items-center justify-center text-muted-foreground hover:text-primary transition-colors"
-                aria-label="GitHub"
+                aria-label="Github"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
+                <AppImage
+                  src="/assets/images/github.svg"
+                  alt="GitHub"
+                  width={20}
+                  height={20}
                   className="h-5 w-5"
-                  viewBox="0 0 48 48"
-                >
-                  <path
-                    fill="#171515"
-                    d="M24 9.593c3.54 0 6.714 1.225 8.593 3.104L29 4l6 6z"
-                  />
-                  <path
-                    fill="#405D40"
-                    d="M14 12.592l6-6 6 6z"
-                  />
-                  <path
-                    fill="none"
-                    d="M0 0h48v48H0z"
-                  />
-                </svg>
+                  unoptimized
+                />
               </a>
               <a
                 href="mailto:john.doe@example.com"
                 className="w-8 h-8 rounded-lg glass-card flex items-center justify-center text-muted-foreground hover:text-primary transition-colors"
                 aria-label="Email"
               >
-                <Mail size={15} />
+                <Mail size={20} />
               </a>
             </div>
           </div>
