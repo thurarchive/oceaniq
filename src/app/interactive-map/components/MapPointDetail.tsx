@@ -52,11 +52,11 @@ export default function MapPointDetail({ point, onClose }: MapPointDetailProps) 
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-0.5">
             {point.type === 'ml' ? (
-              <Brain size={13} className="text-warning flex-shrink-0" />
+              <Brain size={13} className="text-warning shrink-0" />
             ) : point.type === 'citizen' ? (
-              <User size={13} className="text-accent flex-shrink-0" />
+              <User size={13} className="text-accent shrink-0" />
             ) : (
-              <CheckCircle size={13} className="text-positive flex-shrink-0" />
+              <CheckCircle size={13} className="text-positive shrink-0" />
             )}
             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
               {typeLabel[point.type]}
@@ -66,7 +66,7 @@ export default function MapPointDetail({ point, onClose }: MapPointDetailProps) 
         </div>
         <button
           onClick={onClose}
-          className="w-6 h-6 rounded flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-all ml-2 flex-shrink-0"
+          className="w-6 h-6 rounded flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-all ml-2 shrink-0"
         >
           <X size={14} />
         </button>
@@ -91,7 +91,7 @@ export default function MapPointDetail({ point, onClose }: MapPointDetailProps) 
       <div className="p-4 space-y-3">
         {/* Coordinates */}
         <div className="flex items-start gap-2.5">
-          <MapPin size={13} className="text-muted-foreground mt-0.5 flex-shrink-0" />
+          <MapPin size={13} className="text-muted-foreground mt-0.5 shrink-0" />
           <div>
             <p className="text-xs text-muted-foreground">Coordinates</p>
             <p className="font-mono text-xs text-foreground">{point.lat}°S, {point.lng}°E</p>
@@ -100,7 +100,7 @@ export default function MapPointDetail({ point, onClose }: MapPointDetailProps) 
 
         {/* Waste category */}
         <div className="flex items-start gap-2.5">
-          <Tag size={13} className="text-muted-foreground mt-0.5 flex-shrink-0" />
+          <Tag size={13} className="text-muted-foreground mt-0.5 shrink-0" />
           <div>
             <p className="text-xs text-muted-foreground">Waste Category</p>
             <p className="text-xs text-foreground font-medium">{point.wasteCategory}</p>
@@ -109,7 +109,7 @@ export default function MapPointDetail({ point, onClose }: MapPointDetailProps) 
 
         {/* Confidence */}
         <div className="flex items-start gap-2.5">
-          <Gauge size={13} className="text-muted-foreground mt-0.5 flex-shrink-0" />
+          <Gauge size={13} className="text-muted-foreground mt-0.5 shrink-0" />
           <div className="flex-1">
             <p className="text-xs text-muted-foreground mb-1">
               {point.type === 'ml' ? 'Model Confidence' : 'Data Reliability'}
@@ -130,7 +130,7 @@ export default function MapPointDetail({ point, onClose }: MapPointDetailProps) 
 
         {/* Source */}
         <div className="flex items-start gap-2.5">
-          <Layers size={13} className="text-muted-foreground mt-0.5 flex-shrink-0" />
+          <Layers size={13} className="text-muted-foreground mt-0.5 shrink-0" />
           <div>
             <p className="text-xs text-muted-foreground">Data Source</p>
             <p className="text-xs text-foreground">{point.source}</p>
@@ -139,7 +139,7 @@ export default function MapPointDetail({ point, onClose }: MapPointDetailProps) 
 
         {/* Timestamp */}
         <div className="flex items-start gap-2.5">
-          <Clock size={13} className="text-muted-foreground mt-0.5 flex-shrink-0" />
+          <Clock size={13} className="text-muted-foreground mt-0.5 shrink-0" />
           <div>
             <p className="text-xs text-muted-foreground">Recorded</p>
             <p className="font-mono text-xs text-foreground">{formattedDate} {formattedTime}</p>
@@ -165,7 +165,7 @@ export default function MapPointDetail({ point, onClose }: MapPointDetailProps) 
 
         {point.type === 'ml' && (
           <div className="bg-warning/8 border border-warning/20 rounded-lg p-2.5 flex items-start gap-2">
-            <AlertCircle size={12} className="text-warning mt-0.5 flex-shrink-0" />
+            <AlertCircle size={12} className="text-warning mt-0.5 shrink-0" />
             <p className="text-xs text-warning/90">
               This is a model estimate, not a measured observation. See methodology for details.
             </p>

@@ -7,17 +7,17 @@ export default function MapLegend() {
       <p className="text-xs font-semibold text-foreground uppercase tracking-wider mb-2.5">Legend</p>
       <div className="space-y-2 mb-3">
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-positive border border-white/20 flex-shrink-0" />
+          <div className="w-3 h-3 rounded-full bg-positive border border-white/20 shrink-0" />
           <CheckCircle size={11} className="text-positive" />
           <span className="text-xs text-muted-foreground">Verified Observation</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-accent border border-white/20 flex-shrink-0" />
+          <div className="w-3 h-3 rounded-full bg-accent border border-white/20 shrink-0" />
           <Users size={11} className="text-accent" />
           <span className="text-xs text-muted-foreground">Citizen Report</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-warning border border-white/20 flex-shrink-0" />
+          <div className="w-3 h-3 rounded-full bg-warning border border-white/20 shrink-0" />
           <Brain size={11} className="text-warning" />
           <span className="text-xs text-muted-foreground">ML Estimate</span>
         </div>
@@ -32,7 +32,7 @@ export default function MapLegend() {
             { label: 'Low', color: 'bg-positive', size: 'w-2.5 h-2.5' },
           ]?.map((item) => (
             <div key={`legend-intensity-${item?.label}`} className="flex items-center gap-2">
-              <div className={`${item?.size} rounded-full ${item?.color} border border-white/20 flex-shrink-0`} />
+              <div className={`${item?.size} rounded-full ${item?.color} border border-white/20 shrink-0`} />
               <span className="text-xs text-muted-foreground">{item?.label}</span>
             </div>
           ))}

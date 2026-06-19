@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from 'next';
 import { Plus_Jakarta_Sans, IBM_Plex_Mono } from 'next/font/google';
 import { Toaster } from 'sonner';
 import '../styles/tailwind.css';
+import "maplibre-gl/dist/maplibre-gl.css";
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],

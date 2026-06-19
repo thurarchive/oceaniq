@@ -71,7 +71,7 @@ export default function MapFilterSidebar() {
       {open && (
         <div className="absolute top-0 right-0 bottom-0 w-72 glass-card-elevated border-l border-border z-10 flex flex-col overflow-hidden">
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-border flex-shrink-0">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-border shrink-0">
             <div className="flex items-center gap-2">
               <SlidersHorizontal size={14} className="text-primary" />
               <span className="text-sm font-semibold text-foreground">Map Filters</span>
@@ -191,7 +191,7 @@ export default function MapFilterSidebar() {
           </div>
 
           {/* Apply footer */}
-          <div className="border-t border-border p-4 flex-shrink-0">
+          <div className="border-t border-border p-4 shrink-0">
             <button
               onClick={() => setOpen(false)}
               className="btn-primary w-full text-sm"

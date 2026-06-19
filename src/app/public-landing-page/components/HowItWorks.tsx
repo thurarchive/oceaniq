@@ -74,13 +74,13 @@ export default function HowItWorks() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 relative">
           {/* Connector line on xl */}
-          <div className="hidden xl:block absolute top-10 left-[12.5%] right-[12.5%] h-px bg-gradient-to-r from-primary/20 via-accent/20 to-positive/20" />
+          <div className="hidden xl:block absolute top-10 left-[12.5%] right-[12.5%] h-px bg-linear-to-r from-primary/20 via-accent/20 to-positive/20" />
 
           {steps?.map((step, index) => (
             <div key={step?.id} className="relative">
               <div className={`glass-card-elevated border ${step?.borderColor} p-6 rounded-xl h-full`}>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className={`${step?.bgColor} ${step?.color} w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 relative z-10`}>
+                  <div className={`${step?.bgColor} ${step?.color} w-10 h-10 rounded-xl flex items-center justify-center shrink-0 relative z-10`}>
                     {step?.icon}
                   </div>
                   <span className="font-mono text-2xl font-bold text-border">{step?.number}</span>

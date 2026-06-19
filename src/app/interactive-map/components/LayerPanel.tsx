@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { Layers, Eye, EyeOff, ChevronLeft, ChevronRight, MapPin, Users, Brain, Hexagon, CloudRain,  } from 'lucide-react';
+import { BasemapType } from './MapCanvasMapLibre';
 
 interface MapLayer {
   id: string;
@@ -66,7 +67,18 @@ const initialLayers: MapLayer[] = [
   },
 ];
 
-export default function LayerPanel() {
+type LayerPanelProps = {
+  activeBasemap: BasemapType;
+  onBasemapChange: React.Dispatch<React.SetStateAction<BasemapType>>;
+};
+
+const basemapOptions: { value: BasemapType; label: string }[] = [
+  { value: 'ocean-dark', label: 'Ocean Dark' },
+  { value: 'satellite', label: 'Satellite' },
+  { value: 'topographic', label: 'Topographic' },
+];
+
+export default function LayerPanel({ activeBasemap, onBasemapChange }: LayerPanelProps) {
   const [collapsed, setCollapsed] = useState(false);
   const [layers, setLayers] = useState<MapLayer[]>(initialLayers);
 
@@ -78,7 +90,7 @@ export default function LayerPanel() {
 
   return (
     <div
-      className={`glass-card-elevated border-r border-border flex-shrink-0 flex flex-col z-10 transition-all duration-300 ${
+      className={`glass-card-elevated border-r border-border shrink-0 flex flex-col z-10 transition-all duration-300 ${
         collapsed ? 'w-12' : 'w-64'
       }`}
     >
@@ -138,17 +150,18 @@ export default function LayerPanel() {
           {/* Basemap selector */}
           <div className="pt-3 border-t border-border mt-2">
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-1">Basemap</p>
-            {['Ocean Dark', 'Satellite', 'Topographic'].map((basemap) => (
-              <button
-                key={`basemap-${basemap}`}
-                className={`w-full text-left text-xs px-2 py-1.5 rounded transition-all ${
-                  basemap === 'Ocean Dark' ?'bg-primary/10 text-primary font-semibold' :'text-muted-foreground hover:text-foreground hover:bg-muted/40'
-                }`}
-              >
-                {basemap}
-              </button>
-            ))}
-          </div>
+            {basemapOptions.map((basemap) => (
+            <button
+              key={basemap.value} type="button" onClick={() => onBasemapChange(basemap.value)}
+              className={`w-full text-left text-xs px-2 py-1.5 rounded transition-all ${ activeBasemap === basemap.value
+                  ? 'bg-primary/10 text-primary font-semibold'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-muted/40'
+              }`}
+            >
+              {basemap.label}
+            </button>
+          ))}
+        </div>
         </div>
       )}
 
