@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { RadialBarChart, RadialBar, Tooltip, ResponsiveContainer,  } from 'recharts';
+import { RadialBarChart, RadialBar, Tooltip, ResponsiveContainer, } from 'recharts';
 
 // Backend integration point: GET /api/v1/analytics/summary?breakdown=source
 const sourceData = [
@@ -34,7 +34,7 @@ function CustomTooltip({ active, payload }: { active?: boolean; payload?: { payl
     <div className="glass-card-elevated border border-border rounded-xl px-3 py-2.5 shadow-xl">
       <p className="text-xs font-semibold text-foreground mb-1">{d.name}</p>
       <p className="font-mono text-xs text-primary">{d.value}% of dataset</p>
-      <p className="font-mono text-xs text-muted-foreground">{d.count.toLocaleString()} records</p>
+      <p className="font-mono text-xs text-muted-foreground">{d.count.toLocaleString('en-US')} records</p>
     </div>
   );
 }
@@ -76,7 +76,7 @@ export default function DataSourceChart() {
                 <span className="text-xs text-muted-foreground">{source.name}</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="font-mono text-xs text-muted-foreground">{source.count.toLocaleString()}</span>
+                <span className="font-mono text-xs text-muted-foreground">{source.count.toLocaleString('en-US')}</span>
                 <span className="font-mono text-xs font-semibold text-foreground w-8 text-right">{source.value}%</span>
               </div>
             </div>

@@ -43,7 +43,7 @@ export default function LandingCTA() {
                 category details. Approved reports directly enrich the monitoring dataset.
               </p>
               <Link
-                href="/contribute"
+                href="/auth?mode=signup"
                 className="inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-lg bg-positive/15 text-positive border border-positive/30 hover:bg-positive/25 transition-all duration-200"
               >
                 <Waves size={15} />

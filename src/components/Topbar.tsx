@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import AppLogo from '@/components/ui/AppLogo';
-import { Map, BarChart3, Home, Menu, X, Bell, Waves,  } from 'lucide-react';
+import { Map, BarChart3, Home, Menu, X, Bell, Waves, } from 'lucide-react';
 
 interface NavItem {
   label: string;
@@ -50,10 +50,9 @@ export default function Topbar({ currentPath = '/' }: TopbarProps) {
               <Link
                 key={`nav-${item.href}`}
                 href={item.href}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                  isActive
-                    ? 'bg-primary/10 text-primary border border-primary/20' :'text-muted-foreground hover:text-foreground hover:bg-muted/60'
-                }`}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
+                  ? 'bg-primary/10 text-primary border border-primary/20' : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
+                  }`}
               >
                 {item.icon}
                 {item.label}
@@ -89,9 +88,8 @@ export default function Topbar({ currentPath = '/' }: TopbarProps) {
                 {notifications.map((n) => (
                   <div key={n.id} className="px-4 py-3 hover:bg-muted/40 cursor-pointer transition-colors border-b border-border/50 last:border-0">
                     <div className="flex items-start gap-3">
-                      <div className={`mt-0.5 w-2 h-2 rounded-full shrink-0 ${
-                        n.type === 'alert' ? 'bg-danger' : n.type === 'report' ? 'bg-warning' : 'bg-primary'
-                      }`}></div>
+                      <div className={`mt-0.5 w-2 h-2 rounded-full shrink-0 ${n.type === 'alert' ? 'bg-danger' : n.type === 'report' ? 'bg-warning' : 'bg-primary'
+                        }`}></div>
                       <div>
                         <p className="text-sm text-foreground">{n.text}</p>
                         <p className="text-xs text-muted-foreground mt-0.5">{n.time}</p>
@@ -134,10 +132,9 @@ export default function Topbar({ currentPath = '/' }: TopbarProps) {
                   key={`mobile-nav-${item.href}`}
                   href={item.href}
                   onClick={() => setMobileOpen(false)}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all ${
-                    isActive
-                      ? 'bg-primary/10 text-primary border border-primary/20' :'text-muted-foreground hover:text-foreground hover:bg-muted/60'
-                  }`}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all ${isActive
+                    ? 'bg-primary/10 text-primary border border-primary/20' : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
+                    }`}
                 >
                   {item.icon}
                   {item.label}

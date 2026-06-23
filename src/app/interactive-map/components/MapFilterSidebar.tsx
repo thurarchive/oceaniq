@@ -19,21 +19,42 @@ const timeRanges = [
   { id: 'range-all', label: 'All time', value: 'all' },
 ];
 
-const areas = [
-  { id: 'area-all', label: 'All Areas', value: 'all' },
-  { id: 'area-jakarta', label: 'Jakarta Bay', value: 'jakarta_bay' },
-  { id: 'area-bekasi', label: 'Bekasi Coast', value: 'bekasi_coast' },
-  { id: 'area-citarum', label: 'Citarum Mouth', value: 'citarum_mouth' },
-  { id: 'area-karawang', label: 'Karawang Zone', value: 'karawang' },
-  { id: 'area-subang', label: 'Subang Zone', value: 'subang' },
-];
+import { ZONES } from '@/constants/zones';
 
-export default function MapFilterSidebar() {
-  const [open, setOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [selectedTimeRange, setSelectedTimeRange] = useState('30d');
-  const [selectedArea, setSelectedArea] = useState('all');
-  const [confidenceMin, setConfidenceMin] = useState(60);
+const areas = ZONES.map((zone) => {
+  const isAll = zone.name === 'All Zones';
+  return {
+    id: `area-${zone.name.toLowerCase().replace(/\s+/g, '-')}`,
+    label: isAll ? 'All Areas' : zone.name,
+    value: isAll ? 'all' : zone.name.toLowerCase().replace(/\s+/g, '_'),
+  };
+});
+
+type MapFilterSidebarProps = {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  selectedCategory: string;
+  setSelectedCategory: (val: string) => void;
+  selectedTimeRange: string;
+  setSelectedTimeRange: (val: string) => void;
+  selectedArea: string;
+  setSelectedArea: (val: string) => void;
+  confidenceMin: number;
+  setConfidenceMin: (val: number) => void;
+};
+
+export default function MapFilterSidebar({
+  open,
+  setOpen,
+  selectedCategory,
+  setSelectedCategory,
+  selectedTimeRange,
+  setSelectedTimeRange,
+  selectedArea,
+  setSelectedArea,
+  confidenceMin,
+  setConfidenceMin,
+}: MapFilterSidebarProps) {
 
   const activeFilterCount = [
     selectedCategory !== 'all',

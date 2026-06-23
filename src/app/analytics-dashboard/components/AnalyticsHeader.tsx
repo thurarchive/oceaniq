@@ -2,7 +2,9 @@
 import React, { useState } from 'react';
 import { BarChart3, Download, Calendar, RefreshCw, ChevronDown } from 'lucide-react';
 
-const zones = ['All Zones', 'North Jakarta Bay', 'Bekasi Coastal', 'Citarum Mouth', 'Karawang Zone', 'Subang Zone', 'Indramayu'];
+import { ZONES } from '@/constants/zones';
+
+const zones = ZONES.map((z) => z.name);
 const dateRanges = ['Last 7 days', 'Last 30 days', 'Last 90 days', 'Last 6 months', 'Last year'];
 
 export default function AnalyticsHeader() {
@@ -39,9 +41,8 @@ export default function AnalyticsHeader() {
                 <button
                   key={`zone-opt-${z}`}
                   onClick={() => { setSelectedZone(z); setZoneOpen(false); }}
-                  className={`w-full text-left px-3 py-2 text-sm transition-colors ${
-                    selectedZone === z ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-muted/40 hover:text-foreground'
-                  }`}
+                  className={`w-full text-left px-3 py-2 text-sm transition-colors ${selectedZone === z ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-muted/40 hover:text-foreground'
+                    }`}
                 >
                   {z}
                 </button>
@@ -67,9 +68,8 @@ export default function AnalyticsHeader() {
                 <button
                   key={`range-opt-${r}`}
                   onClick={() => { setSelectedRange(r); setRangeOpen(false); }}
-                  className={`w-full text-left px-3 py-2 text-sm transition-colors ${
-                    selectedRange === r ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-muted/40 hover:text-foreground'
-                  }`}
+                  className={`w-full text-left px-3 py-2 text-sm transition-colors ${selectedRange === r ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-muted/40 hover:text-foreground'
+                    }`}
                 >
                   {r}
                 </button>
@@ -78,7 +78,9 @@ export default function AnalyticsHeader() {
           )}
         </div>
 
-        <button className="flex items-center gap-1.5 text-sm px-3 py-2 glass-card border border-border rounded-lg text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all">
+        <button
+          onClick={() => setSelectedZone('All Zones')}
+          className="flex items-center gap-1.5 text-sm px-3 py-2 glass-card border border-border rounded-lg text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all cursor-pointer">
           <RefreshCw size={13} />
           <span className="hidden sm:inline">Refresh</span>
         </button>

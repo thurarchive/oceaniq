@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
-import { Layers, Eye, EyeOff, ChevronLeft, ChevronRight, MapPin, Users, Brain, Hexagon, CloudRain,  } from 'lucide-react';
-import { BasemapType } from './MapCanvasMapLibre';
+import { Layers, Eye, EyeOff, ChevronLeft, ChevronRight, MapPin, Users, Brain, Hexagon, CloudRain, } from 'lucide-react';
+import { BasemapType } from './MapCanvasMapbox';
 
 interface MapLayer {
   id: string;
@@ -90,9 +90,8 @@ export default function LayerPanel({ activeBasemap, onBasemapChange }: LayerPane
 
   return (
     <div
-      className={`glass-card-elevated border-r border-border shrink-0 flex flex-col z-10 transition-all duration-300 ${
-        collapsed ? 'w-12' : 'w-64'
-      }`}
+      className={`glass-card-elevated border-r border-border shrink-0 flex flex-col z-10 transition-all duration-300 ${collapsed ? 'w-12' : 'w-64'
+        }`}
     >
       {/* Header */}
       <div className="flex items-center justify-between px-3 py-3 border-b border-border">
@@ -117,10 +116,9 @@ export default function LayerPanel({ activeBasemap, onBasemapChange }: LayerPane
           {layers.map((layer) => (
             <div
               key={layer.id}
-              className={`rounded-lg border p-3 cursor-pointer transition-all duration-200 ${
-                layer.active
-                  ? 'layer-toggle-active border-primary/30' :'border-border hover:border-border/80 hover:bg-muted/30'
-              }`}
+              className={`rounded-lg border p-3 cursor-pointer transition-all duration-200 ${layer.active
+                ? 'layer-toggle-active border-primary/30' : 'border-border hover:border-border/80 hover:bg-muted/30'
+                }`}
               onClick={() => toggleLayer(layer.id)}
             >
               <div className="flex items-center justify-between mb-1.5">
@@ -141,7 +139,7 @@ export default function LayerPanel({ activeBasemap, onBasemapChange }: LayerPane
               <p className="text-xs text-muted-foreground leading-tight mb-1.5">{layer.description}</p>
               {layer.count > 0 && (
                 <span className="font-mono text-xs text-muted-foreground/70">
-                  {layer.count.toLocaleString()} {layer.type === 'heatmap' ? 'zones' : 'points'}
+                  {layer.count.toLocaleString('en-US')} {layer.type === 'heatmap' ? 'zones' : 'points'}
                 </span>
               )}
             </div>
@@ -151,17 +149,17 @@ export default function LayerPanel({ activeBasemap, onBasemapChange }: LayerPane
           <div className="pt-3 border-t border-border mt-2">
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-1">Basemap</p>
             {basemapOptions.map((basemap) => (
-            <button
-              key={basemap.value} type="button" onClick={() => onBasemapChange(basemap.value)}
-              className={`w-full text-left text-xs px-2 py-1.5 rounded transition-all ${ activeBasemap === basemap.value
+              <button
+                key={basemap.value} type="button" onClick={() => onBasemapChange(basemap.value)}
+                className={`w-full text-left text-xs px-2 py-1.5 rounded transition-all ${activeBasemap === basemap.value
                   ? 'bg-primary/10 text-primary font-semibold'
                   : 'text-muted-foreground hover:text-foreground hover:bg-muted/40'
-              }`}
-            >
-              {basemap.label}
-            </button>
-          ))}
-        </div>
+                  }`}
+              >
+                {basemap.label}
+              </button>
+            ))}
+          </div>
         </div>
       )}
 
@@ -173,10 +171,9 @@ export default function LayerPanel({ activeBasemap, onBasemapChange }: LayerPane
               key={`collapsed-${layer.id}`}
               onClick={() => toggleLayer(layer.id)}
               title={`${layer.active ? 'Hide' : 'Show'} ${layer.label}`}
-              className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${
-                layer.active
-                  ? 'bg-primary/15 text-primary' :'text-muted-foreground/40 hover:text-muted-foreground'
-              }`}
+              className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${layer.active
+                ? 'bg-primary/15 text-primary' : 'text-muted-foreground/40 hover:text-muted-foreground'
+                }`}
             >
               {layer.icon}
             </button>

@@ -22,9 +22,8 @@ export default function LandingTopbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 h-16 transition-all duration-300 ${
-        scrolled ? 'glass-card-elevated border-b border-border' : 'bg-transparent'
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 h-16 transition-all duration-300 ${scrolled ? 'glass-card-elevated border-b border-border' : 'bg-transparent'
+        }`}
     >
       <div className="max-w-screen-2xl mx-auto px-6 lg:px-10 h-full flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2.5">
@@ -46,7 +45,7 @@ export default function LandingTopbar() {
         </nav>
 
         <div className="hidden md:flex items-center gap-3">
-          <Link href="/login" className="btn-ghost text-sm">Sign In</Link>
+          <Link href="/auth" className="btn-ghost text-sm">Sign In</Link>
           <Link href="/contribute" className="btn-primary flex items-center gap-2 text-sm">
             <Waves size={14} />
             Contribute
