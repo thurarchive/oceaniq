@@ -48,7 +48,7 @@ function CustomTooltip({ active, payload }: { active?: boolean; payload?: { payl
         </div>
         <div className="flex items-center justify-between gap-3">
           <span className="text-xs text-muted-foreground">Waste Density</span>
-          <span className="font-mono text-xs text-accent font-semibold">{d.wasteDensity} kg/km²</span>
+          <span className="font-mono text-xs text-accent font-semibold">{d.wasteDensity} kg/m²</span>
         </div>
       </div>
     </div>

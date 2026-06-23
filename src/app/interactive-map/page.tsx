@@ -2,8 +2,7 @@
 
 import React, { useState } from 'react';
 import AppLayout from '@/components/AppLayout';
-import MapCanvas from './components/MapCanvas';
-import LayerPanel from './components/LayerPanel';
+import LayerPanel, { MapLayer, initialLayers } from './components/LayerPanel';
 import MapFilterSidebar from './components/MapFilterSidebar';
 import MapHeader from './components/MapHeader';
 import MapCanvasMapbox, { BasemapType } from "./components/MapCanvasMapbox";
@@ -15,42 +14,68 @@ export default function InteractiveMapPage() {
 
   // Lifted Map Filter states
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [selectedTimeRange, setSelectedTimeRange] = useState("30d");
-  const [selectedArea, setSelectedArea] = useState("all");
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedTimeRanges, setSelectedTimeRanges] = useState<string[]>(["all"]);
+  const [selectedAreas, setSelectedAreas] = useState<string[]>([]);
   const [confidenceMin, setConfidenceMin] = useState(60);
+
+  // Lifted Map Layer states
+  const [layers, setLayers] = useState<MapLayer[]>(initialLayers);
+  const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
+
+  const toggleLayer = (id: string) => {
+    setLayers((prev) =>
+      prev.map((l) => (l.id === id ? { ...l, active: !l.active } : l))
+    );
+  };
 
   const handleRefresh = () => {
     setSelectedZone("All Zones");
     setSidebarOpen(false);
-    setSelectedCategory("all");
-    setSelectedTimeRange("30d");
-    setSelectedArea("all");
+    setSelectedCategories([]);
+    setSelectedTimeRanges(["all"]);
+    setSelectedAreas([]);
     setConfidenceMin(60);
+    setLayers(initialLayers);
+    setRefreshTrigger((prev) => prev + 1);
   };
 
   return (
     <AppLayout currentPath="/interactive-map">
       <div className="h-[calc(100vh-4rem)] flex flex-col overflow-hidden">
-        <MapHeader 
-          selectedZone={selectedZone} 
-          onZoneChange={setSelectedZone} 
+        <MapHeader
+          selectedZone={selectedZone}
+          onZoneChange={setSelectedZone}
           onRefresh={handleRefresh}
         />
         <div className="flex flex-1 overflow-hidden relative">
-          <LayerPanel activeBasemap={activeBasemap}
+          <LayerPanel
+            activeBasemap={activeBasemap}
             onBasemapChange={setActiveBasemap}
+            layers={layers}
+            onLayerToggle={toggleLayer}
           />
-          <MapCanvasMapbox activeBasemap={activeBasemap} selectedZone={selectedZone} />
-          <MapFilterSidebar 
+          <div className="flex-1 h-full relative">
+            <MapCanvasMapbox
+              activeBasemap={activeBasemap}
+              selectedZone={selectedZone}
+              layers={layers}
+              selectedCategories={selectedCategories}
+              selectedTimeRanges={selectedTimeRanges}
+              selectedAreas={selectedAreas}
+              confidenceMin={confidenceMin}
+              refreshTrigger={refreshTrigger}
+            />
+          </div>
+          <MapFilterSidebar
             open={sidebarOpen}
             setOpen={setSidebarOpen}
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-            selectedTimeRange={selectedTimeRange}
-            setSelectedTimeRange={setSelectedTimeRange}
-            selectedArea={selectedArea}
-            setSelectedArea={setSelectedArea}
+            selectedCategories={selectedCategories}
+            setSelectedCategories={setSelectedCategories}
+            selectedTimeRanges={selectedTimeRanges}
+            setSelectedTimeRanges={setSelectedTimeRanges}
+            selectedAreas={selectedAreas}
+            setSelectedAreas={setSelectedAreas}
             confidenceMin={confidenceMin}
             setConfidenceMin={setConfidenceMin}
           />

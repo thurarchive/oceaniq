@@ -2,25 +2,7 @@
 import React from 'react';
 import { X, MapPin, Clock, User, Gauge, Tag, Layers, CheckCircle, AlertCircle, Brain } from 'lucide-react';
 import StatusBadge from '@/components/ui/StatusBadge';
-
-interface MapPoint {
-  id: string;
-  x: number;
-  y: number;
-  type: 'observation' | 'citizen' | 'ml';
-  intensity: 'critical' | 'high' | 'medium' | 'low';
-  zone: string;
-  lat: number;
-  lng: number;
-  wasteDensity: number;
-  wasteCategory: string;
-  confidence: number;
-  source: string;
-  timestamp: string;
-  moderationStatus: string;
-  description: string;
-  clusterCount?: number;
-}
+import { MapPoint } from './mockPoints';
 
 interface MapPointDetailProps {
   point: MapPoint;
@@ -46,7 +28,7 @@ export default function MapPointDetail({ point, onClose }: MapPointDetailProps) 
   const formattedTime = point.timestamp.split('T')[1]?.replace('Z', ' UTC') ?? '';
 
   return (
-    <div className="absolute top-4 left-4 md:left-auto md:right-4 md:top-4 w-80 glass-card-elevated border border-border rounded-xl overflow-hidden z-30 shadow-2xl">
+    <div className="absolute top-4 left-4 w-80 glass-card-elevated border border-border rounded-xl overflow-hidden z-30 shadow-2xl">
       {/* Header */}
       <div className="flex items-start justify-between px-4 py-3 border-b border-border">
         <div className="flex-1 min-w-0">
@@ -78,7 +60,7 @@ export default function MapPointDetail({ point, onClose }: MapPointDetailProps) 
           <div>
             <p className="text-xs text-muted-foreground mb-0.5">Waste Density</p>
             <p className={`font-mono text-2xl font-bold ${intensityCfg.color}`}>
-              {point.wasteDensity} <span className="text-sm font-normal">kg/km²</span>
+              {point.wasteDensity} <span className="text-sm font-normal">kg/m²</span>
             </p>
           </div>
           <span className={`text-xs font-bold px-2.5 py-1 rounded-full border ${intensityCfg.bg} ${intensityCfg.color} border-current/30`}>
@@ -117,9 +99,8 @@ export default function MapPointDetail({ point, onClose }: MapPointDetailProps) 
             <div className="flex items-center gap-2">
               <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
                 <div
-                  className={`h-full rounded-full ${
-                    point.confidence >= 90 ? 'bg-positive' : point.confidence >= 70 ? 'bg-primary' : 'bg-warning'
-                  }`}
+                  className={`h-full rounded-full ${point.confidence >= 90 ? 'bg-positive' : point.confidence >= 70 ? 'bg-primary' : 'bg-warning'
+                    }`}
                   style={{ width: `${point.confidence}%` }}
                 />
               </div>

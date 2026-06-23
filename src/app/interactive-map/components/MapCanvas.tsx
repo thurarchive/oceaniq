@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import MapPointDetail from './MapPointDetail';
-import MapLegend from './MapLegend';
+// import MapLegend from './MapLegend';
 import { ZoomIn, ZoomOut, Compass } from 'lucide-react';
 
 interface MapPoint {
@@ -301,7 +301,7 @@ export default function MapCanvas() {
         <span className="font-mono text-xs text-muted-foreground">-6.1234°S, 107.0123°E</span>
       </div>
 
-      <MapLegend />
+      {/* <MapLegend /> */}
     </div>
   );
 }

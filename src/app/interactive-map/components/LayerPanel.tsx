@@ -1,9 +1,21 @@
 'use client';
+
 import React, { useState } from 'react';
-import { Layers, Eye, EyeOff, ChevronLeft, ChevronRight, MapPin, Users, Brain, Hexagon, CloudRain, } from 'lucide-react';
+import {
+  Layers,
+  Eye,
+  EyeOff,
+  ChevronLeft,
+  ChevronRight,
+  MapPin,
+  Users,
+  Brain,
+  Hexagon,
+  CloudRain,
+} from 'lucide-react';
 import { BasemapType } from './MapCanvasMapbox';
 
-interface MapLayer {
+export interface MapLayer {
   id: string;
   label: string;
   description: string;
@@ -14,7 +26,7 @@ interface MapLayer {
   type: 'point' | 'polygon' | 'heatmap' | 'overlay';
 }
 
-const initialLayers: MapLayer[] = [
+export const initialLayers: MapLayer[] = [
   {
     id: 'layer-observations',
     label: 'Verified Observations',
@@ -51,7 +63,7 @@ const initialLayers: MapLayer[] = [
     description: 'Official monitoring zone boundaries',
     icon: <Hexagon size={15} />,
     color: 'bg-primary',
-    count: 847,
+    count: 5,
     active: true,
     type: 'polygon',
   },
@@ -70,6 +82,8 @@ const initialLayers: MapLayer[] = [
 type LayerPanelProps = {
   activeBasemap: BasemapType;
   onBasemapChange: React.Dispatch<React.SetStateAction<BasemapType>>;
+  layers: MapLayer[];
+  onLayerToggle: (id: string) => void;
 };
 
 const basemapOptions: { value: BasemapType; label: string }[] = [
@@ -78,36 +92,39 @@ const basemapOptions: { value: BasemapType; label: string }[] = [
   { value: 'topographic', label: 'Topographic' },
 ];
 
-export default function LayerPanel({ activeBasemap, onBasemapChange }: LayerPanelProps) {
+export default function LayerPanel({
+  activeBasemap,
+  onBasemapChange,
+  layers,
+  onLayerToggle,
+}: LayerPanelProps) {
   const [collapsed, setCollapsed] = useState(false);
-  const [layers, setLayers] = useState<MapLayer[]>(initialLayers);
-
-  const toggleLayer = (id: string) => {
-    setLayers((prev) =>
-      prev.map((l) => (l.id === id ? { ...l, active: !l.active } : l))
-    );
-  };
 
   return (
     <div
-      className={`glass-card-elevated border-r border-border shrink-0 flex flex-col z-10 transition-all duration-300 ${collapsed ? 'w-12' : 'w-64'
-        }`}
+      className={`glass-card-elevated border-r border-border shrink-0 flex flex-col z-10 transition-all duration-300 ${
+        collapsed ? 'w-12' : 'w-64'
+      }`}
     >
       {/* Header */}
       <div className="flex items-center justify-between px-3 py-3 border-b border-border">
         {!collapsed && (
           <div className="flex items-center gap-2">
             <Layers size={14} className="text-primary" />
-            <span className="text-xs font-semibold text-foreground uppercase tracking-wider">Layers</span>
+            <span className="text-xs font-semibold text-foreground uppercase tracking-wider">
+              Layers
+            </span>
           </div>
         )}
-        <button
-          onClick={() => setCollapsed(!collapsed)}
-          className="w-6 h-6 rounded flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-all ml-auto"
-          title={collapsed ? 'Expand layer panel' : 'Collapse layer panel'}
-        >
-          {collapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
-        </button>
+        <div className="flex items-center gap-1 ml-auto">
+          <button
+            onClick={() => setCollapsed(!collapsed)}
+            className="w-6 h-6 rounded flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-all"
+            title={collapsed ? 'Expand layer panel' : 'Collapse layer panel'}
+          >
+            {collapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
+          </button>
+        </div>
       </div>
 
       {/* Layers list */}
@@ -116,10 +133,12 @@ export default function LayerPanel({ activeBasemap, onBasemapChange }: LayerPane
           {layers.map((layer) => (
             <div
               key={layer.id}
-              className={`rounded-lg border p-3 cursor-pointer transition-all duration-200 ${layer.active
-                ? 'layer-toggle-active border-primary/30' : 'border-border hover:border-border/80 hover:bg-muted/30'
-                }`}
-              onClick={() => toggleLayer(layer.id)}
+              className={`rounded-lg border p-3 cursor-pointer transition-all duration-200 ${
+                layer.active
+                  ? 'layer-toggle-active border-primary/30'
+                  : 'border-border hover:border-border/80 hover:bg-muted/30'
+              }`}
+              onClick={() => onLayerToggle(layer.id)}
             >
               <div className="flex items-center justify-between mb-1.5">
                 <div className="flex items-center gap-2">
@@ -130,7 +149,10 @@ export default function LayerPanel({ activeBasemap, onBasemapChange }: LayerPane
                 </div>
                 <button
                   className={`transition-colors ${layer.active ? 'text-primary' : 'text-muted-foreground/40'}`}
-                  onClick={(e) => { e.stopPropagation(); toggleLayer(layer.id); }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onLayerToggle(layer.id);
+                  }}
                   title={layer.active ? `Hide ${layer.label}` : `Show ${layer.label}`}
                 >
                   {layer.active ? <Eye size={13} /> : <EyeOff size={13} />}
@@ -150,11 +172,14 @@ export default function LayerPanel({ activeBasemap, onBasemapChange }: LayerPane
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-1">Basemap</p>
             {basemapOptions.map((basemap) => (
               <button
-                key={basemap.value} type="button" onClick={() => onBasemapChange(basemap.value)}
-                className={`w-full text-left text-xs px-2 py-1.5 rounded transition-all ${activeBasemap === basemap.value
-                  ? 'bg-primary/10 text-primary font-semibold'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-muted/40'
-                  }`}
+                key={basemap.value}
+                type="button"
+                onClick={() => onBasemapChange(basemap.value)}
+                className={`w-full text-left text-xs px-2 py-1.5 rounded transition-all ${
+                  activeBasemap === basemap.value
+                    ? 'bg-primary/10 text-primary font-semibold'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-muted/40'
+                }`}
               >
                 {basemap.label}
               </button>
@@ -169,11 +194,13 @@ export default function LayerPanel({ activeBasemap, onBasemapChange }: LayerPane
           {layers.map((layer) => (
             <button
               key={`collapsed-${layer.id}`}
-              onClick={() => toggleLayer(layer.id)}
+              onClick={() => onLayerToggle(layer.id)}
               title={`${layer.active ? 'Hide' : 'Show'} ${layer.label}`}
-              className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${layer.active
-                ? 'bg-primary/15 text-primary' : 'text-muted-foreground/40 hover:text-muted-foreground'
-                }`}
+              className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${
+                layer.active
+                  ? 'bg-primary/15 text-primary'
+                  : 'text-muted-foreground/40 hover:text-muted-foreground'
+              }`}
             >
               {layer.icon}
             </button>

@@ -13,7 +13,7 @@ const kpis = [
     id: 'kpi-density',
     label: 'Avg Waste Density',
     value: '47.3',
-    unit: 'kg/km²',
+    unit: 'kg/m²',
     change: '+6.2%',
     changeTrend: 'up-bad',
     subtext: 'vs. 44.5 last period',
@@ -150,9 +150,8 @@ export default function KPIBentoGrid() {
       {kpis.map((kpi) => (
         <div
           key={kpi.id}
-          className={`glass-card-elevated border ${kpi.borderColor} ${kpi.bgColor} rounded-xl p-5 transition-all duration-300 hover:brightness-110 ${
-            kpi.isAlert ? 'ring-1 ring-danger/30' : ''
-          }`}
+          className={`glass-card-elevated border ${kpi.borderColor} ${kpi.bgColor} rounded-xl p-5 transition-all duration-300 hover:brightness-110 ${kpi.isAlert ? 'ring-1 ring-danger/30' : ''
+            }`}
         >
           <div className="flex items-start justify-between mb-3">
             <div className={`w-9 h-9 rounded-lg ${kpi.bgColor} ${kpi.color} flex items-center justify-center border ${kpi.borderColor}`}>
@@ -171,11 +170,10 @@ export default function KPIBentoGrid() {
               {kpi.changeTrend === 'neutral' && (
                 <Minus size={13} className="text-muted-foreground" />
               )}
-              <span className={`text-xs font-semibold font-mono ${
-                kpi.changeTrend === 'up-good' ? 'text-positive' :
+              <span className={`text-xs font-semibold font-mono ${kpi.changeTrend === 'up-good' ? 'text-positive' :
                 kpi.changeTrend === 'up-bad' ? 'text-danger' :
-                kpi.changeTrend === 'down-warn' ? 'text-warning' : 'text-muted-foreground'
-              }`}>
+                  kpi.changeTrend === 'down-warn' ? 'text-warning' : 'text-muted-foreground'
+                }`}>
                 {kpi.change}
               </span>
             </div>

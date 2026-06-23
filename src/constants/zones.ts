@@ -2,6 +2,7 @@ export interface Zone {
   name: string;
   center: [number, number]; // [longitude, latitude]
   zoom: number;
+  offset?: number;
 }
 
 export const ZONES: Zone[] = [
@@ -12,13 +13,15 @@ export const ZONES: Zone[] = [
   },
   {
     name: "North Jakarta Bay",
-    center: [106.8232, -6.0847],
-    zoom: 10.5,
+    center: [106.8400, -6.1000],
+    zoom: 10.0,
+    offset: 0.10,
   },
   {
     name: "Bekasi Coastal",
-    center: [107.0345, -5.9438],
-    zoom: 11.5,
+    center: [107.0100, -6.0200],
+    zoom: 11.0,
+    offset: 0.08,
   },
   {
     name: "Citarum Mouth",
@@ -33,6 +36,7 @@ export const ZONES: Zone[] = [
   {
     name: "Cisadane River",
     center: [106.6780, -6.0120],
-    zoom: 12.0,
+    zoom: 11.5,
+    offset: 0.08,
   },
 ];
