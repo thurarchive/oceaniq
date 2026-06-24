@@ -1,4 +1,4 @@
-TANGGAL,RR,FF_X,DDD_X,FF_AVG,DDD_CAR,STASIUN
+record_date,rainfall_mm,wind_max_ms,wind_dir_max,wind_avg_ms,wind_dir_dominant,station_name
 2024-10-01,0,4,310,1,C,Kemayoran
 2024-10-02,0,5,320,1,C,Kemayoran
 2024-10-03,8888,4,110,1,C,Kemayoran

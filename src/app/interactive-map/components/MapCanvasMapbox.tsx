@@ -4,11 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import mapboxgl, { Map } from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { ZONES } from "@/constants/zones";
-import { supabase } from "@/lib/supabase";
-import { mockPoints, MapPoint } from "./mockPoints";
 import { MapLayer } from "./LayerPanel";
 import MapPointDetail from "./MapPointDetail";
-// import MapLegend from "./MapLegend";
+import MapLegend from "./MapLegend";
+import MapStationDetail, { SelectedStationData } from "./MapStationDetail";
+import { useWasteObservations } from "../hooks/useWasteObservations";
+import { useWeatherStations } from "../hooks/useWeatherStations";
+import { MapPoint } from "./mockPoints";
 
 export type BasemapType = "ocean-dark" | "satellite" | "topographic";
 
@@ -39,7 +41,7 @@ const zoneGeojson: GeoJSON.FeatureCollection = {
   type: "FeatureCollection",
   features: ZONES.filter((z) => z.name !== "All Zones").map((z) => {
     const [lng, lat] = z.center;
-    const offset = z.offset ?? 0.04; // Outer boundary size
+    const offset = z.offset ?? 0.04;
     return {
       type: "Feature",
       geometry: {
@@ -77,12 +79,18 @@ export default function MapCanvasMapbox({
   const mapRef = useRef<Map | null>(null);
   const [isClient, setIsClient] = useState(false);
   const [selectedPoint, setSelectedPoint] = useState<MapPoint | null>(null);
-  const [points, setPoints] = useState<MapPoint[]>([]);
+  const [selectedStation, setSelectedStation] = useState<SelectedStationData | null>(null);
+
+  // Invoke custom data fetching hooks
+  const { points } = useWasteObservations(refreshTrigger);
+  const { weatherStationsData } = useWeatherStations(refreshTrigger);
 
   const circleGeojsonRef = useRef<GeoJSON.FeatureCollection>({ type: "FeatureCollection", features: [] });
   const mlGeojsonRef = useRef<GeoJSON.FeatureCollection>({ type: "FeatureCollection", features: [] });
 
-  //Fix map resize issue
+  // React Ref to handle the Mapbox event listener stale closure bug
+  const weatherStationsDataRef = useRef<SelectedStationData[]>([]);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsClient(true);
@@ -90,120 +98,31 @@ export default function MapCanvasMapbox({
     return () => clearTimeout(timer);
   }, []);
 
-  interface WasteObservationRow {
-    id: string;
-    lat: number | null;
-    lng: number | null;
-    site_id: string | number | null;
-    site_name: string | null;
-    observation_time: string | null;
-    debris_coverage_m2: number | null;
-    debris_quantity: number | null;
-    plastic_pct: number | null;
-    organic_pct: number | null;
-    plastic_quantity: number | null;
-    organic_quantity: number | null;
-    weather: string | null;
-    tides: string | null;
-    msl: number | null;
-    compact_coverage_m2: number | null;
-    compact_pct: number | null;
-    scatter_coverage_m2: number | null;
-    scatter_pct: number | null;
-    approx_moving_debris: number | null;
-    approx_stuck_debris: number | null;
-  }
-
-  // Fetch observation points from Supabase on mount (fall back to mock baseline data on error)
+  // Synchronize Ref with the weather state
   useEffect(() => {
-    async function loadData() {
-      try {
-        const { data, error } = await supabase
-          .from("waste_observations")
-          .select("*");
+    weatherStationsDataRef.current = weatherStationsData;
+  }, [weatherStationsData]);
 
-        if (error) throw error;
-
-        if (data && data.length > 0) {
-          const mapped: MapPoint[] = data.map((item: WasteObservationRow) => {
-            // Waste Density from debris_coverage_m2 or debris_quantity fallback
-            const density = item.debris_coverage_m2 ?? item.debris_quantity ?? 0.0;
-
-            // Intensity classification based on density threshold values
-            let intensity: "critical" | "high" | "medium" | "low" = "low";
-            if (density > 80) intensity = "critical";
-            else if (density > 45) intensity = "high";
-            else if (density > 10) intensity = "medium";
-
-            // Category classification derived from plastic_pct & organic_pct breakdown
-            let category = "Mixed Debris";
-            if (item.plastic_pct !== null && item.organic_pct !== null) {
-              if (item.plastic_pct > 70) category = "Plastic-dominant";
-              else if (item.organic_pct > 70) category = "Organic-dominant";
-              else if (item.plastic_pct > 0 || item.organic_pct > 0) {
-                category = `Mixed (${Math.round(item.plastic_pct)}% Plastic, ${Math.round(item.organic_pct)}% Organic)`;
-              }
-            } else if (item.plastic_quantity !== null || item.organic_quantity !== null) {
-              const plastic = item.plastic_quantity ?? 0;
-              const organic = item.organic_quantity ?? 0;
-              const total = plastic + organic;
-              if (total > 0) {
-                const pPct = (plastic / total) * 100;
-                const oPct = (organic / total) * 100;
-                if (pPct > 70) category = "Plastic-dominant";
-                else if (oPct > 70) category = "Organic-dominant";
-                else category = `Mixed (${Math.round(pPct)}% Plastic, ${Math.round(oPct)}% Organic)`;
-              }
-            }
-
-            // Description generated dynamically from weather, tides, and coverage parameters
-            let desc = "";
-            if (item.weather) desc += `Weather: ${item.weather}. `;
-            if (item.tides) desc += `Tides: ${item.tides} (MSL: ${item.msl ?? 0}m). `;
-            if (item.compact_coverage_m2 !== null && item.compact_coverage_m2 > 0) {
-              desc += `Compact coverage: ${item.compact_coverage_m2}m² (${Math.round(item.compact_pct ?? 0)}%). `;
-            }
-            if (item.scatter_coverage_m2 !== null && item.scatter_coverage_m2 > 0) {
-              desc += `Scatter coverage: ${item.scatter_coverage_m2}m² (${Math.round(item.scatter_pct ?? 0)}%). `;
-            }
-            if (item.approx_moving_debris !== null || item.approx_stuck_debris !== null) {
-              desc += `Debris: ${item.approx_moving_debris ?? 0} moving, ${item.approx_stuck_debris ?? 0} stuck. `;
-            }
-            if (!desc) {
-              desc = "Official survey record at location.";
-            }
-
-            return {
-              id: item.id,
-              type: "observation", // Official observation category
-              intensity,
-              zone: item.site_name || "Unnamed Station",
-              lat: item.lat ?? 0.0,
-              lng: item.lng ?? 0.0,
-              wasteDensity: density,
-              wasteCategory: category,
-              confidence: 100, // Verified observations have maximum confidence
-              source: `Official Station #${item.site_id ?? "Unknown"}`,
-              timestamp: item.observation_time || new Date().toISOString(),
-              moderationStatus: "Verified",
-              description: desc,
-              clusterCount: undefined,
-            };
-          });
-
-          // Merge with mock citizen and ml points to keep other interactive demo layers active
-          const citizenAndMlMocks = mockPoints.filter((p) => p.type === "citizen" || p.type === "ml");
-          setPoints([...mapped, ...citizenAndMlMocks]);
-        } else {
-          setPoints(mockPoints);
-        }
-      } catch (err) {
-        console.warn("Failed to load waste points from Supabase, falling back to mock points. Error details:", err);
-        setPoints(mockPoints);
+  // Construct weather stations GeoJSON
+  const weatherStationsGeojson: GeoJSON.FeatureCollection = {
+    type: "FeatureCollection",
+    features: weatherStationsData.map(ws => ({
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: [ws.lng, ws.lat]
+      },
+      properties: {
+        name: ws.name,
+        databaseStationName: ws.databaseStationName,
+        temp: ws.temp,
+        precip: ws.precip,
+        weatherCode: ws.weatherCode,
+        accumulatedRainfall3d: ws.accumulatedRainfall3d,
+        correlationCoefficient: ws.correlationCoefficient,
       }
-    }
-    loadData();
-  }, [refreshTrigger]);
+    }))
+  };
 
   // Reusable helper to set up Mapbox custom sources & layers
   const setupLayers = (map: mapboxgl.Map) => {
@@ -224,6 +143,12 @@ export default function MapCanvasMapbox({
       map.addSource("monitoring-zones-source", {
         type: "geojson",
         data: zoneGeojson,
+      });
+    }
+    if (!map.getSource("weather-stations-source")) {
+      map.addSource("weather-stations-source", {
+        type: "geojson",
+        data: weatherStationsGeojson,
       });
     }
 
@@ -326,7 +251,72 @@ export default function MapCanvasMapbox({
       });
     }
 
-    // Click handler helper for popup detail card
+    // 6. Add Weather Station Layers
+    if (!map.getLayer("weather-stations-buffer")) {
+      map.addLayer({
+        id: "weather-stations-buffer",
+        type: "circle",
+        source: "weather-stations-source",
+        paint: {
+          "circle-radius": [
+            "interpolate",
+            ["linear"],
+            ["coalesce", ["get", "accumulatedRainfall3d"], 0],
+            0, 15,
+            10, 30,
+            50, 60,
+            100, 100
+          ],
+          "circle-color": "#3b82f6",
+          "circle-opacity": 0.12,
+          "circle-stroke-width": 1,
+          "circle-stroke-color": "#3b82f6",
+          "circle-stroke-opacity": 0.25,
+        }
+      });
+    }
+
+    if (!map.getLayer("weather-stations-circles")) {
+      map.addLayer({
+        id: "weather-stations-circles",
+        type: "circle",
+        source: "weather-stations-source",
+        paint: {
+          "circle-color": "#06b6d4",
+          "circle-radius": 7,
+          "circle-stroke-width": 2,
+          "circle-stroke-color": "#ffffff",
+        }
+      });
+    }
+
+    if (!map.getLayer("weather-stations-labels")) {
+      map.addLayer({
+        id: "weather-stations-labels",
+        type: "symbol",
+        source: "weather-stations-source",
+        layout: {
+          "text-field": [
+            "concat",
+            ["get", "databaseStationName"],
+            " Station: ",
+            ["coalesce", ["get", "accumulatedRainfall3d"], 0],
+            " mm"
+          ],
+          "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+          "text-offset": [0, 1.8],
+          "text-anchor": "top",
+          "text-size": 11,
+        },
+        paint: {
+          "text-color": "#38bdf8",
+          "text-halo-color": "#090d16",
+          "text-halo-width": 1.5,
+        }
+      });
+    }
+
+    // Click handler for waste points popup
     const handleFeatureClick = (e: mapboxgl.MapMouseEvent & { features?: mapboxgl.MapboxGeoJSONFeature[] }) => {
       if (e.features && e.features[0]) {
         const props = e.features[0].properties;
@@ -347,10 +337,23 @@ export default function MapCanvasMapbox({
           description: props.description,
           clusterCount: props.clusterCount ? Number(props.clusterCount) : undefined,
         });
+        setSelectedStation(null);
       }
     };
 
-    // Hover cursor helpers
+    // Click handler for Weather Stations (reads from REF to avoid stale React closures)
+    const handleStationClick = (e: mapboxgl.MapMouseEvent & { features?: mapboxgl.MapboxGeoJSONFeature[] }) => {
+      if (e.features && e.features[0]) {
+        const props = e.features[0].properties;
+        if (!props) return;
+        const match = weatherStationsDataRef.current.find(ws => ws.name === props.name);
+        if (match) {
+          setSelectedStation(match);
+          setSelectedPoint(null);
+        }
+      }
+    };
+
     const handleMouseEnter = () => {
       map.getCanvas().style.cursor = "pointer";
     };
@@ -360,22 +363,25 @@ export default function MapCanvasMapbox({
 
     map.on("click", "waste-circles-observation", handleFeatureClick);
     map.on("click", "waste-circles-citizen", handleFeatureClick);
-
-    // Close panel when clicking anywhere on the map that is NOT a waste point
-    map.on("click", (e) => {
-      const features = map.queryRenderedFeatures(e.point, {
-        layers: ["waste-circles-observation", "waste-circles-citizen"],
-      });
-      if (!features || features.length === 0) {
-        setSelectedPoint(null);
-      }
-    });
+    map.on("click", "weather-stations-circles", handleStationClick);
 
     map.on("mouseenter", "waste-circles-observation", handleMouseEnter);
     map.on("mouseleave", "waste-circles-observation", handleMouseLeave);
     map.on("mouseenter", "waste-circles-citizen", handleMouseEnter);
     map.on("mouseleave", "waste-circles-citizen", handleMouseLeave);
+    map.on("mouseenter", "weather-stations-circles", handleMouseEnter);
+    map.on("mouseleave", "weather-stations-circles", handleMouseLeave);
 
+    // Close popups when clicking map background
+    map.on("click", (e) => {
+      const clickPoints = map.queryRenderedFeatures(e.point, {
+        layers: ["waste-circles-observation", "waste-circles-citizen", "weather-stations-circles"],
+      });
+      if (!clickPoints || clickPoints.length === 0) {
+        setSelectedPoint(null);
+        setSelectedStation(null);
+      }
+    });
   };
 
   // INITIALIZATION: Run once on mount
@@ -429,10 +435,28 @@ export default function MapCanvasMapbox({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isClient]);
 
+  // Update weather stations source when data state changes
+  useEffect(() => {
+    if (!mapRef.current) return;
+    const map = mapRef.current;
+
+    const setWeatherSourceData = () => {
+      const source = map.getSource("weather-stations-source") as mapboxgl.GeoJSONSource;
+      if (source) {
+        source.setData(weatherStationsGeojson);
+      }
+    };
+
+    if (map.isStyleLoaded()) {
+      setWeatherSourceData();
+    } else {
+      map.once("idle", setWeatherSourceData);
+    }
+  }, [weatherStationsData]);
+
   // FLY TO SELECTED ZONE: Triggered whenever selected zone changes
   useEffect(() => {
     if (mapRef.current && isClient && selectedZone) {
-      // 1. Try to find in predefined ZONES first
       const zoneData = ZONES.find((z) => z.name === selectedZone);
       if (zoneData) {
         mapRef.current.flyTo({
@@ -442,12 +466,11 @@ export default function MapCanvasMapbox({
           duration: 2000,
         });
       } else {
-        // 2. Try to find in loaded database points (site names)
         const matchPoint = points.find((p) => p.zone === selectedZone);
         if (matchPoint) {
           mapRef.current.flyTo({
             center: [matchPoint.lng, matchPoint.lat],
-            zoom: 12.0, // A nice close-up zoom for a specific site
+            zoom: 12.0,
             essential: true,
             duration: 2000,
           });
@@ -456,7 +479,7 @@ export default function MapCanvasMapbox({
     }
   }, [selectedZone, isClient, points]);
 
-  // BASMAP UPDATE: Re-render layout on base layers update
+  // BASEMAP UPDATE
   useEffect(() => {
     if (mapRef.current && isClient) {
       mapRef.current.setStyle(MAPBOX_STYLES[activeBasemap]);
@@ -468,9 +491,7 @@ export default function MapCanvasMapbox({
     if (!mapRef.current) return;
     const map = mapRef.current;
 
-    // Apply active filters on datasets
     const filtered = points.filter((p) => {
-      // 1. Category Filter
       if (selectedCategories && selectedCategories.length > 0) {
         const matchesSomeCat = selectedCategories.some((cat) => {
           const catLower = cat.toLowerCase();
@@ -485,10 +506,8 @@ export default function MapCanvasMapbox({
         if (!matchesSomeCat) return false;
       }
 
-      // 2. Area Filter
       if (selectedAreas && selectedAreas.length > 0) {
         const matchesSomeArea = selectedAreas.some((area) => {
-          // A: Geographic Bounding Box Check if it matches an official zone name
           const zone = ZONES.find(z => z.name.toLowerCase().replace(/\s+/g, '_') === area);
           if (zone) {
             const [zLng, zLat] = zone.center;
@@ -497,8 +516,6 @@ export default function MapCanvasMapbox({
               p.lat >= zLat - offset && p.lat <= zLat + offset;
             if (inside) return true;
           }
-
-          // B: Fallback string match on site name / zone name
           const areaMatch = area.replace(/_/g, " ").toLowerCase();
           const zoneMatch = p.zone.toLowerCase();
           return zoneMatch.includes(areaMatch) || areaMatch.includes(zoneMatch);
@@ -506,14 +523,12 @@ export default function MapCanvasMapbox({
         if (!matchesSomeArea) return false;
       }
 
-      // 3. Confidence Filter (ML estimates only)
       if (p.type === "ml" && p.confidence < confidenceMin) return false;
 
-      // 4. Time Range Filter
       if (selectedTimeRanges && selectedTimeRanges.length > 0) {
         const rawTimestamp = p.timestamp ? p.timestamp.trim().replace(" ", "T") : "";
         const pDate = new Date(rawTimestamp);
-        const now = new Date("2026-06-22T20:47:22+07:00"); // Base reference time
+        const now = new Date("2026-06-22T20:47:22+07:00");
         const diffTime = Math.abs(now.getTime() - pDate.getTime());
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
@@ -555,7 +570,6 @@ export default function MapCanvasMapbox({
       features: mlPoints.map(makeFeature),
     };
 
-    // Keep state values in refs so style.load can fetch them instantly
     circleGeojsonRef.current = circleGeojson;
     mlGeojsonRef.current = mlGeojson;
 
@@ -584,6 +598,7 @@ export default function MapCanvasMapbox({
       const isCitizenActive = layers.find((l) => l.id === "layer-citizen")?.active ?? true;
       const isMlActive = layers.find((l) => l.id === "layer-ml")?.active ?? true;
       const isZonesActive = layers.find((l) => l.id === "layer-zones")?.active ?? true;
+      const isRainfallActive = layers.find((l) => l.id === "layer-rainfall")?.active ?? false;
 
       if (map.getLayer("waste-circles-observation")) {
         map.setLayoutProperty("waste-circles-observation", "visibility", isObsActive ? "visible" : "none");
@@ -600,6 +615,15 @@ export default function MapCanvasMapbox({
       if (map.getLayer("monitoring-zones-outline")) {
         map.setLayoutProperty("monitoring-zones-outline", "visibility", isZonesActive ? "visible" : "none");
       }
+      if (map.getLayer("weather-stations-circles")) {
+        map.setLayoutProperty("weather-stations-circles", "visibility", isRainfallActive ? "visible" : "none");
+      }
+      if (map.getLayer("weather-stations-labels")) {
+        map.setLayoutProperty("weather-stations-labels", "visibility", isRainfallActive ? "visible" : "none");
+      }
+      if (map.getLayer("weather-stations-buffer")) {
+        map.setLayoutProperty("weather-stations-buffer", "visibility", isRainfallActive ? "visible" : "none");
+      }
     };
 
     if (map.isStyleLoaded()) {
@@ -611,14 +635,19 @@ export default function MapCanvasMapbox({
 
   return (
     <div className="flex-1 h-full relative overflow-hidden">
-      <div ref={mapContainerRef} className="w-full h-full" />
+      <div id="map" ref={mapContainerRef} className="w-full h-full" />
 
       {/* Point Detail Popup */}
       {selectedPoint && (
         <MapPointDetail point={selectedPoint} onClose={() => setSelectedPoint(null)} />
       )}
 
-      {/* <MapLegend /> */}
+      {/* Station Detail Popup */}
+      {selectedStation && !selectedPoint && (
+        <MapStationDetail station={selectedStation} onClose={() => setSelectedStation(null)} />
+      )}
+
+      <MapLegend />
     </div>
   );
 }
