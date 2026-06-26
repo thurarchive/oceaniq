@@ -34,14 +34,21 @@ export function useWasteObservations(refreshTrigger: number) {
     async function loadData() {
       setLoading(true);
       try {
-        const { data, error } = await supabase
-          .from("waste_observations")
-          .select("*");
+        const [obsResult, citizenResult] = await Promise.all([
+          supabase.from("waste_observations").select("*"),
+          supabase.from("citizen_reports").select("*").eq("status", "approved"),
+        ]);
 
-        if (error) throw error;
+        if (obsResult.error) throw obsResult.error;
+        if (citizenResult.error) throw citizenResult.error;
 
-        if (data && data.length > 0) {
-          const mapped: MapPoint[] = data.map((item: WasteObservationRow) => {
+        const obsData = obsResult.data ?? [];
+        const citizenData = citizenResult.data ?? [];
+
+        const hasDbData = obsData.length > 0 || citizenData.length > 0;
+
+        if (hasDbData) {
+          const mappedObs: MapPoint[] = obsData.map((item: WasteObservationRow) => {
             const density = item.debris_coverage_m2 ?? item.debris_quantity ?? 0.0;
 
             let intensity: "critical" | "high" | "medium" | "low" = "low";
@@ -102,8 +109,56 @@ export function useWasteObservations(refreshTrigger: number) {
             };
           });
 
-          const citizenAndMlMocks = mockPoints.filter((p) => p.type === "citizen" || p.type === "ml");
-          setPoints([...mapped, ...citizenAndMlMocks]);
+          const mappedCitizen: MapPoint[] = citizenData.map((item: any) => {
+            const density = item.weight_estimate_kg ?? item.area_estimate_m2 ?? 0.0;
+
+            let intensity: "critical" | "high" | "medium" | "low" = "low";
+            if (density > 80) intensity = "critical";
+            else if (density > 45) intensity = "high";
+            else if (density > 10) intensity = "medium";
+            else if (item.volume_estimate === "Large Accumulation") intensity = "critical";
+            else if (item.volume_estimate === "Small Truck Load") intensity = "high";
+            else if (item.volume_estimate === "1–5 Bags") intensity = "medium";
+
+            const categories: string[] = [];
+            if (item.has_plastic) categories.push("Plastic");
+            if (item.has_organic) categories.push("Organic");
+            if (item.has_fishing_gear) categories.push("Fishing gear");
+            if (item.has_styrofoam) categories.push("Styrofoam");
+            if (item.has_glass_metal) categories.push("Glass/Metal");
+            const category = categories.length > 0 ? categories.join(" + ") : "Mixed Debris";
+
+            let desc = "";
+            if (item.weather) desc += `Weather: ${item.weather}. `;
+            if (item.tides) desc += `Tides: ${item.tides}. `;
+            if (item.volume_estimate) desc += `Volume: ${item.volume_estimate}. `;
+            if (item.weight_estimate_kg) desc += `Weight: ~${item.weight_estimate_kg} kg. `;
+            else if (item.weight_range) desc += `Weight: ${item.weight_range}. `;
+            if (item.notes) desc += item.notes;
+            if (!desc) {
+              desc = "Verified citizen report at location.";
+            }
+
+            return {
+              id: item.id,
+              type: "citizen",
+              intensity,
+              zone: item.site_name || "Unnamed Area",
+              lat: item.lat ?? 0.0,
+              lng: item.lng ?? 0.0,
+              wasteDensity: density,
+              wasteCategory: category,
+              confidence: 95,
+              source: "Citizen Report",
+              timestamp: item.observation_time || item.created_at || new Date().toISOString(),
+              moderationStatus: "Approved",
+              description: desc,
+            };
+          });
+
+          // Keep ML mock points for prediction overlay display
+          const mlMocks = mockPoints.filter((p) => p.type === "ml");
+          setPoints([...mappedObs, ...mappedCitizen, ...mlMocks]);
         } else {
           setPoints(mockPoints);
         }

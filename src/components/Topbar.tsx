@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import AppLogo from '@/components/ui/AppLogo';
-import { Map, BarChart3, Home, Menu, X, Bell, Waves, LogOut, Loader2, BookOpen } from 'lucide-react';
+import { Map, BarChart3, Home, Menu, X, Bell, Waves, LogOut, Loader2, BookOpen, LayoutDashboard } from 'lucide-react';
 import { toast } from 'sonner';
 import { User as SupabaseUser } from '@supabase/supabase-js';
 
@@ -22,8 +22,23 @@ const navItems: NavItem[] = [
   { label: 'Analytics', href: '/analytics-dashboard', icon: <BarChart3 size={16} /> },
 ];
 
+const authNavItems: NavItem[] = [
+  { label: 'Dashboard', href: '/user-dashboard', icon: <LayoutDashboard size={16} /> },
+];
+
 interface TopbarProps {
   currentPath?: string;
+}
+
+function getRoleLabel(role?: string): string {
+  switch (role) {
+    case 'admin':
+      return 'Administrator';
+    case 'analyst':
+      return 'Verified Analyst';
+    default:
+      return 'Contributor';
+  }
 }
 
 export default function Topbar({ currentPath = '/' }: TopbarProps) {
@@ -82,7 +97,7 @@ export default function Topbar({ currentPath = '/' }: TopbarProps) {
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-1">
-          {navItems.map((item) => {
+          {[...navItems, ...(user ? authNavItems : [])].map((item) => {
             const isActive = currentPath === item.href;
             return (
               <Link
@@ -159,7 +174,9 @@ export default function Topbar({ currentPath = '/' }: TopbarProps) {
               {profileOpen && (
                 <div className="absolute right-0 top-11 w-56 glass-card-elevated border border-border rounded-xl shadow-2xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                   <div className="px-4 py-3 border-b border-border bg-card/50">
-                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Signed in as</p>
+                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                      Signed in as {getRoleLabel(user.user_metadata?.role)}
+                    </p>
                     <p className="text-sm font-semibold text-foreground truncate mt-0.5">
                       {user.user_metadata?.full_name || 'User'}
                     </p>
@@ -213,7 +230,7 @@ export default function Topbar({ currentPath = '/' }: TopbarProps) {
       {mobileOpen && (
         <div className="md:hidden glass-card-elevated border-t border-border px-4 py-4">
           <nav className="flex flex-col gap-1">
-            {navItems.map((item) => {
+            {[...navItems, ...(user ? authNavItems : [])].map((item) => {
               const isActive = currentPath === item.href;
               return (
                 <Link
@@ -238,7 +255,9 @@ export default function Topbar({ currentPath = '/' }: TopbarProps) {
             ) : user ? (
               <div className="border-t border-border mt-3 pt-3 flex flex-col gap-2">
                 <div className="px-4 py-2 bg-muted/20 rounded-lg">
-                  <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Signed in as</p>
+                  <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                    Signed in as {getRoleLabel(user.user_metadata?.role)}
+                  </p>
                   <p className="text-sm font-semibold text-foreground truncate mt-0.5">
                     {user.user_metadata?.full_name || 'User'}
                   </p>

@@ -588,6 +588,33 @@ export default function MapCanvasMapbox({
     }
   }, [points, selectedCategories, selectedTimeRanges, selectedAreas, confidenceMin]);
 
+  // Focus on map point from URL search parameters on load
+  useEffect(() => {
+    if (!mapRef.current || points.length === 0) return;
+    const map = mapRef.current;
+
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const focusId = params.get("id");
+      const latParam = params.get("lat");
+      const lngParam = params.get("lng");
+
+      if (focusId) {
+        const match = points.find((p) => p.id === focusId);
+        if (match) {
+          map.flyTo({ center: [match.lng, match.lat], zoom: 10 });
+          setSelectedPoint(match);
+        }
+      } else if (latParam && lngParam) {
+        const lat = parseFloat(latParam);
+        const lng = parseFloat(lngParam);
+        if (!isNaN(lat) && !isNaN(lng)) {
+          map.flyTo({ center: [lng, lat], zoom: 10 });
+        }
+      }
+    }
+  }, [points]);
+
   // TOGGLE VISIBILITY FOR ACTIVE LAYERS
   useEffect(() => {
     if (!mapRef.current) return;
