@@ -4,14 +4,15 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import AppLogo from '@/components/ui/AppLogo';
-import { Map, BarChart3, Menu, X, Waves, BookOpen, Loader2 } from 'lucide-react';
+import { Map, BarChart3, Menu, X, Waves, BookOpen, Loader2, Home } from 'lucide-react';
 import { toast } from 'sonner';
 import { User as SupabaseUser } from '@supabase/supabase-js';
 
 const navLinks = [
+  { label: 'Home', href: '/', icon: <Home size={15} /> },
+  { label: 'About', href: '/about', icon: <BookOpen size={15} /> },
   { label: 'Map', href: '/interactive-map', icon: <Map size={15} /> },
   { label: 'Analytics', href: '/analytics-dashboard', icon: <BarChart3 size={15} /> },
-  { label: 'About', href: '/about', icon: <BookOpen size={15} /> },
 ];
 
 export default function LandingTopbar() {

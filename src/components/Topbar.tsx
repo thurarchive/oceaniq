@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import AppLogo from '@/components/ui/AppLogo';
-import { Map, BarChart3, Home, Menu, X, Bell, Waves, LogOut, Loader2 } from 'lucide-react';
+import { Map, BarChart3, Home, Menu, X, Bell, Waves, LogOut, Loader2, BookOpen } from 'lucide-react';
 import { toast } from 'sonner';
 import { User as SupabaseUser } from '@supabase/supabase-js';
 
@@ -17,6 +17,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { label: 'Home', href: '/', icon: <Home size={16} /> },
+  { label: 'About', href: '/about', icon: <BookOpen size={16} /> },
   { label: 'Map', href: '/interactive-map', icon: <Map size={16} /> },
   { label: 'Analytics', href: '/analytics-dashboard', icon: <BarChart3 size={16} /> },
 ];
@@ -138,15 +139,6 @@ export default function Topbar({ currentPath = '/' }: TopbarProps) {
             )}
           </div>
 
-          {/* Contribute CTA */}
-          <Link
-            href="/contribute"
-            className="hidden sm:flex btn-primary items-center gap-2 text-sm"
-          >
-            <Waves size={15} />
-            Contribute
-          </Link>
-
           {/* User Profile / Auth State */}
           {loading ? (
             <div className="w-9 h-9 flex items-center justify-center">
@@ -197,6 +189,15 @@ export default function Topbar({ currentPath = '/' }: TopbarProps) {
             </Link>
           )}
 
+          {/* Contribute CTA */}
+          <Link
+            href="/contribute"
+            className="hidden sm:flex btn-primary items-center gap-2 text-sm"
+          >
+            <Waves size={15} />
+            Contribute
+          </Link>
+
           {/* Mobile menu */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
@@ -228,14 +229,6 @@ export default function Topbar({ currentPath = '/' }: TopbarProps) {
                 </Link>
               );
             })}
-            <Link
-              href="/contribute"
-              onClick={() => setMobileOpen(false)}
-              className="btn-primary flex items-center justify-center gap-2 text-sm mt-2 py-2.5"
-            >
-              <Waves size={15} />
-              Contribute a Report
-            </Link>
 
             {/* Mobile Auth Drawer Controls */}
             {loading ? (
@@ -256,20 +249,38 @@ export default function Topbar({ currentPath = '/' }: TopbarProps) {
                     setMobileOpen(false);
                     handleSignOut();
                   }}
-                  className="w-full flex items-center justify-center gap-2 py-2.5 text-sm text-danger hover:bg-danger/10 rounded-lg transition-colors cursor-pointer font-medium"
+                  className="w-full flex items-center justify-center gap-2 py-2.5 text-sm text-danger hover:bg-danger/10 border border-danger/20 rounded-lg transition-colors cursor-pointer font-medium"
                 >
                   <LogOut size={14} />
                   Sign Out
                 </button>
+                <Link
+                  href="/contribute"
+                  onClick={() => setMobileOpen(false)}
+                  className="btn-primary flex items-center justify-center gap-2 text-sm mt-2 py-2.5"
+                >
+                  <Waves size={15} />
+                  Contribute a Report
+                </Link>
               </div>
             ) : (
-              <Link
-                href="/auth"
-                onClick={() => setMobileOpen(false)}
-                className="w-full flex items-center justify-center gap-2 py-2.5 text-sm border border-primary/20 hover:bg-primary/5 rounded-lg transition-colors text-center mt-2 font-medium text-muted-foreground hover:text-foreground"
-              >
-                Sign In
-              </Link>
+              <div className="flex flex-col gap-2 mt-2">
+                <Link
+                  href="/auth"
+                  onClick={() => setMobileOpen(false)}
+                  className="w-full flex items-center justify-center gap-2 py-2.5 text-sm border border-primary/20 hover:bg-primary/5 rounded-lg transition-colors text-center font-medium text-muted-foreground hover:text-foreground"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/contribute"
+                  onClick={() => setMobileOpen(false)}
+                  className="btn-primary flex items-center justify-center gap-2 text-sm py-2.5"
+                >
+                  <Waves size={15} />
+                  Contribute a Report
+                </Link>
+              </div>
             )}
           </nav>
         </div>
