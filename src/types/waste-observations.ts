@@ -35,6 +35,7 @@ export interface WasteObservation {
   location_lat: number | null;
   location_lng: number | null;
   site_name: string | null;
+  data_source?: string | null;
 
   // Citizen fields
   volume_estimate: VolumeEstimate | null;

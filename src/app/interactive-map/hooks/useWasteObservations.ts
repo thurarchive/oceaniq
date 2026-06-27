@@ -24,6 +24,7 @@ interface WasteObservationRow {
   scatter_pct: number | null;
   approx_moving_debris: number | null;
   approx_stuck_debris: number | null;
+  data_source: string | null;
 }
 
 export function useWasteObservations(refreshTrigger: number) {
@@ -102,7 +103,7 @@ export function useWasteObservations(refreshTrigger: number) {
               wasteDensity: density,
               wasteCategory: category,
               confidence: 100,
-              source: `Official Station #${item.site_id ?? "Unknown"}`,
+              source: item.data_source || `Official Station #${item.site_id ?? "Unknown"}`,
               timestamp: item.observation_time || new Date().toISOString(),
               moderationStatus: "Verified",
               description: desc,
@@ -155,6 +156,7 @@ export function useWasteObservations(refreshTrigger: number) {
               description: desc,
               contributorName: item.contributor_name || undefined,
               reviewerName: item.reviewer_name || undefined,
+              photoUrl: item.photo_url || undefined,
             };
           });
 

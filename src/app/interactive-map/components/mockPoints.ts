@@ -17,6 +17,7 @@ export interface MapPoint {
   y?: number;
   contributorName?: string;
   reviewerName?: string;
+  photoUrl?: string;
 }
 
 export const mockPoints: MapPoint[] = [
@@ -43,6 +44,7 @@ export const mockPoints: MapPoint[] = [
     description: 'Mixed waste including plastic bags, food packaging, and organic material. Post-rainfall accumulation near mangrove edge.',
     contributorName: 'Ahmad Fauzi',
     reviewerName: 'Admin1',
+    photoUrl: 'https://images.unsplash.com/photo-1618477388954-7852f32655ec?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'ml-001',
@@ -78,6 +80,7 @@ export const mockPoints: MapPoint[] = [
     description: 'Large concentration of plastic bags washed up after overnight tide. Photographed and GPS-logged.',
     contributorName: 'Dewi Santoso',
     reviewerName: 'Admin2',
+    photoUrl: 'https://images.unsplash.com/photo-1621451537084-482c730e378a?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'ml-002',
