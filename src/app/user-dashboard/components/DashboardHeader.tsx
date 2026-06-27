@@ -29,7 +29,7 @@ function getRoleLabel(role?: string): string {
 export default function DashboardHeader({ user, onNewReport }: DashboardHeaderProps) {
   const name = user.user_metadata?.full_name ?? user.email?.split('@')[0] ?? 'Contributor';
   const firstName = name.split(' ')[0];
-  const role = user.user_metadata?.role as string | undefined;
+  const role = (user.app_metadata?.role || user.user_metadata?.role) as string | undefined;
 
   return (
     <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">

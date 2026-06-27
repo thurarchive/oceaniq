@@ -103,25 +103,70 @@ export default function MapCanvasMapbox({
     weatherStationsDataRef.current = weatherStationsData;
   }, [weatherStationsData]);
 
-  // Construct weather stations GeoJSON
-  const weatherStationsGeojson: GeoJSON.FeatureCollection = {
-    type: "FeatureCollection",
-    features: weatherStationsData.map(ws => ({
-      type: "Feature",
-      geometry: {
-        type: "Point",
-        coordinates: [ws.lng, ws.lat]
-      },
-      properties: {
-        name: ws.name,
-        databaseStationName: ws.databaseStationName,
-        temp: ws.temp,
-        precip: ws.precip,
-        weatherCode: ws.weatherCode,
-        accumulatedRainfall3d: ws.accumulatedRainfall3d,
-        correlationCoefficient: ws.correlationCoefficient,
-      }
-    }))
+  // React Ref to handle the Mapbox layers/state sync stale closure bug
+  const layersRef = useRef<MapLayer[]>(layers);
+  useEffect(() => {
+    layersRef.current = layers;
+  }, [layers]);
+
+  // Construct weather stations GeoJSON dynamically using Ref to avoid stale closures
+  const getWeatherStationsGeojson = (): GeoJSON.FeatureCollection => {
+    return {
+      type: "FeatureCollection",
+      features: weatherStationsDataRef.current.map(ws => ({
+        type: "Feature",
+        geometry: {
+          type: "Point",
+          coordinates: [ws.lng, ws.lat]
+        },
+        properties: {
+          name: ws.name,
+          databaseStationName: ws.databaseStationName,
+          temp: ws.temp,
+          precip: ws.precip,
+          weatherCode: ws.weatherCode,
+          accumulatedRainfall3d: ws.accumulatedRainfall3d,
+          correlationCoefficient: ws.correlationCoefficient,
+        }
+      }))
+    };
+  };
+
+  const updateVisibility = (mapInstance?: mapboxgl.Map) => {
+    const map = mapInstance || mapRef.current;
+    if (!map) return;
+
+    const currentLayers = layersRef.current;
+    const isObsActive = currentLayers.find((l) => l.id === "layer-observations")?.active ?? true;
+    const isCitizenActive = currentLayers.find((l) => l.id === "layer-citizen")?.active ?? true;
+    const isMlActive = currentLayers.find((l) => l.id === "layer-ml")?.active ?? true;
+    const isZonesActive = currentLayers.find((l) => l.id === "layer-zones")?.active ?? true;
+    const isRainfallActive = currentLayers.find((l) => l.id === "layer-rainfall")?.active ?? false;
+
+    if (map.getLayer("waste-circles-observation")) {
+      map.setLayoutProperty("waste-circles-observation", "visibility", isObsActive ? "visible" : "none");
+    }
+    if (map.getLayer("waste-circles-citizen")) {
+      map.setLayoutProperty("waste-circles-citizen", "visibility", isCitizenActive ? "visible" : "none");
+    }
+    if (map.getLayer("waste-heatmap-ml")) {
+      map.setLayoutProperty("waste-heatmap-ml", "visibility", isMlActive ? "visible" : "none");
+    }
+    if (map.getLayer("monitoring-zones-fill")) {
+      map.setLayoutProperty("monitoring-zones-fill", "visibility", isZonesActive ? "visible" : "none");
+    }
+    if (map.getLayer("monitoring-zones-outline")) {
+      map.setLayoutProperty("monitoring-zones-outline", "visibility", isZonesActive ? "visible" : "none");
+    }
+    if (map.getLayer("weather-stations-circles")) {
+      map.setLayoutProperty("weather-stations-circles", "visibility", isRainfallActive ? "visible" : "none");
+    }
+    if (map.getLayer("weather-stations-labels")) {
+      map.setLayoutProperty("weather-stations-labels", "visibility", isRainfallActive ? "visible" : "none");
+    }
+    if (map.getLayer("weather-stations-buffer")) {
+      map.setLayoutProperty("weather-stations-buffer", "visibility", isRainfallActive ? "visible" : "none");
+    }
   };
 
   // Reusable helper to set up Mapbox custom sources & layers
@@ -148,7 +193,7 @@ export default function MapCanvasMapbox({
     if (!map.getSource("weather-stations-source")) {
       map.addSource("weather-stations-source", {
         type: "geojson",
-        data: weatherStationsGeojson,
+        data: getWeatherStationsGeojson(),
       });
     }
 
@@ -382,6 +427,8 @@ export default function MapCanvasMapbox({
         setSelectedStation(null);
       }
     });
+
+    updateVisibility(map);
   };
 
   // INITIALIZATION: Run once on mount
@@ -443,7 +490,7 @@ export default function MapCanvasMapbox({
     const setWeatherSourceData = () => {
       const source = map.getSource("weather-stations-source") as mapboxgl.GeoJSONSource;
       if (source) {
-        source.setData(weatherStationsGeojson);
+        source.setData(getWeatherStationsGeojson());
       }
     };
 
@@ -620,43 +667,10 @@ export default function MapCanvasMapbox({
     if (!mapRef.current) return;
     const map = mapRef.current;
 
-    const updateVisibility = () => {
-      const isObsActive = layers.find((l) => l.id === "layer-observations")?.active ?? true;
-      const isCitizenActive = layers.find((l) => l.id === "layer-citizen")?.active ?? true;
-      const isMlActive = layers.find((l) => l.id === "layer-ml")?.active ?? true;
-      const isZonesActive = layers.find((l) => l.id === "layer-zones")?.active ?? true;
-      const isRainfallActive = layers.find((l) => l.id === "layer-rainfall")?.active ?? false;
-
-      if (map.getLayer("waste-circles-observation")) {
-        map.setLayoutProperty("waste-circles-observation", "visibility", isObsActive ? "visible" : "none");
-      }
-      if (map.getLayer("waste-circles-citizen")) {
-        map.setLayoutProperty("waste-circles-citizen", "visibility", isCitizenActive ? "visible" : "none");
-      }
-      if (map.getLayer("waste-heatmap-ml")) {
-        map.setLayoutProperty("waste-heatmap-ml", "visibility", isMlActive ? "visible" : "none");
-      }
-      if (map.getLayer("monitoring-zones-fill")) {
-        map.setLayoutProperty("monitoring-zones-fill", "visibility", isZonesActive ? "visible" : "none");
-      }
-      if (map.getLayer("monitoring-zones-outline")) {
-        map.setLayoutProperty("monitoring-zones-outline", "visibility", isZonesActive ? "visible" : "none");
-      }
-      if (map.getLayer("weather-stations-circles")) {
-        map.setLayoutProperty("weather-stations-circles", "visibility", isRainfallActive ? "visible" : "none");
-      }
-      if (map.getLayer("weather-stations-labels")) {
-        map.setLayoutProperty("weather-stations-labels", "visibility", isRainfallActive ? "visible" : "none");
-      }
-      if (map.getLayer("weather-stations-buffer")) {
-        map.setLayoutProperty("weather-stations-buffer", "visibility", isRainfallActive ? "visible" : "none");
-      }
-    };
-
     if (map.isStyleLoaded()) {
-      updateVisibility();
+      updateVisibility(map);
     } else {
-      map.once("idle", updateVisibility);
+      map.once("idle", () => updateVisibility(map));
     }
   }, [layers]);
 

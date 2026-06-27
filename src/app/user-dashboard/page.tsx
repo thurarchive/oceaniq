@@ -30,6 +30,8 @@ export default function UserDashboardPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedDraft, setSelectedDraft] = useState<CitizenReport | null>(null);
 
+  const role = (user?.app_metadata?.role || user?.user_metadata?.role) as string | undefined;
+
   // ── Auth ──
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -78,10 +80,9 @@ export default function UserDashboardPage() {
 
   useEffect(() => {
     if (user) {
-      const role = user.user_metadata?.role as string | undefined;
       loadData(user.id, role);
     }
-  }, [user, loadData]);
+  }, [user, role, loadData]);
 
   // ── Auth loading state ──
   if (authLoading) {
@@ -133,7 +134,7 @@ export default function UserDashboardPage() {
         {/* Section heading */}
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider">
-            {user.user_metadata?.role === 'analyst' || user.user_metadata?.role === 'admin'
+            {role === 'analyst' || role === 'admin'
               ? 'Moderation & Reports'
               : 'My Reports'}
           </h2>
@@ -146,9 +147,9 @@ export default function UserDashboardPage() {
         <SubmissionTabs
           reports={reports}
           userId={user.id}
-          userRole={user.user_metadata?.role as string | undefined}
+          userRole={role}
           loading={dataLoading}
-          onRefresh={() => loadData(user.id, user.user_metadata?.role as string | undefined)}
+          onRefresh={() => loadData(user.id, role)}
           onEdit={(r) => setSelectedDraft(r)}
         />
       </div>
@@ -162,7 +163,7 @@ export default function UserDashboardPage() {
             setModalOpen(false);
             setSelectedDraft(null);
           }}
-          onSuccess={() => loadData(user.id, user.user_metadata?.role as string | undefined)}
+          onSuccess={() => loadData(user.id, role)}
         />
       )}
     </AppLayout>

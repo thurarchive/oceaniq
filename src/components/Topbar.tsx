@@ -175,7 +175,7 @@ export default function Topbar({ currentPath = '/' }: TopbarProps) {
                 <div className="absolute right-0 top-11 w-56 glass-card-elevated border border-border rounded-xl shadow-2xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                   <div className="px-4 py-3 border-b border-border bg-card/50">
                     <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
-                      Signed in as {getRoleLabel(user.user_metadata?.role)}
+                      Signed in as {getRoleLabel(user.app_metadata?.role || user.user_metadata?.role)}
                     </p>
                     <p className="text-sm font-semibold text-foreground truncate mt-0.5">
                       {user.user_metadata?.full_name || 'User'}
@@ -256,7 +256,7 @@ export default function Topbar({ currentPath = '/' }: TopbarProps) {
               <div className="border-t border-border mt-3 pt-3 flex flex-col gap-2">
                 <div className="px-4 py-2 bg-muted/20 rounded-lg">
                   <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
-                    Signed in as {getRoleLabel(user.user_metadata?.role)}
+                    Signed in as {getRoleLabel(user.app_metadata?.role || user.user_metadata?.role)}
                   </p>
                   <p className="text-sm font-semibold text-foreground truncate mt-0.5">
                     {user.user_metadata?.full_name || 'User'}

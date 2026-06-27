@@ -143,7 +143,7 @@ export async function deleteDraftCitizenReport(
  */
 export async function updateCitizenReport(
   id: string,
-  payload: Partial<CitizenReportInsert>
+  payload: Partial<CitizenReport>
 ): Promise<CitizenReport> {
   const { data, error } = await supabase
     .from('citizen_reports')

@@ -17,7 +17,7 @@ function isExpertRole(role?: string): boolean {
 }
 
 export default function NewReportModal({ user, draft, onClose, onSuccess }: NewReportModalProps) {
-  const role = user.user_metadata?.role as string | undefined;
+  const role = (user.app_metadata?.role || user.user_metadata?.role) as string | undefined;
   const isReadOnly = draft && draft.status !== 'draft';
   const isCitizenDraft = draft && ('volume_estimate' in draft || 'has_plastic' in draft);
   const isExpert = isCitizenDraft ? false : isExpertRole(role);
