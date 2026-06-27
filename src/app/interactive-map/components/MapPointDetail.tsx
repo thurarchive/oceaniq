@@ -1,7 +1,8 @@
 'use client';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, MapPin, Clock, User, Gauge, Tag, Layers, CheckCircle, AlertCircle, Brain } from 'lucide-react';
 import StatusBadge from '@/components/ui/StatusBadge';
+import { supabase } from '@/lib/supabase';
 import { MapPoint } from './mockPoints';
 
 interface MapPointDetailProps {
@@ -27,6 +28,28 @@ export default function MapPointDetail({ point, onClose }: MapPointDetailProps) 
   const formattedDate = point.timestamp.split('T')[0];
   const formattedTime = point.timestamp.split('T')[1]?.replace('Z', ' UTC') ?? '';
 
+  const [contributor, setContributor] = useState<string | null>(point.contributorName || null);
+  const [reviewer, setReviewer] = useState<string | null>(point.reviewerName || null);
+
+  useEffect(() => {
+    setContributor(point.contributorName || null);
+    setReviewer(point.reviewerName || null);
+
+    if (point.type === 'citizen') {
+      supabase
+        .from('citizen_reports')
+        .select('contributor_name, reviewer_name')
+        .eq('id', point.id)
+        .single()
+        .then(({ data }) => {
+          if (data) {
+            if (data.contributor_name) setContributor(data.contributor_name);
+            if (data.reviewer_name) setReviewer(data.reviewer_name);
+          }
+        });
+    }
+  }, [point.id, point.type, point.contributorName, point.reviewerName]);
+
   return (
     <div className="absolute top-4 left-4 w-80 glass-card-elevated border border-border rounded-xl overflow-hidden z-30 shadow-2xl">
       {/* Header */}
@@ -41,7 +64,9 @@ export default function MapPointDetail({ point, onClose }: MapPointDetailProps) 
               <CheckCircle size={13} className="text-positive shrink-0" />
             )}
             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-              {typeLabel[point.type]}
+              {point.type === 'citizen'
+                ? `Citizen Report${contributor ? ` submitted by ${contributor}` : ''}`
+                : typeLabel[point.type]}
             </span>
           </div>
           <h3 className="text-sm font-semibold text-foreground truncate">{point.zone}</h3>
@@ -130,13 +155,22 @@ export default function MapPointDetail({ point, onClose }: MapPointDetailProps) 
         {/* Moderation status */}
         <div className="flex items-center justify-between pt-1 border-t border-border">
           <span className="text-xs text-muted-foreground">Status</span>
-          {point.type === 'ml' ? (
-            <StatusBadge variant="estimated" />
-          ) : point.moderationStatus === 'Verified' ? (
-            <StatusBadge variant="verified" />
-          ) : (
-            <StatusBadge variant="approved" />
-          )}
+          <div className="flex items-center gap-1.5">
+            {point.type === 'ml' ? (
+              <StatusBadge variant="estimated" />
+            ) : point.moderationStatus === 'Verified' ? (
+              <StatusBadge variant="verified" />
+            ) : (
+              <>
+                <StatusBadge variant="approved" />
+                {point.type === 'citizen' && (
+                  <span className="text-xs text-muted-foreground font-medium">
+                    by {reviewer || 'Admin'}
+                  </span>
+                )}
+              </>
+            )}
+          </div>
         </div>
 
         {/* Description */}

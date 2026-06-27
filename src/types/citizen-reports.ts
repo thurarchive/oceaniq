@@ -26,6 +26,8 @@ export interface CitizenReport {
   status: CitizenReportStatus;
   reviewed_by: string | null;
   reviewed_at: string | null;
+  contributor_name: string | null;
+  reviewer_name: string | null;
 
   // Location
   site_name: string | null;
@@ -68,7 +70,7 @@ export interface CitizenReport {
 
 export type CitizenReportInsert = Omit<
   CitizenReport,
-  'id' | 'created_at' | 'updated_at' | 'reviewed_by' | 'reviewed_at' | 'promoted_observation_id'
+  'id' | 'created_at' | 'updated_at' | 'reviewed_by' | 'reviewed_at' | 'promoted_observation_id' | 'reviewer_name'
 >;
 
 // Aggregated stats across both citizen_reports and waste_observations

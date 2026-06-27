@@ -153,6 +153,8 @@ export function useWasteObservations(refreshTrigger: number) {
               timestamp: item.observation_time || item.created_at || new Date().toISOString(),
               moderationStatus: "Approved",
               description: desc,
+              contributorName: item.contributor_name || undefined,
+              reviewerName: item.reviewer_name || undefined,
             };
           });
 

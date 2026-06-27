@@ -102,8 +102,8 @@ export default function NewReportModal({ user, draft, onClose, onSuccess }: NewR
           <div className="flex items-center gap-3">
             <div
               className={`w-9 h-9 rounded-xl flex items-center justify-center ${isExpert
-                  ? 'bg-accent/15 text-accent border border-accent/30'
-                  : 'bg-primary/15 text-primary border border-primary/30'
+                ? 'bg-accent/15 text-accent border border-accent/30'
+                : 'bg-primary/15 text-primary border border-primary/30'
                 }`}
             >
               {isExpert ? <FlaskConical size={18} /> : <Users size={18} />}
@@ -113,8 +113,8 @@ export default function NewReportModal({ user, draft, onClose, onSuccess }: NewR
                 {isExpert ? 'Expert / Scientific' : 'Citizen Report'}
               </p>
               <h2 className="text-base font-bold text-foreground leading-tight">
-                {isReadOnly 
-                  ? (isExpert ? 'Scientific Observation Details' : 'Citizen Report Details') 
+                {isReadOnly
+                  ? (isExpert ? 'Scientific Observation Details' : 'Citizen Report Details')
                   : (isExpert ? 'New Scientific Observation' : 'Report a Waste Site')}
               </h2>
             </div>
@@ -144,6 +144,7 @@ export default function NewReportModal({ user, draft, onClose, onSuccess }: NewR
             <CitizenReportForm
               ref={formRef}
               userId={user.id}
+              user={user}
               draft={draft}
               readOnly={isReadOnly}
               onSuccess={handleSuccess}

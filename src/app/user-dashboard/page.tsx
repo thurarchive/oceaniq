@@ -147,6 +147,7 @@ export default function UserDashboardPage() {
         <SubmissionTabs
           reports={reports}
           userId={user.id}
+          user={user}
           userRole={role}
           loading={dataLoading}
           onRefresh={() => loadData(user.id, role)}

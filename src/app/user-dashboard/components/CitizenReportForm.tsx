@@ -198,6 +198,7 @@ export interface FormRef {
 
 interface CitizenReportFormProps {
   userId: string;
+  user?: any;
   draft?: any;
   onSuccess: () => void;
   onCancel: () => void;
@@ -208,7 +209,7 @@ interface CitizenReportFormProps {
 // Main component
 // ─────────────────────────────────────────────
 const CitizenReportForm = forwardRef<FormRef, CitizenReportFormProps>(
-  ({ userId, draft, onSuccess, onCancel, readOnly = false }, ref) => {
+  ({ userId, user, draft, onSuccess, onCancel, readOnly = false }, ref) => {
     const [step, setStep] = useState(0);
     const [detecting, setDetecting] = useState(false);
     const [submitting, setSubmitting] = useState(false);
@@ -285,6 +286,7 @@ const CitizenReportForm = forwardRef<FormRef, CitizenReportFormProps>(
           photo_url = await uploadCitizenPhoto(userId, form.photo);
         }
         const weight_kg = form.weight_estimate_kg ? parseFloat(form.weight_estimate_kg) : null;
+        const contributor_name = user?.user_metadata?.full_name ?? user?.email?.split('@')[0] ?? 'Citizen Contributor';
 
         const payload = {
           user_id: userId,
@@ -304,6 +306,7 @@ const CitizenReportForm = forwardRef<FormRef, CitizenReportFormProps>(
           weight_range: form.weight_range || null,
           photo_url,
           notes: form.notes || null,
+          contributor_name,
         };
 
         if (draft?.id) {
@@ -440,6 +443,7 @@ const CitizenReportForm = forwardRef<FormRef, CitizenReportFormProps>(
           photo_url = await uploadCitizenPhoto(userId, form.photo);
         }
         const weight_kg = form.weight_estimate_kg ? parseFloat(form.weight_estimate_kg) : null;
+        const contributor_name = user?.user_metadata?.full_name ?? user?.email?.split('@')[0] ?? 'Citizen Contributor';
 
         const payload = {
           user_id: userId,
@@ -459,6 +463,7 @@ const CitizenReportForm = forwardRef<FormRef, CitizenReportFormProps>(
           weight_range: form.weight_range || null,
           photo_url,
           notes: form.notes || null,
+          contributor_name,
         };
 
         if (draft?.id) {

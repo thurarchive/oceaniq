@@ -53,17 +53,37 @@ export default function MapHeader({ selectedZone, onZoneChange, onRefresh }: Map
 
   const fetchLastUpdated = async () => {
     try {
-      const { data, error } = await supabase
-        .from('waste_observations')
-        .select('observation_time')
-        .not('observation_time', 'is', null)
-        .order('observation_time', { ascending: false })
-        .limit(1);
+      const [wasteRes, citizenRes] = await Promise.all([
+        supabase
+          .from('waste_observations')
+          .select('observation_time')
+          .not('observation_time', 'is', null)
+          .order('observation_time', { ascending: false })
+          .limit(1),
+        supabase
+          .from('citizen_reports')
+          .select('observation_time')
+          .eq('status', 'approved')
+          .not('observation_time', 'is', null)
+          .order('observation_time', { ascending: false })
+          .limit(1)
+      ]);
 
-      if (error) throw error;
+      if (wasteRes.error) throw wasteRes.error;
+      if (citizenRes.error) throw citizenRes.error;
 
-      if (data && data.length > 0 && data[0].observation_time) {
-        setLastUpdatedText(formatDateToWIB(data[0].observation_time));
+      const wasteTime = wasteRes.data?.[0]?.observation_time;
+      const citizenTime = citizenRes.data?.[0]?.observation_time;
+
+      let latestTime = null;
+      if (wasteTime && citizenTime) {
+        latestTime = new Date(wasteTime) > new Date(citizenTime) ? wasteTime : citizenTime;
+      } else {
+        latestTime = wasteTime || citizenTime;
+      }
+
+      if (latestTime) {
+        setLastUpdatedText(formatDateToWIB(latestTime));
       }
     } catch (err) {
       console.warn('Error fetching observation time:', err);
@@ -91,11 +111,17 @@ export default function MapHeader({ selectedZone, onZoneChange, onRefresh }: Map
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    fetchLastUpdated();
+    fetchSiteNames();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
       fetchLastUpdated();
       fetchSiteNames();
-    }, 0);
-    return () => clearTimeout(timer);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   const handleRefresh = async () => {

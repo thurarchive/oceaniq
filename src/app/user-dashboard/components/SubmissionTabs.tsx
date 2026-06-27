@@ -236,6 +236,7 @@ function SkeletonRows() {
 interface SubmissionTabsProps {
   reports: CitizenReport[];
   userId: string;
+  user?: any;
   userRole?: string;
   loading?: boolean;
   onRefresh?: () => void;
@@ -245,6 +246,7 @@ interface SubmissionTabsProps {
 export default function SubmissionTabs({
   reports,
   userId,
+  user,
   userRole,
   loading = false,
   onRefresh,
@@ -273,9 +275,11 @@ export default function SubmissionTabs({
 
   const handleApprove = async (id: string) => {
     try {
+      const reviewer_name = user?.user_metadata?.full_name ?? user?.email?.split('@')[0] ?? 'Moderator';
       await updateCitizenReport(id, {
         status: 'approved',
         reviewed_by: userId,
+        reviewer_name,
         reviewed_at: new Date().toISOString(),
       });
       toast.success('Report approved and published to map');
@@ -287,9 +291,11 @@ export default function SubmissionTabs({
 
   const handleReject = async (id: string) => {
     try {
+      const reviewer_name = user?.user_metadata?.full_name ?? user?.email?.split('@')[0] ?? 'Moderator';
       await updateCitizenReport(id, {
         status: 'rejected',
         reviewed_by: userId,
+        reviewer_name,
         reviewed_at: new Date().toISOString(),
       });
       toast.success('Report rejected');

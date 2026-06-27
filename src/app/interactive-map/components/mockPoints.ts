@@ -15,6 +15,8 @@ export interface MapPoint {
   clusterCount?: number;
   x?: number;
   y?: number;
+  contributorName?: string;
+  reviewerName?: string;
 }
 
 export const mockPoints: MapPoint[] = [
@@ -39,6 +41,8 @@ export const mockPoints: MapPoint[] = [
     timestamp: '2026-06-17T05:45:00Z',
     moderationStatus: 'Approved',
     description: 'Mixed waste including plastic bags, food packaging, and organic material. Post-rainfall accumulation near mangrove edge.',
+    contributorName: 'Ahmad Fauzi',
+    reviewerName: 'Admin1',
   },
   {
     id: 'ml-001',
@@ -72,6 +76,8 @@ export const mockPoints: MapPoint[] = [
     timestamp: '2026-06-17T04:20:00Z',
     moderationStatus: 'Approved',
     description: 'Large concentration of plastic bags washed up after overnight tide. Photographed and GPS-logged.',
+    contributorName: 'Dewi Santoso',
+    reviewerName: 'Admin2',
   },
   {
     id: 'ml-002',

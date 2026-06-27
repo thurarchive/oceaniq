@@ -1,9 +1,3 @@
--- 1. Enable Row Level Security (RLS) on spatial_ref_sys and configure a read-only policy for all users
-alter table public.spatial_ref_sys enable row level security;
-
-create policy "Allow select for all users" on public.spatial_ref_sys
-  for select using (true);
-
 -- 2. Drop existing policies on citizen_reports that reference user_metadata
 drop policy if exists "Allow moderators to read all reports" on public.citizen_reports;
 drop policy if exists "Allow moderators to update all reports" on public.citizen_reports;
