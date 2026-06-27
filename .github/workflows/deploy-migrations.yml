@@ -24,8 +24,28 @@ jobs:
         with:
           version: latest
 
+      - name: Verify Setup and Secrets
+        run: |
+          if [ ! -f "supabase/config.toml" ]; then
+            echo "::error::The 'supabase' directory or 'supabase/config.toml' is missing from the repository. Please make sure you have committed and pushed the 'supabase/' folder."
+            exit 1
+          fi
+          if [ -z "$SUPABASE_ACCESS_TOKEN" ]; then
+            echo "::error::SUPABASE_ACCESS_TOKEN is missing. Add it to your repository secrets."
+            exit 1
+          fi
+          if [ -z "$SUPABASE_DB_PASSWORD" ]; then
+            echo "::error::SUPABASE_DB_PASSWORD is missing. Add it to your repository secrets."
+            exit 1
+          fi
+          if [ -z "$SUPABASE_PROJECT_ID" ]; then
+            echo "::error::SUPABASE_PROJECT_ID is missing. Add it to your repository secrets."
+            exit 1
+          fi
+
       - name: Link Project
         run: supabase link --project-ref "$SUPABASE_PROJECT_ID"
 
       - name: Push Migrations
         run: supabase db push
+
