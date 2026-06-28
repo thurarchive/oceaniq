@@ -1,0 +1,1879 @@
+{
+  "overall_metrics": {
+    "xgboost": {
+      "mae": 249.16,
+      "rmse": 342.43
+    },
+    "chronos": {
+      "mae": 278.63,
+      "rmse": 427.71
+    },
+    "chronos_tuned": {
+      "mae": 272.22,
+      "rmse": 407.71
+    }
+  },
+  "sites": {
+    "1": {
+      "site_id": 1,
+      "site_name": "Kutai Barat Sector 1",
+      "lat": -0.7615004644606858,
+      "lng": 116.50301774121613,
+      "metrics": {
+        "xgboost": {
+          "mae": 318.5,
+          "rmse": 439.99
+        },
+        "chronos": {
+          "mae": 392.55,
+          "rmse": 606.96
+        },
+        "chronos_tuned": {
+          "mae": 358.72,
+          "rmse": 553.62
+        }
+      },
+      "series": [
+        {
+          "date": "2025-11-27",
+          "actual": 1319,
+          "xgboost": 1709.6,
+          "chronos": 1323.5,
+          "chronos_tuned": 1247.8,
+          "weather": "Rain",
+          "tides_in_number": -0.335,
+          "debris_coverage": 60.7
+        },
+        {
+          "date": "2025-11-28",
+          "actual": 1257,
+          "xgboost": 1480.2,
+          "chronos": 1270.5,
+          "chronos_tuned": 1149.5,
+          "weather": "Clear",
+          "tides_in_number": -0.33,
+          "debris_coverage": 72.81
+        },
+        {
+          "date": "2025-11-29",
+          "actual": 1127,
+          "xgboost": 1440.2,
+          "chronos": 1149.5,
+          "chronos_tuned": 1104.1,
+          "weather": "Overcast",
+          "tides_in_number": -0.751,
+          "debris_coverage": 45.94
+        },
+        {
+          "date": "2025-11-30",
+          "actual": 1684,
+          "xgboost": 1426.1,
+          "chronos": 1157.1,
+          "chronos_tuned": 1126.8,
+          "weather": "Rain",
+          "tides_in_number": -0.881,
+          "debris_coverage": 83.41
+        },
+        {
+          "date": "2025-12-01",
+          "actual": 1923,
+          "xgboost": 1566.6,
+          "chronos": 1119.3,
+          "chronos_tuned": 1089.0,
+          "weather": "Rain",
+          "tides_in_number": -0.819,
+          "debris_coverage": 99.61
+        },
+        {
+          "date": "2025-12-02",
+          "actual": 2538,
+          "xgboost": 1621.3,
+          "chronos": 1126.8,
+          "chronos_tuned": 1096.6,
+          "weather": "Rain",
+          "tides_in_number": -0.309,
+          "debris_coverage": 137.48
+        },
+        {
+          "date": "2025-12-03",
+          "actual": 1953,
+          "xgboost": 1420.9,
+          "chronos": 1066.3,
+          "chronos_tuned": 1096.6,
+          "weather": "Clear",
+          "tides_in_number": -0.015,
+          "debris_coverage": 107.07
+        },
+        {
+          "date": "2025-12-04",
+          "actual": 1446,
+          "xgboost": 1365.3,
+          "chronos": 1089.0,
+          "chronos_tuned": 1119.3,
+          "weather": "Clear",
+          "tides_in_number": 0.115,
+          "debris_coverage": 71.17
+        },
+        {
+          "date": "2025-12-05",
+          "actual": 744,
+          "xgboost": 1361.6,
+          "chronos": 1104.1,
+          "chronos_tuned": 1172.2,
+          "weather": "Rain",
+          "tides_in_number": 0.606,
+          "debris_coverage": 48.95
+        },
+        {
+          "date": "2025-12-06",
+          "actual": 1018,
+          "xgboost": 1205.6,
+          "chronos": 1142.0,
+          "chronos_tuned": 1126.8,
+          "weather": "Overcast",
+          "tides_in_number": 1.034,
+          "debris_coverage": 58.05
+        },
+        {
+          "date": "2025-12-07",
+          "actual": 1464,
+          "xgboost": 1324.0,
+          "chronos": 1051.2,
+          "chronos_tuned": 1255.4,
+          "weather": "Rain",
+          "tides_in_number": 0.712,
+          "debris_coverage": 75.72
+        },
+        {
+          "date": "2025-12-08",
+          "actual": 1105,
+          "xgboost": 1177.3,
+          "chronos": 1104.1,
+          "chronos_tuned": 1315.9,
+          "weather": "Clear",
+          "tides_in_number": 0.433,
+          "debris_coverage": 63.23
+        },
+        {
+          "date": "2025-12-09",
+          "actual": 1273,
+          "xgboost": 1299.9,
+          "chronos": 1164.6,
+          "chronos_tuned": 1308.3,
+          "weather": "Overcast",
+          "tides_in_number": 0.337,
+          "debris_coverage": 73.85
+        },
+        {
+          "date": "2025-12-10",
+          "actual": 1239,
+          "xgboost": 1436.1,
+          "chronos": 1149.5,
+          "chronos_tuned": 1285.6,
+          "weather": "Rain",
+          "tides_in_number": -0.032,
+          "debris_coverage": 57.41
+        },
+        {
+          "date": "2025-12-11",
+          "actual": 1289,
+          "xgboost": 1466.2,
+          "chronos": 1119.3,
+          "chronos_tuned": 1331.0,
+          "weather": "Overcast",
+          "tides_in_number": -0.399,
+          "debris_coverage": 59.39
+        },
+        {
+          "date": "2025-12-12",
+          "actual": 1208,
+          "xgboost": 1319.3,
+          "chronos": 1096.6,
+          "chronos_tuned": 1278.1,
+          "weather": "Overcast",
+          "tides_in_number": -0.386,
+          "debris_coverage": 64.51
+        },
+        {
+          "date": "2025-12-13",
+          "actual": 1093,
+          "xgboost": 1234.0,
+          "chronos": 1096.6,
+          "chronos_tuned": 1323.5,
+          "weather": "Overcast",
+          "tides_in_number": -0.94,
+          "debris_coverage": 57.62
+        },
+        {
+          "date": "2025-12-14",
+          "actual": 844,
+          "xgboost": 1186.0,
+          "chronos": 1013.4,
+          "chronos_tuned": 1368.8,
+          "weather": "Clear",
+          "tides_in_number": -0.822,
+          "debris_coverage": 30.75
+        },
+        {
+          "date": "2025-12-15",
+          "actual": 1111,
+          "xgboost": 1098.7,
+          "chronos": 1028.5,
+          "chronos_tuned": 1255.4,
+          "weather": "Clear",
+          "tides_in_number": -0.803,
+          "debris_coverage": 50.98
+        },
+        {
+          "date": "2025-12-16",
+          "actual": 960,
+          "xgboost": 1218.6,
+          "chronos": 1013.4,
+          "chronos_tuned": 1217.6,
+          "weather": "Overcast",
+          "tides_in_number": -0.59,
+          "debris_coverage": 58.81
+        },
+        {
+          "date": "2025-12-17",
+          "actual": 1125,
+          "xgboost": 1370.0,
+          "chronos": 998.3,
+          "chronos_tuned": 1179.8,
+          "weather": "Rain",
+          "tides_in_number": -0.06,
+          "debris_coverage": 71.06
+        },
+        {
+          "date": "2025-12-18",
+          "actual": 965,
+          "xgboost": 1326.4,
+          "chronos": 968.0,
+          "chronos_tuned": 1187.3,
+          "weather": "Clear",
+          "tides_in_number": 0.366,
+          "debris_coverage": 51.34
+        },
+        {
+          "date": "2025-12-19",
+          "actual": 1166,
+          "xgboost": 1172.7,
+          "chronos": 1073.9,
+          "chronos_tuned": 1247.8,
+          "weather": "Overcast",
+          "tides_in_number": 0.633,
+          "debris_coverage": 61.75
+        },
+        {
+          "date": "2025-12-20",
+          "actual": 1335,
+          "xgboost": 1223.0,
+          "chronos": 1028.5,
+          "chronos_tuned": 1240.3,
+          "weather": "Rain",
+          "tides_in_number": 0.809,
+          "debris_coverage": 65.26
+        },
+        {
+          "date": "2025-12-21",
+          "actual": 1446,
+          "xgboost": 1073.5,
+          "chronos": 1058.8,
+          "chronos_tuned": 1285.6,
+          "weather": "Clear",
+          "tides_in_number": 1.099,
+          "debris_coverage": 69.08
+        },
+        {
+          "date": "2025-12-22",
+          "actual": 1447,
+          "xgboost": 1117.5,
+          "chronos": 1073.9,
+          "chronos_tuned": 1225.1,
+          "weather": "Overcast",
+          "tides_in_number": 0.811,
+          "debris_coverage": 78.26
+        },
+        {
+          "date": "2025-12-23",
+          "actual": 1988,
+          "xgboost": 1343.6,
+          "chronos": 1043.6,
+          "chronos_tuned": 1202.5,
+          "weather": "Rain",
+          "tides_in_number": 0.201,
+          "debris_coverage": 105.63
+        },
+        {
+          "date": "2025-12-24",
+          "actual": 2654,
+          "xgboost": 1376.6,
+          "chronos": 1013.4,
+          "chronos_tuned": 1210.0,
+          "weather": "Rain",
+          "tides_in_number": -0.17,
+          "debris_coverage": 143.42
+        },
+        {
+          "date": "2025-12-25",
+          "actual": 2855,
+          "xgboost": 1593.6,
+          "chronos": 945.3,
+          "chronos_tuned": 1179.8,
+          "weather": "Rain",
+          "tides_in_number": -0.374,
+          "debris_coverage": 152.13
+        },
+        {
+          "date": "2025-12-26",
+          "actual": 1719,
+          "xgboost": 1309.6,
+          "chronos": 1043.6,
+          "chronos_tuned": 1217.6,
+          "weather": "Overcast",
+          "tides_in_number": -0.831,
+          "debris_coverage": 89.62
+        },
+        {
+          "date": "2025-12-27",
+          "actual": 1364,
+          "xgboost": 1200.8,
+          "chronos": 937.8,
+          "chronos_tuned": 1217.6,
+          "weather": "Overcast",
+          "tides_in_number": -1.011,
+          "debris_coverage": 67.76
+        },
+        {
+          "date": "2025-12-28",
+          "actual": 1426,
+          "xgboost": 1241.9,
+          "chronos": 1005.8,
+          "chronos_tuned": 1232.7,
+          "weather": "Rain",
+          "tides_in_number": -0.831,
+          "debris_coverage": 76.44
+        },
+        {
+          "date": "2025-12-29",
+          "actual": 1344,
+          "xgboost": 1281.1,
+          "chronos": 983.1,
+          "chronos_tuned": 1217.6,
+          "weather": "Overcast",
+          "tides_in_number": -0.747,
+          "debris_coverage": 70.95
+        },
+        {
+          "date": "2025-12-30",
+          "actual": 1196,
+          "xgboost": 1242.5,
+          "chronos": 983.1,
+          "chronos_tuned": 1202.5,
+          "weather": "Clear",
+          "tides_in_number": -0.264,
+          "debris_coverage": 56.52
+        },
+        {
+          "date": "2025-12-31",
+          "actual": 872,
+          "xgboost": 1188.1,
+          "chronos": 1021.0,
+          "chronos_tuned": 1187.3,
+          "weather": "Clear",
+          "tides_in_number": -0.157,
+          "debris_coverage": 46.91
+        }
+      ]
+    },
+    "2": {
+      "site_id": 2,
+      "site_name": "Maluku Utara Sector 2",
+      "lat": -1.523355477299518,
+      "lng": 125.11886463604895,
+      "metrics": {
+        "xgboost": {
+          "mae": 151.48,
+          "rmse": 182.46
+        },
+        "chronos": {
+          "mae": 124.17,
+          "rmse": 170.53
+        },
+        "chronos_tuned": {
+          "mae": 120.99,
+          "rmse": 165.42
+        }
+      },
+      "series": [
+        {
+          "date": "2025-11-27",
+          "actual": 1044,
+          "xgboost": 1219.1,
+          "chronos": 898.2,
+          "chronos_tuned": 952.5,
+          "weather": "Rain",
+          "tides_in_number": -0.134,
+          "debris_coverage": 54.13
+        },
+        {
+          "date": "2025-11-28",
+          "actual": 909,
+          "xgboost": 1063.6,
+          "chronos": 898.2,
+          "chronos_tuned": 934.4,
+          "weather": "Clear",
+          "tides_in_number": -0.675,
+          "debris_coverage": 51.41
+        },
+        {
+          "date": "2025-11-29",
+          "actual": 835,
+          "xgboost": 1024.5,
+          "chronos": 904.3,
+          "chronos_tuned": 934.4,
+          "weather": "Overcast",
+          "tides_in_number": -1.153,
+          "debris_coverage": 40.26
+        },
+        {
+          "date": "2025-11-30",
+          "actual": 941,
+          "xgboost": 991.3,
+          "chronos": 940.4,
+          "chronos_tuned": 904.3,
+          "weather": "Rain",
+          "tides_in_number": -0.921,
+          "debris_coverage": 45.91
+        },
+        {
+          "date": "2025-12-01",
+          "actual": 1002,
+          "xgboost": 1040.9,
+          "chronos": 934.4,
+          "chronos_tuned": 916.3,
+          "weather": "Rain",
+          "tides_in_number": -0.474,
+          "debris_coverage": 65.29
+        },
+        {
+          "date": "2025-12-02",
+          "actual": 1241,
+          "xgboost": 1103.2,
+          "chronos": 904.3,
+          "chronos_tuned": 940.4,
+          "weather": "Rain",
+          "tides_in_number": -0.549,
+          "debris_coverage": 71.61
+        },
+        {
+          "date": "2025-12-03",
+          "actual": 1318,
+          "xgboost": 1059.8,
+          "chronos": 958.5,
+          "chronos_tuned": 970.6,
+          "weather": "Clear",
+          "tides_in_number": -0.09,
+          "debris_coverage": 70.33
+        },
+        {
+          "date": "2025-12-04",
+          "actual": 1078,
+          "xgboost": 1070.1,
+          "chronos": 1000.7,
+          "chronos_tuned": 1042.9,
+          "weather": "Clear",
+          "tides_in_number": 0.289,
+          "debris_coverage": 60.61
+        },
+        {
+          "date": "2025-12-05",
+          "actual": 1048,
+          "xgboost": 976.7,
+          "chronos": 1018.8,
+          "chronos_tuned": 1085.1,
+          "weather": "Rain",
+          "tides_in_number": 0.653,
+          "debris_coverage": 51.52
+        },
+        {
+          "date": "2025-12-06",
+          "actual": 1183,
+          "xgboost": 1006.6,
+          "chronos": 1018.8,
+          "chronos_tuned": 1115.3,
+          "weather": "Rain",
+          "tides_in_number": 0.733,
+          "debris_coverage": 64.04
+        },
+        {
+          "date": "2025-12-07",
+          "actual": 1148,
+          "xgboost": 963.5,
+          "chronos": 1018.8,
+          "chronos_tuned": 1097.2,
+          "weather": "Rain",
+          "tides_in_number": 0.61,
+          "debris_coverage": 58.59
+        },
+        {
+          "date": "2025-12-08",
+          "actual": 986,
+          "xgboost": 936.5,
+          "chronos": 958.5,
+          "chronos_tuned": 1018.8,
+          "weather": "Clear",
+          "tides_in_number": 0.333,
+          "debris_coverage": 55.56
+        },
+        {
+          "date": "2025-12-09",
+          "actual": 1008,
+          "xgboost": 1086.1,
+          "chronos": 958.5,
+          "chronos_tuned": 1000.7,
+          "weather": "Rain",
+          "tides_in_number": 0.161,
+          "debris_coverage": 60.14
+        },
+        {
+          "date": "2025-12-10",
+          "actual": 965,
+          "xgboost": 1111.6,
+          "chronos": 970.6,
+          "chronos_tuned": 994.7,
+          "weather": "Rain",
+          "tides_in_number": 0.06,
+          "debris_coverage": 43.12
+        },
+        {
+          "date": "2025-12-11",
+          "actual": 1012,
+          "xgboost": 1180.6,
+          "chronos": 964.6,
+          "chronos_tuned": 1000.7,
+          "weather": "Overcast",
+          "tides_in_number": -0.149,
+          "debris_coverage": 51.44
+        },
+        {
+          "date": "2025-12-12",
+          "actual": 948,
+          "xgboost": 1065.5,
+          "chronos": 970.6,
+          "chronos_tuned": 964.6,
+          "weather": "Overcast",
+          "tides_in_number": -0.69,
+          "debris_coverage": 46.41
+        },
+        {
+          "date": "2025-12-13",
+          "actual": 949,
+          "xgboost": 1030.0,
+          "chronos": 1006.8,
+          "chronos_tuned": 982.6,
+          "weather": "Clear",
+          "tides_in_number": -0.797,
+          "debris_coverage": 53.46
+        },
+        {
+          "date": "2025-12-14",
+          "actual": 874,
+          "xgboost": 943.6,
+          "chronos": 934.4,
+          "chronos_tuned": 988.7,
+          "weather": "Clear",
+          "tides_in_number": -1.04,
+          "debris_coverage": 42.57
+        },
+        {
+          "date": "2025-12-15",
+          "actual": 810,
+          "xgboost": 903.2,
+          "chronos": 976.6,
+          "chronos_tuned": 970.6,
+          "weather": "Clear",
+          "tides_in_number": -0.839,
+          "debris_coverage": 32.22
+        },
+        {
+          "date": "2025-12-16",
+          "actual": 812,
+          "xgboost": 942.2,
+          "chronos": 952.5,
+          "chronos_tuned": 1018.8,
+          "weather": "Overcast",
+          "tides_in_number": -0.449,
+          "debris_coverage": 52.72
+        },
+        {
+          "date": "2025-12-17",
+          "actual": 827,
+          "xgboost": 990.8,
+          "chronos": 1000.7,
+          "chronos_tuned": 1042.9,
+          "weather": "Overcast",
+          "tides_in_number": -0.201,
+          "debris_coverage": 45.2
+        },
+        {
+          "date": "2025-12-18",
+          "actual": 746,
+          "xgboost": 965.3,
+          "chronos": 994.7,
+          "chronos_tuned": 1055.0,
+          "weather": "Clear",
+          "tides_in_number": 0.473,
+          "debris_coverage": 38.77
+        },
+        {
+          "date": "2025-12-19",
+          "actual": 970,
+          "xgboost": 875.4,
+          "chronos": 1012.8,
+          "chronos_tuned": 1097.2,
+          "weather": "Overcast",
+          "tides_in_number": 0.643,
+          "debris_coverage": 43.27
+        },
+        {
+          "date": "2025-12-20",
+          "actual": 1083,
+          "xgboost": 875.5,
+          "chronos": 1036.9,
+          "chronos_tuned": 1097.2,
+          "weather": "Rain",
+          "tides_in_number": 0.858,
+          "debris_coverage": 57.85
+        },
+        {
+          "date": "2025-12-21",
+          "actual": 1108,
+          "xgboost": 791.6,
+          "chronos": 994.7,
+          "chronos_tuned": 1067.0,
+          "weather": "Clear",
+          "tides_in_number": 0.765,
+          "debris_coverage": 59.44
+        },
+        {
+          "date": "2025-12-22",
+          "actual": 1060,
+          "xgboost": 899.9,
+          "chronos": 976.6,
+          "chronos_tuned": 1085.1,
+          "weather": "Rain",
+          "tides_in_number": 0.591,
+          "debris_coverage": 61.63
+        },
+        {
+          "date": "2025-12-23",
+          "actual": 1260,
+          "xgboost": 900.4,
+          "chronos": 976.6,
+          "chronos_tuned": 1049.0,
+          "weather": "Rain",
+          "tides_in_number": 0.572,
+          "debris_coverage": 62.38
+        },
+        {
+          "date": "2025-12-24",
+          "actual": 1431,
+          "xgboost": 968.1,
+          "chronos": 1000.7,
+          "chronos_tuned": 1024.8,
+          "weather": "Rain",
+          "tides_in_number": -0.049,
+          "debris_coverage": 74.09
+        },
+        {
+          "date": "2025-12-25",
+          "actual": 1345,
+          "xgboost": 981.7,
+          "chronos": 946.5,
+          "chronos_tuned": 1024.8,
+          "weather": "Overcast",
+          "tides_in_number": -0.464,
+          "debris_coverage": 70.11
+        },
+        {
+          "date": "2025-12-26",
+          "actual": 909,
+          "xgboost": 901.6,
+          "chronos": 946.5,
+          "chronos_tuned": 994.7,
+          "weather": "Clear",
+          "tides_in_number": -0.782,
+          "debris_coverage": 52.97
+        },
+        {
+          "date": "2025-12-27",
+          "actual": 723,
+          "xgboost": 858.3,
+          "chronos": 988.7,
+          "chronos_tuned": 1006.8,
+          "weather": "Overcast",
+          "tides_in_number": -0.801,
+          "debris_coverage": 34.78
+        },
+        {
+          "date": "2025-12-28",
+          "actual": 953,
+          "xgboost": 854.3,
+          "chronos": 1018.8,
+          "chronos_tuned": 1049.0,
+          "weather": "Rain",
+          "tides_in_number": -0.831,
+          "debris_coverage": 63.86
+        },
+        {
+          "date": "2025-12-29",
+          "actual": 980,
+          "xgboost": 854.6,
+          "chronos": 934.4,
+          "chronos_tuned": 1042.9,
+          "weather": "Overcast",
+          "tides_in_number": -0.568,
+          "debris_coverage": 40.64
+        },
+        {
+          "date": "2025-12-30",
+          "actual": 996,
+          "xgboost": 815.9,
+          "chronos": 1018.8,
+          "chronos_tuned": 1018.8,
+          "weather": "Clear",
+          "tides_in_number": -0.562,
+          "debris_coverage": 50.65
+        },
+        {
+          "date": "2025-12-31",
+          "actual": 862,
+          "xgboost": 833.6,
+          "chronos": 982.6,
+          "chronos_tuned": 1085.1,
+          "weather": "Clear",
+          "tides_in_number": 0.065,
+          "debris_coverage": 49.81
+        }
+      ]
+    },
+    "3": {
+      "site_id": 3,
+      "site_name": "Sulawesi Tenggara Sector 3",
+      "lat": -4.143160350772332,
+      "lng": 121.60920032689474,
+      "metrics": {
+        "xgboost": {
+          "mae": 175.9,
+          "rmse": 229.67
+        },
+        "chronos": {
+          "mae": 173.57,
+          "rmse": 274.35
+        },
+        "chronos_tuned": {
+          "mae": 177.33,
+          "rmse": 275.68
+        }
+      },
+      "series": [
+        {
+          "date": "2025-11-27",
+          "actual": 498,
+          "xgboost": 768.7,
+          "chronos": 715.0,
+          "chronos_tuned": 674.4,
+          "weather": "Overcast",
+          "tides_in_number": -0.31,
+          "debris_coverage": 24.48
+        },
+        {
+          "date": "2025-11-28",
+          "actual": 706,
+          "xgboost": 712.7,
+          "chronos": 674.4,
+          "chronos_tuned": 619.1,
+          "weather": "Clear",
+          "tides_in_number": -0.666,
+          "debris_coverage": 36.54
+        },
+        {
+          "date": "2025-11-29",
+          "actual": 537,
+          "xgboost": 712.7,
+          "chronos": 622.8,
+          "chronos_tuned": 648.6,
+          "weather": "Overcast",
+          "tides_in_number": -0.835,
+          "debris_coverage": 24.43
+        },
+        {
+          "date": "2025-11-30",
+          "actual": 749,
+          "xgboost": 818.4,
+          "chronos": 597.0,
+          "chronos_tuned": 637.6,
+          "weather": "Rain",
+          "tides_in_number": -0.517,
+          "debris_coverage": 32.99
+        },
+        {
+          "date": "2025-12-01",
+          "actual": 905,
+          "xgboost": 775.1,
+          "chronos": 659.7,
+          "chronos_tuned": 597.0,
+          "weather": "Rain",
+          "tides_in_number": -0.463,
+          "debris_coverage": 48.43
+        },
+        {
+          "date": "2025-12-02",
+          "actual": 1388,
+          "xgboost": 779.2,
+          "chronos": 659.7,
+          "chronos_tuned": 630.2,
+          "weather": "Rain",
+          "tides_in_number": -0.241,
+          "debris_coverage": 70.16
+        },
+        {
+          "date": "2025-12-03",
+          "actual": 1069,
+          "xgboost": 748.7,
+          "chronos": 667.1,
+          "chronos_tuned": 630.2,
+          "weather": "Clear",
+          "tides_in_number": -0.087,
+          "debris_coverage": 58.37
+        },
+        {
+          "date": "2025-12-04",
+          "actual": 794,
+          "xgboost": 762.5,
+          "chronos": 678.1,
+          "chronos_tuned": 656.0,
+          "weather": "Clear",
+          "tides_in_number": 0.301,
+          "debris_coverage": 42.76
+        },
+        {
+          "date": "2025-12-05",
+          "actual": 651,
+          "xgboost": 724.4,
+          "chronos": 667.1,
+          "chronos_tuned": 652.3,
+          "weather": "Rain",
+          "tides_in_number": 0.69,
+          "debris_coverage": 38.03
+        },
+        {
+          "date": "2025-12-06",
+          "actual": 678,
+          "xgboost": 744.9,
+          "chronos": 637.6,
+          "chronos_tuned": 692.9,
+          "weather": "Rain",
+          "tides_in_number": 0.81,
+          "debris_coverage": 30.44
+        },
+        {
+          "date": "2025-12-07",
+          "actual": 737,
+          "xgboost": 813.7,
+          "chronos": 659.7,
+          "chronos_tuned": 681.8,
+          "weather": "Rain",
+          "tides_in_number": 0.808,
+          "debris_coverage": 33.01
+        },
+        {
+          "date": "2025-12-08",
+          "actual": 788,
+          "xgboost": 721.8,
+          "chronos": 674.4,
+          "chronos_tuned": 663.4,
+          "weather": "Clear",
+          "tides_in_number": 0.725,
+          "debris_coverage": 45.77
+        },
+        {
+          "date": "2025-12-09",
+          "actual": 815,
+          "xgboost": 747.2,
+          "chronos": 670.7,
+          "chronos_tuned": 656.0,
+          "weather": "Overcast",
+          "tides_in_number": 0.364,
+          "debris_coverage": 45.24
+        },
+        {
+          "date": "2025-12-10",
+          "actual": 462,
+          "xgboost": 794.2,
+          "chronos": 644.9,
+          "chronos_tuned": 656.0,
+          "weather": "Rain",
+          "tides_in_number": -0.002,
+          "debris_coverage": 22.78
+        },
+        {
+          "date": "2025-12-11",
+          "actual": 697,
+          "xgboost": 810.2,
+          "chronos": 644.9,
+          "chronos_tuned": 670.7,
+          "weather": "Overcast",
+          "tides_in_number": -0.312,
+          "debris_coverage": 34.77
+        },
+        {
+          "date": "2025-12-12",
+          "actual": 685,
+          "xgboost": 797.5,
+          "chronos": 659.7,
+          "chronos_tuned": 674.4,
+          "weather": "Rain",
+          "tides_in_number": -0.447,
+          "debris_coverage": 38.98
+        },
+        {
+          "date": "2025-12-13",
+          "actual": 621,
+          "xgboost": 768.5,
+          "chronos": 648.6,
+          "chronos_tuned": 648.6,
+          "weather": "Clear",
+          "tides_in_number": -0.93,
+          "debris_coverage": 26.8
+        },
+        {
+          "date": "2025-12-14",
+          "actual": 554,
+          "xgboost": 763.6,
+          "chronos": 626.5,
+          "chronos_tuned": 692.9,
+          "weather": "Overcast",
+          "tides_in_number": -0.837,
+          "debris_coverage": 23.67
+        },
+        {
+          "date": "2025-12-15",
+          "actual": 483,
+          "xgboost": 732.1,
+          "chronos": 630.2,
+          "chronos_tuned": 696.5,
+          "weather": "Clear",
+          "tides_in_number": -0.658,
+          "debris_coverage": 24.79
+        },
+        {
+          "date": "2025-12-16",
+          "actual": 659,
+          "xgboost": 790.0,
+          "chronos": 644.9,
+          "chronos_tuned": 689.2,
+          "weather": "Rain",
+          "tides_in_number": -0.488,
+          "debris_coverage": 36.0
+        },
+        {
+          "date": "2025-12-17",
+          "actual": 778,
+          "xgboost": 800.1,
+          "chronos": 644.9,
+          "chronos_tuned": 707.6,
+          "weather": "Rain",
+          "tides_in_number": -0.373,
+          "debris_coverage": 38.08
+        },
+        {
+          "date": "2025-12-18",
+          "actual": 716,
+          "xgboost": 808.2,
+          "chronos": 652.3,
+          "chronos_tuned": 696.5,
+          "weather": "Clear",
+          "tides_in_number": 0.091,
+          "debris_coverage": 33.52
+        },
+        {
+          "date": "2025-12-19",
+          "actual": 584,
+          "xgboost": 725.2,
+          "chronos": 648.6,
+          "chronos_tuned": 689.2,
+          "weather": "Overcast",
+          "tides_in_number": 0.56,
+          "debris_coverage": 35.21
+        },
+        {
+          "date": "2025-12-20",
+          "actual": 591,
+          "xgboost": 783.4,
+          "chronos": 615.5,
+          "chronos_tuned": 674.4,
+          "weather": "Rain",
+          "tides_in_number": 0.698,
+          "debris_coverage": 34.06
+        },
+        {
+          "date": "2025-12-21",
+          "actual": 615,
+          "xgboost": 678.0,
+          "chronos": 633.9,
+          "chronos_tuned": 674.4,
+          "weather": "Clear",
+          "tides_in_number": 0.782,
+          "debris_coverage": 31.7
+        },
+        {
+          "date": "2025-12-22",
+          "actual": 762,
+          "xgboost": 746.3,
+          "chronos": 648.6,
+          "chronos_tuned": 667.1,
+          "weather": "Rain",
+          "tides_in_number": 0.846,
+          "debris_coverage": 40.86
+        },
+        {
+          "date": "2025-12-23",
+          "actual": 1225,
+          "xgboost": 803.5,
+          "chronos": 641.3,
+          "chronos_tuned": 681.8,
+          "weather": "Rain",
+          "tides_in_number": 0.206,
+          "debris_coverage": 55.32
+        },
+        {
+          "date": "2025-12-24",
+          "actual": 1349,
+          "xgboost": 815.5,
+          "chronos": 641.3,
+          "chronos_tuned": 659.7,
+          "weather": "Rain",
+          "tides_in_number": 0.033,
+          "debris_coverage": 68.33
+        },
+        {
+          "date": "2025-12-25",
+          "actual": 1420,
+          "xgboost": 923.6,
+          "chronos": 619.1,
+          "chronos_tuned": 637.6,
+          "weather": "Rain",
+          "tides_in_number": -0.539,
+          "debris_coverage": 75.69
+        },
+        {
+          "date": "2025-12-26",
+          "actual": 1004,
+          "xgboost": 831.6,
+          "chronos": 633.9,
+          "chronos_tuned": 656.0,
+          "weather": "Clear",
+          "tides_in_number": -1.024,
+          "debris_coverage": 59.53
+        },
+        {
+          "date": "2025-12-27",
+          "actual": 662,
+          "xgboost": 810.2,
+          "chronos": 626.5,
+          "chronos_tuned": 663.4,
+          "weather": "Clear",
+          "tides_in_number": -1.052,
+          "debris_coverage": 29.39
+        },
+        {
+          "date": "2025-12-28",
+          "actual": 736,
+          "xgboost": 792.3,
+          "chronos": 615.5,
+          "chronos_tuned": 681.8,
+          "weather": "Rain",
+          "tides_in_number": -0.573,
+          "debris_coverage": 38.73
+        },
+        {
+          "date": "2025-12-29",
+          "actual": 569,
+          "xgboost": 766.3,
+          "chronos": 611.8,
+          "chronos_tuned": 644.9,
+          "weather": "Clear",
+          "tides_in_number": -0.827,
+          "debris_coverage": 27.47
+        },
+        {
+          "date": "2025-12-30",
+          "actual": 655,
+          "xgboost": 762.9,
+          "chronos": 626.5,
+          "chronos_tuned": 674.4,
+          "weather": "Clear",
+          "tides_in_number": -0.325,
+          "debris_coverage": 42.69
+        },
+        {
+          "date": "2025-12-31",
+          "actual": 532,
+          "xgboost": 769.3,
+          "chronos": 608.1,
+          "chronos_tuned": 667.1,
+          "weather": "Clear",
+          "tides_in_number": -0.248,
+          "debris_coverage": 27.23
+        }
+      ]
+    },
+    "4": {
+      "site_id": 4,
+      "site_name": "Timor Tengah Utara Sector 4",
+      "lat": -9.5,
+      "lng": 124.66777261797678,
+      "metrics": {
+        "xgboost": {
+          "mae": 287.25,
+          "rmse": 375.67
+        },
+        "chronos": {
+          "mae": 314.43,
+          "rmse": 466.33
+        },
+        "chronos_tuned": {
+          "mae": 303.32,
+          "rmse": 448.56
+        }
+      },
+      "series": [
+        {
+          "date": "2025-11-27",
+          "actual": 1202,
+          "xgboost": 1280.2,
+          "chronos": 1059.3,
+          "chronos_tuned": 1070.0,
+          "weather": "Rain",
+          "tides_in_number": -0.264,
+          "debris_coverage": 66.31
+        },
+        {
+          "date": "2025-11-28",
+          "actual": 1253,
+          "xgboost": 1060.0,
+          "chronos": 931.6,
+          "chronos_tuned": 990.1,
+          "weather": "Clear",
+          "tides_in_number": -0.733,
+          "debris_coverage": 60.59
+        },
+        {
+          "date": "2025-11-29",
+          "actual": 889,
+          "xgboost": 1012.8,
+          "chronos": 851.7,
+          "chronos_tuned": 910.3,
+          "weather": "Overcast",
+          "tides_in_number": -0.738,
+          "debris_coverage": 49.39
+        },
+        {
+          "date": "2025-11-30",
+          "actual": 822,
+          "xgboost": 1081.9,
+          "chronos": 857.0,
+          "chronos_tuned": 990.1,
+          "weather": "Rain",
+          "tides_in_number": -0.393,
+          "debris_coverage": 39.3
+        },
+        {
+          "date": "2025-12-01",
+          "actual": 1445,
+          "xgboost": 1186.8,
+          "chronos": 867.7,
+          "chronos_tuned": 1038.0,
+          "weather": "Rain",
+          "tides_in_number": -0.733,
+          "debris_coverage": 79.01
+        },
+        {
+          "date": "2025-12-02",
+          "actual": 1958,
+          "xgboost": 1227.0,
+          "chronos": 910.3,
+          "chronos_tuned": 968.8,
+          "weather": "Rain",
+          "tides_in_number": -0.301,
+          "debris_coverage": 99.33
+        },
+        {
+          "date": "2025-12-03",
+          "actual": 1668,
+          "xgboost": 1109.4,
+          "chronos": 920.9,
+          "chronos_tuned": 942.2,
+          "weather": "Clear",
+          "tides_in_number": -0.092,
+          "debris_coverage": 86.23
+        },
+        {
+          "date": "2025-12-04",
+          "actual": 1256,
+          "xgboost": 1152.9,
+          "chronos": 889.0,
+          "chronos_tuned": 984.8,
+          "weather": "Clear",
+          "tides_in_number": 0.208,
+          "debris_coverage": 70.23
+        },
+        {
+          "date": "2025-12-05",
+          "actual": 785,
+          "xgboost": 1063.4,
+          "chronos": 841.1,
+          "chronos_tuned": 963.5,
+          "weather": "Rain",
+          "tides_in_number": 0.632,
+          "debris_coverage": 36.7
+        },
+        {
+          "date": "2025-12-06",
+          "actual": 995,
+          "xgboost": 1029.6,
+          "chronos": 819.8,
+          "chronos_tuned": 1059.3,
+          "weather": "Overcast",
+          "tides_in_number": 0.331,
+          "debris_coverage": 58.66
+        },
+        {
+          "date": "2025-12-07",
+          "actual": 1365,
+          "xgboost": 1025.1,
+          "chronos": 862.4,
+          "chronos_tuned": 995.4,
+          "weather": "Rain",
+          "tides_in_number": 0.786,
+          "debris_coverage": 66.85
+        },
+        {
+          "date": "2025-12-08",
+          "actual": 1020,
+          "xgboost": 930.0,
+          "chronos": 846.4,
+          "chronos_tuned": 968.8,
+          "weather": "Clear",
+          "tides_in_number": 0.683,
+          "debris_coverage": 45.79
+        },
+        {
+          "date": "2025-12-09",
+          "actual": 958,
+          "xgboost": 1023.4,
+          "chronos": 867.7,
+          "chronos_tuned": 979.5,
+          "weather": "Overcast",
+          "tides_in_number": 0.378,
+          "debris_coverage": 61.0
+        },
+        {
+          "date": "2025-12-10",
+          "actual": 864,
+          "xgboost": 1139.4,
+          "chronos": 915.6,
+          "chronos_tuned": 990.1,
+          "weather": "Rain",
+          "tides_in_number": 0.096,
+          "debris_coverage": 45.5
+        },
+        {
+          "date": "2025-12-11",
+          "actual": 924,
+          "xgboost": 1179.5,
+          "chronos": 857.0,
+          "chronos_tuned": 1016.7,
+          "weather": "Overcast",
+          "tides_in_number": -0.381,
+          "debris_coverage": 46.74
+        },
+        {
+          "date": "2025-12-12",
+          "actual": 764,
+          "xgboost": 1069.8,
+          "chronos": 904.9,
+          "chronos_tuned": 1038.0,
+          "weather": "Overcast",
+          "tides_in_number": -0.768,
+          "debris_coverage": 36.01
+        },
+        {
+          "date": "2025-12-13",
+          "actual": 977,
+          "xgboost": 1080.9,
+          "chronos": 841.1,
+          "chronos_tuned": 1027.4,
+          "weather": "Rain",
+          "tides_in_number": -0.703,
+          "debris_coverage": 47.58
+        },
+        {
+          "date": "2025-12-14",
+          "actual": 1085,
+          "xgboost": 1002.5,
+          "chronos": 835.7,
+          "chronos_tuned": 1043.3,
+          "weather": "Overcast",
+          "tides_in_number": -0.705,
+          "debris_coverage": 62.23
+        },
+        {
+          "date": "2025-12-15",
+          "actual": 842,
+          "xgboost": 962.6,
+          "chronos": 883.6,
+          "chronos_tuned": 1016.7,
+          "weather": "Clear",
+          "tides_in_number": -0.707,
+          "debris_coverage": 37.04
+        },
+        {
+          "date": "2025-12-16",
+          "actual": 578,
+          "xgboost": 1019.3,
+          "chronos": 894.3,
+          "chronos_tuned": 995.4,
+          "weather": "Overcast",
+          "tides_in_number": -0.143,
+          "debris_coverage": 31.69
+        },
+        {
+          "date": "2025-12-17",
+          "actual": 775,
+          "xgboost": 1142.3,
+          "chronos": 878.3,
+          "chronos_tuned": 1064.6,
+          "weather": "Rain",
+          "tides_in_number": 0.038,
+          "debris_coverage": 42.88
+        },
+        {
+          "date": "2025-12-18",
+          "actual": 750,
+          "xgboost": 1110.5,
+          "chronos": 857.0,
+          "chronos_tuned": 1016.7,
+          "weather": "Clear",
+          "tides_in_number": 0.379,
+          "debris_coverage": 32.65
+        },
+        {
+          "date": "2025-12-19",
+          "actual": 562,
+          "xgboost": 976.6,
+          "chronos": 904.9,
+          "chronos_tuned": 1016.7,
+          "weather": "Clear",
+          "tides_in_number": 0.652,
+          "debris_coverage": 31.73
+        },
+        {
+          "date": "2025-12-20",
+          "actual": 1095,
+          "xgboost": 1012.3,
+          "chronos": 952.8,
+          "chronos_tuned": 958.2,
+          "weather": "Rain",
+          "tides_in_number": 0.744,
+          "debris_coverage": 60.71
+        },
+        {
+          "date": "2025-12-21",
+          "actual": 1075,
+          "xgboost": 890.4,
+          "chronos": 936.9,
+          "chronos_tuned": 931.6,
+          "weather": "Clear",
+          "tides_in_number": 0.88,
+          "debris_coverage": 54.77
+        },
+        {
+          "date": "2025-12-22",
+          "actual": 1136,
+          "xgboost": 899.9,
+          "chronos": 894.3,
+          "chronos_tuned": 958.2,
+          "weather": "Overcast",
+          "tides_in_number": 0.52,
+          "debris_coverage": 51.66
+        },
+        {
+          "date": "2025-12-23",
+          "actual": 1676,
+          "xgboost": 1002.7,
+          "chronos": 889.0,
+          "chronos_tuned": 926.2,
+          "weather": "Rain",
+          "tides_in_number": 0.455,
+          "debris_coverage": 86.32
+        },
+        {
+          "date": "2025-12-24",
+          "actual": 2103,
+          "xgboost": 1130.1,
+          "chronos": 926.2,
+          "chronos_tuned": 931.6,
+          "weather": "Rain",
+          "tides_in_number": -0.002,
+          "debris_coverage": 108.65
+        },
+        {
+          "date": "2025-12-25",
+          "actual": 2339,
+          "xgboost": 1304.8,
+          "chronos": 846.4,
+          "chronos_tuned": 910.3,
+          "weather": "Rain",
+          "tides_in_number": -0.233,
+          "debris_coverage": 115.65
+        },
+        {
+          "date": "2025-12-26",
+          "actual": 1315,
+          "xgboost": 1124.7,
+          "chronos": 841.1,
+          "chronos_tuned": 899.6,
+          "weather": "Overcast",
+          "tides_in_number": -0.498,
+          "debris_coverage": 69.07
+        },
+        {
+          "date": "2025-12-27",
+          "actual": 816,
+          "xgboost": 1100.6,
+          "chronos": 835.7,
+          "chronos_tuned": 910.3,
+          "weather": "Overcast",
+          "tides_in_number": -0.811,
+          "debris_coverage": 37.55
+        },
+        {
+          "date": "2025-12-28",
+          "actual": 955,
+          "xgboost": 1006.7,
+          "chronos": 857.0,
+          "chronos_tuned": 952.8,
+          "weather": "Rain",
+          "tides_in_number": -0.758,
+          "debris_coverage": 46.53
+        },
+        {
+          "date": "2025-12-29",
+          "actual": 1084,
+          "xgboost": 957.6,
+          "chronos": 883.6,
+          "chronos_tuned": 984.8,
+          "weather": "Clear",
+          "tides_in_number": -0.792,
+          "debris_coverage": 58.05
+        },
+        {
+          "date": "2025-12-30",
+          "actual": 1046,
+          "xgboost": 935.8,
+          "chronos": 830.4,
+          "chronos_tuned": 1011.4,
+          "weather": "Clear",
+          "tides_in_number": -0.227,
+          "debris_coverage": 57.7
+        },
+        {
+          "date": "2025-12-31",
+          "actual": 694,
+          "xgboost": 959.1,
+          "chronos": 883.6,
+          "chronos_tuned": 1006.1,
+          "weather": "Clear",
+          "tides_in_number": 0.012,
+          "debris_coverage": 33.99
+        }
+      ]
+    },
+    "5": {
+      "site_id": 5,
+      "site_name": "Jawa Barat Sector 5",
+      "lat": -5.678084264324238,
+      "lng": 106.94772223998532,
+      "metrics": {
+        "xgboost": {
+          "mae": 312.69,
+          "rmse": 484.37
+        },
+        "chronos": {
+          "mae": 388.44,
+          "rmse": 620.39
+        },
+        "chronos_tuned": {
+          "mae": 400.75,
+          "rmse": 595.27
+        }
+      },
+      "series": [
+        {
+          "date": "2025-11-27",
+          "actual": 1477,
+          "xgboost": 1424.9,
+          "chronos": 1349.7,
+          "chronos_tuned": 1343.0,
+          "weather": "Overcast",
+          "tides_in_number": -0.159,
+          "debris_coverage": 79.22
+        },
+        {
+          "date": "2025-11-28",
+          "actual": 1223,
+          "xgboost": 1227.4,
+          "chronos": 1209.4,
+          "chronos_tuned": 1249.5,
+          "weather": "Clear",
+          "tides_in_number": -0.521,
+          "debris_coverage": 58.37
+        },
+        {
+          "date": "2025-11-29",
+          "actual": 842,
+          "xgboost": 1161.7,
+          "chronos": 1122.5,
+          "chronos_tuned": 1149.3,
+          "weather": "Clear",
+          "tides_in_number": -0.627,
+          "debris_coverage": 39.72
+        },
+        {
+          "date": "2025-11-30",
+          "actual": 1364,
+          "xgboost": 1244.1,
+          "chronos": 1069.1,
+          "chronos_tuned": 1115.9,
+          "weather": "Rain",
+          "tides_in_number": -1.104,
+          "debris_coverage": 73.13
+        },
+        {
+          "date": "2025-12-01",
+          "actual": 1721,
+          "xgboost": 1333.4,
+          "chronos": 1115.9,
+          "chronos_tuned": 1089.1,
+          "weather": "Rain",
+          "tides_in_number": -0.686,
+          "debris_coverage": 85.16
+        },
+        {
+          "date": "2025-12-02",
+          "actual": 2335,
+          "xgboost": 1438.7,
+          "chronos": 1022.3,
+          "chronos_tuned": 1129.2,
+          "weather": "Rain",
+          "tides_in_number": -0.366,
+          "debris_coverage": 118.81
+        },
+        {
+          "date": "2025-12-03",
+          "actual": 1816,
+          "xgboost": 1326.8,
+          "chronos": 1075.8,
+          "chronos_tuned": 1115.9,
+          "weather": "Clear",
+          "tides_in_number": 0.133,
+          "debris_coverage": 93.79
+        },
+        {
+          "date": "2025-12-04",
+          "actual": 1202,
+          "xgboost": 1309.3,
+          "chronos": 1129.2,
+          "chronos_tuned": 1182.7,
+          "weather": "Clear",
+          "tides_in_number": 0.395,
+          "debris_coverage": 66.44
+        },
+        {
+          "date": "2025-12-05",
+          "actual": 1015,
+          "xgboost": 1185.3,
+          "chronos": 1075.8,
+          "chronos_tuned": 1176.0,
+          "weather": "Rain",
+          "tides_in_number": 0.637,
+          "debris_coverage": 46.51
+        },
+        {
+          "date": "2025-12-06",
+          "actual": 1058,
+          "xgboost": 1251.7,
+          "chronos": 1049.0,
+          "chronos_tuned": 1162.6,
+          "weather": "Rain",
+          "tides_in_number": 0.834,
+          "debris_coverage": 51.55
+        },
+        {
+          "date": "2025-12-07",
+          "actual": 1545,
+          "xgboost": 1227.0,
+          "chronos": 1155.9,
+          "chronos_tuned": 1222.8,
+          "weather": "Rain",
+          "tides_in_number": 0.895,
+          "debris_coverage": 86.59
+        },
+        {
+          "date": "2025-12-08",
+          "actual": 1224,
+          "xgboost": 1046.0,
+          "chronos": 1095.8,
+          "chronos_tuned": 1242.8,
+          "weather": "Clear",
+          "tides_in_number": 0.794,
+          "debris_coverage": 54.73
+        },
+        {
+          "date": "2025-12-09",
+          "actual": 1275,
+          "xgboost": 1309.6,
+          "chronos": 1115.9,
+          "chronos_tuned": 1262.9,
+          "weather": "Rain",
+          "tides_in_number": 0.436,
+          "debris_coverage": 68.85
+        },
+        {
+          "date": "2025-12-10",
+          "actual": 1243,
+          "xgboost": 1370.8,
+          "chronos": 1169.3,
+          "chronos_tuned": 1323.0,
+          "weather": "Rain",
+          "tides_in_number": -0.209,
+          "debris_coverage": 67.99
+        },
+        {
+          "date": "2025-12-11",
+          "actual": 1298,
+          "xgboost": 1262.2,
+          "chronos": 1049.0,
+          "chronos_tuned": 1276.2,
+          "weather": "Clear",
+          "tides_in_number": -0.602,
+          "debris_coverage": 69.68
+        },
+        {
+          "date": "2025-12-12",
+          "actual": 1139,
+          "xgboost": 1147.6,
+          "chronos": 1162.6,
+          "chronos_tuned": 1316.3,
+          "weather": "Overcast",
+          "tides_in_number": -0.628,
+          "debris_coverage": 57.61
+        },
+        {
+          "date": "2025-12-13",
+          "actual": 858,
+          "xgboost": 1128.1,
+          "chronos": 1142.6,
+          "chronos_tuned": 1302.9,
+          "weather": "Overcast",
+          "tides_in_number": -0.549,
+          "debris_coverage": 46.25
+        },
+        {
+          "date": "2025-12-14",
+          "actual": 896,
+          "xgboost": 1090.7,
+          "chronos": 1102.5,
+          "chronos_tuned": 1289.6,
+          "weather": "Overcast",
+          "tides_in_number": -0.834,
+          "debris_coverage": 46.06
+        },
+        {
+          "date": "2025-12-15",
+          "actual": 905,
+          "xgboost": 1011.9,
+          "chronos": 1142.6,
+          "chronos_tuned": 1363.1,
+          "weather": "Clear",
+          "tides_in_number": -0.492,
+          "debris_coverage": 53.42
+        },
+        {
+          "date": "2025-12-16",
+          "actual": 826,
+          "xgboost": 1120.7,
+          "chronos": 1176.0,
+          "chronos_tuned": 1369.8,
+          "weather": "Overcast",
+          "tides_in_number": -0.451,
+          "debris_coverage": 34.84
+        },
+        {
+          "date": "2025-12-17",
+          "actual": 811,
+          "xgboost": 1166.5,
+          "chronos": 1082.4,
+          "chronos_tuned": 1369.8,
+          "weather": "Overcast",
+          "tides_in_number": -0.02,
+          "debris_coverage": 37.11
+        },
+        {
+          "date": "2025-12-18",
+          "actual": 623,
+          "xgboost": 1157.9,
+          "chronos": 1169.3,
+          "chronos_tuned": 1376.4,
+          "weather": "Clear",
+          "tides_in_number": 0.276,
+          "debris_coverage": 30.6
+        },
+        {
+          "date": "2025-12-19",
+          "actual": 861,
+          "xgboost": 1044.5,
+          "chronos": 1182.7,
+          "chronos_tuned": 1376.4,
+          "weather": "Overcast",
+          "tides_in_number": 0.44,
+          "debris_coverage": 44.47
+        },
+        {
+          "date": "2025-12-20",
+          "actual": 1184,
+          "xgboost": 1194.2,
+          "chronos": 1082.4,
+          "chronos_tuned": 1302.9,
+          "weather": "Rain",
+          "tides_in_number": 0.903,
+          "debris_coverage": 64.21
+        },
+        {
+          "date": "2025-12-21",
+          "actual": 1186,
+          "xgboost": 996.4,
+          "chronos": 1075.8,
+          "chronos_tuned": 1289.6,
+          "weather": "Clear",
+          "tides_in_number": 1.145,
+          "debris_coverage": 71.38
+        },
+        {
+          "date": "2025-12-22",
+          "actual": 1338,
+          "xgboost": 1219.9,
+          "chronos": 1055.7,
+          "chronos_tuned": 1249.5,
+          "weather": "Rain",
+          "tides_in_number": 0.513,
+          "debris_coverage": 70.14
+        },
+        {
+          "date": "2025-12-23",
+          "actual": 2236,
+          "xgboost": 1310.8,
+          "chronos": 1055.7,
+          "chronos_tuned": 1216.1,
+          "weather": "Rain",
+          "tides_in_number": 0.359,
+          "debris_coverage": 115.48
+        },
+        {
+          "date": "2025-12-24",
+          "actual": 3002,
+          "xgboost": 1374.9,
+          "chronos": 995.6,
+          "chronos_tuned": 1229.4,
+          "weather": "Rain",
+          "tides_in_number": 0.075,
+          "debris_coverage": 153.31
+        },
+        {
+          "date": "2025-12-25",
+          "actual": 2947,
+          "xgboost": 1499.1,
+          "chronos": 1042.4,
+          "chronos_tuned": 1196.0,
+          "weather": "Rain",
+          "tides_in_number": -0.256,
+          "debris_coverage": 156.47
+        },
+        {
+          "date": "2025-12-26",
+          "actual": 1566,
+          "xgboost": 1213.6,
+          "chronos": 982.2,
+          "chronos_tuned": 1202.7,
+          "weather": "Overcast",
+          "tides_in_number": -0.467,
+          "debris_coverage": 83.26
+        },
+        {
+          "date": "2025-12-27",
+          "actual": 922,
+          "xgboost": 1193.2,
+          "chronos": 1035.7,
+          "chronos_tuned": 1162.6,
+          "weather": "Overcast",
+          "tides_in_number": -0.995,
+          "debris_coverage": 47.99
+        },
+        {
+          "date": "2025-12-28",
+          "actual": 1110,
+          "xgboost": 1232.8,
+          "chronos": 995.6,
+          "chronos_tuned": 1176.0,
+          "weather": "Rain",
+          "tides_in_number": -0.577,
+          "debris_coverage": 58.92
+        },
+        {
+          "date": "2025-12-29",
+          "actual": 1176,
+          "xgboost": 1232.6,
+          "chronos": 1035.7,
+          "chronos_tuned": 1242.8,
+          "weather": "Overcast",
+          "tides_in_number": -0.758,
+          "debris_coverage": 60.99
+        },
+        {
+          "date": "2025-12-30",
+          "actual": 1098,
+          "xgboost": 1156.6,
+          "chronos": 1055.7,
+          "chronos_tuned": 1249.5,
+          "weather": "Clear",
+          "tides_in_number": -0.474,
+          "debris_coverage": 50.78
+        },
+        {
+          "date": "2025-12-31",
+          "actual": 778,
+          "xgboost": 1158.7,
+          "chronos": 1035.7,
+          "chronos_tuned": 1222.8,
+          "weather": "Clear",
+          "tides_in_number": 0.139,
+          "debris_coverage": 37.52
+        }
+      ]
+    }
+  },
+  "last_updated": "2026-06-28 18:13:44"
+}

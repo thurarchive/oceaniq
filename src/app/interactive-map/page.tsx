@@ -22,6 +22,20 @@ export default function InteractiveMapPage() {
   // Lifted Map Layer states
   const [layers, setLayers] = useState<MapLayer[]>(initialLayers);
   const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
+  const [isExperimental, setIsExperimental] = useState<boolean>(false);
+
+  const handleToggleExperimental = () => {
+    setIsExperimental((prev) => {
+      const next = !prev;
+      if (next) {
+        // Automatically enable ML Estimates layer
+        setLayers((currentLayers) =>
+          currentLayers.map((l) => (l.id === 'layer-ml' ? { ...l, active: true } : l))
+        );
+      }
+      return next;
+    });
+  };
 
   const toggleLayer = (id: string) => {
     setLayers((prev) =>
@@ -37,6 +51,7 @@ export default function InteractiveMapPage() {
     setSelectedAreas([]);
     setConfidenceMin(60);
     setLayers(initialLayers);
+    setIsExperimental(false);
     setRefreshTrigger((prev) => prev + 1);
   };
 
@@ -47,6 +62,8 @@ export default function InteractiveMapPage() {
           selectedZone={selectedZone}
           onZoneChange={setSelectedZone}
           onRefresh={handleRefresh}
+          isExperimental={isExperimental}
+          onToggleExperimental={handleToggleExperimental}
         />
         <div className="flex flex-1 overflow-hidden relative">
           <LayerPanel
@@ -65,6 +82,7 @@ export default function InteractiveMapPage() {
               selectedAreas={selectedAreas}
               confidenceMin={confidenceMin}
               refreshTrigger={refreshTrigger}
+              isExperimental={isExperimental}
             />
           </div>
           <MapFilterSidebar

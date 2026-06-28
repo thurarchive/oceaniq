@@ -102,9 +102,8 @@ export default function LayerPanel({
 
   return (
     <div
-      className={`glass-card-elevated border-r border-border shrink-0 flex flex-col z-10 transition-all duration-300 ${
-        collapsed ? 'w-12' : 'w-64'
-      }`}
+      className={`glass-card-elevated border-r border-border shrink-0 flex flex-col z-10 transition-all duration-300 ${collapsed ? 'w-12' : 'w-64'
+        }`}
     >
       {/* Header */}
       <div className="flex items-center justify-between px-3 py-3 border-b border-border">
@@ -133,11 +132,10 @@ export default function LayerPanel({
           {layers.map((layer) => (
             <div
               key={layer.id}
-              className={`rounded-lg border p-3 cursor-pointer transition-all duration-200 ${
-                layer.active
+              className={`rounded-lg border p-3 cursor-pointer transition-all duration-200 ${layer.active
                   ? 'layer-toggle-active border-primary/30'
                   : 'border-border hover:border-border/80 hover:bg-muted/30'
-              }`}
+                }`}
               onClick={() => onLayerToggle(layer.id)}
             >
               <div className="flex items-center justify-between mb-1.5">
@@ -175,11 +173,10 @@ export default function LayerPanel({
                 key={basemap.value}
                 type="button"
                 onClick={() => onBasemapChange(basemap.value)}
-                className={`w-full text-left text-xs px-2 py-1.5 rounded transition-all ${
-                  activeBasemap === basemap.value
+                className={`w-full text-left text-xs px-2 py-1.5 rounded transition-all ${activeBasemap === basemap.value
                     ? 'bg-primary/10 text-primary font-semibold'
                     : 'text-muted-foreground hover:text-foreground hover:bg-muted/40'
-                }`}
+                  }`}
               >
                 {basemap.label}
               </button>
@@ -196,11 +193,10 @@ export default function LayerPanel({
               key={`collapsed-${layer.id}`}
               onClick={() => onLayerToggle(layer.id)}
               title={`${layer.active ? 'Hide' : 'Show'} ${layer.label}`}
-              className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${
-                layer.active
+              className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${layer.active
                   ? 'bg-primary/15 text-primary'
                   : 'text-muted-foreground/40 hover:text-muted-foreground'
-              }`}
+                }`}
             >
               {layer.icon}
             </button>

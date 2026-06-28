@@ -11,6 +11,8 @@ import MapStationDetail, { SelectedStationData } from "./MapStationDetail";
 import { useWasteObservations } from "../hooks/useWasteObservations";
 import { useWeatherStations } from "../hooks/useWeatherStations";
 import { MapPoint } from "./mockPoints";
+import { Brain } from "lucide-react";
+import { toast } from "sonner";
 
 export type BasemapType = "ocean-dark" | "satellite" | "topographic";
 
@@ -25,6 +27,7 @@ type MapCanvasProps = {
   initialCenter?: [number, number];
   initialZoom?: number;
   refreshTrigger?: number;
+  isExperimental?: boolean;
 };
 
 const MAPBOX_STYLES: Record<BasemapType, string> = {
@@ -35,6 +38,42 @@ const MAPBOX_STYLES: Record<BasemapType, string> = {
 
 const MAPBOX_API_KEY = process.env.NEXT_PUBLIC_MAPBOX_TOKEN ?? "";
 mapboxgl.accessToken = MAPBOX_API_KEY;
+
+// Haversine formula to compute distance in km
+const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
+  const R = 6371; // Earth's radius in km
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((lat1 * Math.PI) / 180) *
+    Math.cos((lat2 * Math.PI) / 180) *
+    Math.sin(dLon / 2) *
+    Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+};
+
+// Generate circular polygon coordinate ring representing specified radius (km)
+const createGeoJSONCircle = (center: [number, number], radiusKm: number, points = 64): GeoJSON.Position[][] => {
+  const [longitude, latitude] = center;
+  const coords: GeoJSON.Position[] = [];
+  const kmPerDegreeLat = 111.1; // approximate km per degree latitude
+
+  for (let i = 0; i < points; i++) {
+    const angle = (i / points) * 360;
+    const angleRad = (angle * Math.PI) / 180;
+    const latRad = (latitude * Math.PI) / 180;
+
+    // Offset latitude and longitude
+    const offsetLat = (radiusKm * Math.cos(angleRad)) / kmPerDegreeLat;
+    const offsetLng = (radiusKm * Math.sin(angleRad)) / (kmPerDegreeLat * Math.cos(latRad));
+
+    coords.push([longitude + offsetLng, latitude + offsetLat]);
+  }
+  coords.push(coords[0]); // Close the polygon
+  return [coords];
+};
 
 // Generate GeoJSON polygons for monitoring zones based on coordinates list
 const zoneGeojson: GeoJSON.FeatureCollection = {
@@ -74,6 +113,7 @@ export default function MapCanvasMapbox({
   initialCenter = [117.5400, -2.5000],
   initialZoom = 4.5,
   refreshTrigger = 0,
+  isExperimental = false,
 }: MapCanvasProps) {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<Map | null>(null);
@@ -81,12 +121,107 @@ export default function MapCanvasMapbox({
   const [selectedPoint, setSelectedPoint] = useState<MapPoint | null>(null);
   const [selectedStation, setSelectedStation] = useState<SelectedStationData | null>(null);
 
+  const [customPredictionPoint, setCustomPredictionPoint] = useState<MapPoint | null>(null);
+  const [predictingCoords, setPredictingCoords] = useState<{ lat: number; lng: number } | null>(null);
+
+  const isExperimentalRef = useRef<boolean>(isExperimental);
+  useEffect(() => {
+    isExperimentalRef.current = isExperimental;
+    if (!isExperimental) {
+      setCustomPredictionPoint(null);
+      if (selectedPoint?.id.startsWith("ml-custom-")) {
+        setSelectedPoint(null);
+      }
+    }
+    if (mapRef.current && isClient) {
+      const map = mapRef.current;
+      if (map.isStyleLoaded()) {
+        updateVisibility(map);
+      } else {
+        map.once("idle", () => updateVisibility(map));
+      }
+    }
+  }, [isExperimental, selectedPoint, isClient]);
+
+  const triggerCustomPrediction = async (lat: number, lng: number) => {
+    const verifiedStations = points.filter((p) => p.type === "observation");
+    if (verifiedStations.length > 0) {
+      let minDistance = Infinity;
+      verifiedStations.forEach((station) => {
+        const dist = calculateDistance(lat, lng, station.lat, station.lng);
+        if (dist < minDistance) {
+          minDistance = dist;
+        }
+      });
+
+      const PREDICTION_THRESHOLD_KM = 5.0; // 5 km threshold
+      if (minDistance > PREDICTION_THRESHOLD_KM) {
+        toast.warning("Clicked coordinate is too far from a monitored station. Please click closer to a station for a reliable estimate.");
+        return;
+      }
+    }
+
+    setPredictingCoords({ lat, lng });
+    try {
+      const response = await fetch("/api/predict", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          lat,
+          lng,
+          weather: "Clear",
+          tides: "High",
+          msl: 1.0,
+          tides_in_number: 1.0,
+        }),
+      });
+
+      const result = await response.json();
+      if (result.error) {
+        console.error("Prediction failed:", result.error);
+        return;
+      }
+
+      const density = result.predicted_density;
+      let intensity: "critical" | "high" | "medium" | "low" = "low";
+      if (density > 80) intensity = "critical";
+      else if (density > 45) intensity = "high";
+      else if (density > 10) intensity = "medium";
+
+      const customPoint: MapPoint = {
+        id: `ml-custom-${Date.now()}`,
+        type: "ml",
+        intensity,
+        zone: `Custom Coordinate (${lat.toFixed(4)}, ${lng.toFixed(4)})`,
+        lat,
+        lng,
+        wasteDensity: density,
+        wasteCategory: "Model Estimate",
+        confidence: 85,
+        source: `ML Subprocess (Closest: ${result.closest_station.name})`,
+        timestamp: new Date().toISOString(),
+        moderationStatus: "ML Simulation",
+        description: `Dynamic estimate computed by XGBoost subprocess. Closest historical baseline station used: ${result.closest_station.name} (${(result.closest_station.distance_degrees * 111).toFixed(1)} km away).`
+      };
+
+      setCustomPredictionPoint(customPoint);
+      setSelectedPoint(customPoint);
+    } catch (err) {
+      console.error("Failed to fetch prediction:", err);
+    } finally {
+      setPredictingCoords(null);
+    }
+  };
+
   // Invoke custom data fetching hooks
-  const { points } = useWasteObservations(refreshTrigger);
+  const { points } = useWasteObservations(refreshTrigger, isExperimental);
   const { weatherStationsData } = useWeatherStations(refreshTrigger);
 
   const circleGeojsonRef = useRef<GeoJSON.FeatureCollection>({ type: "FeatureCollection", features: [] });
   const mlGeojsonRef = useRef<GeoJSON.FeatureCollection>({ type: "FeatureCollection", features: [] });
+  const bufferGeojsonRef = useRef<GeoJSON.FeatureCollection>({ type: "FeatureCollection", features: [] });
 
   // React Ref to handle the Mapbox event listener stale closure bug
   const weatherStationsDataRef = useRef<SelectedStationData[]>([]);
@@ -167,6 +302,12 @@ export default function MapCanvasMapbox({
     if (map.getLayer("weather-stations-buffer")) {
       map.setLayoutProperty("weather-stations-buffer", "visibility", isRainfallActive ? "visible" : "none");
     }
+    if (map.getLayer("prediction-buffer-fill")) {
+      map.setLayoutProperty("prediction-buffer-fill", "visibility", isExperimental ? "visible" : "none");
+    }
+    if (map.getLayer("prediction-buffer-line")) {
+      map.setLayoutProperty("prediction-buffer-line", "visibility", isExperimental ? "visible" : "none");
+    }
   };
 
   // Reusable helper to set up Mapbox custom sources & layers
@@ -196,6 +337,12 @@ export default function MapCanvasMapbox({
         data: getWeatherStationsGeojson(),
       });
     }
+    if (!map.getSource("prediction-buffer-source")) {
+      map.addSource("prediction-buffer-source", {
+        type: "geojson",
+        data: bufferGeojsonRef.current,
+      });
+    }
 
     // 2. Add Monitoring Zones Layers (Polygons)
     if (!map.getLayer("monitoring-zones-fill")) {
@@ -218,6 +365,32 @@ export default function MapCanvasMapbox({
           "line-color": "#0ea5e9",
           "line-width": 1.5,
           "line-dasharray": [3, 2],
+        },
+      });
+    }
+
+    // Prediction Buffer Layers
+    if (!map.getLayer("prediction-buffer-fill")) {
+      map.addLayer({
+        id: "prediction-buffer-fill",
+        type: "fill",
+        source: "prediction-buffer-source",
+        paint: {
+          "fill-color": "#10b981",
+          "fill-opacity": 0.08,
+        },
+      });
+    }
+    if (!map.getLayer("prediction-buffer-line")) {
+      map.addLayer({
+        id: "prediction-buffer-line",
+        type: "line",
+        source: "prediction-buffer-source",
+        paint: {
+          "line-color": "#10b981",
+          "line-width": 1.5,
+          "line-dasharray": [3, 3],
+          "line-opacity": 0.35,
         },
       });
     }
@@ -425,6 +598,11 @@ export default function MapCanvasMapbox({
       if (!clickPoints || clickPoints.length === 0) {
         setSelectedPoint(null);
         setSelectedStation(null);
+
+        if (isExperimentalRef.current) {
+          const { lng, lat } = e.lngLat;
+          triggerCustomPrediction(lat, lng);
+        }
       }
     });
 
@@ -538,7 +716,8 @@ export default function MapCanvasMapbox({
     if (!mapRef.current) return;
     const map = mapRef.current;
 
-    const filtered = points.filter((p) => {
+    const allPoints = customPredictionPoint ? [...points, customPredictionPoint] : points;
+    const filtered = allPoints.filter((p) => {
       if (selectedCategories && selectedCategories.length > 0) {
         const matchesSomeCat = selectedCategories.some((cat) => {
           const catLower = cat.toLowerCase();
@@ -607,6 +786,33 @@ export default function MapCanvasMapbox({
     const circlePoints = filtered.filter((p) => p.type === "observation" || p.type === "citizen");
     const mlPoints = filtered.filter((p) => p.type === "ml");
 
+    // De-duplicate verified stations by coordinates to draw buffer zones only once per station location
+    const verifiedStations = points.filter((p) => p.type === "observation");
+    const uniqueStations: MapPoint[] = [];
+    const seenStations = new Set<string>();
+    for (const p of verifiedStations) {
+      const stationKey = `${p.lat.toFixed(4)},${p.lng.toFixed(4)}`;
+      if (!seenStations.has(stationKey)) {
+        seenStations.add(stationKey);
+        uniqueStations.push(p);
+      }
+    }
+
+    const bufferGeojson: GeoJSON.FeatureCollection = {
+      type: "FeatureCollection",
+      features: uniqueStations.map((station) => ({
+        type: "Feature" as const,
+        geometry: {
+          type: "Polygon" as const,
+          coordinates: createGeoJSONCircle([station.lng, station.lat], 5.0), // 5km prediction threshold radius
+        },
+        properties: {
+          id: station.id,
+          name: station.zone,
+        },
+      })),
+    };
+
     const circleGeojson: GeoJSON.FeatureCollection = {
       type: "FeatureCollection",
       features: circlePoints.map(makeFeature),
@@ -619,6 +825,7 @@ export default function MapCanvasMapbox({
 
     circleGeojsonRef.current = circleGeojson;
     mlGeojsonRef.current = mlGeojson;
+    bufferGeojsonRef.current = bufferGeojson;
 
     const setSourceData = () => {
       const circSource = map.getSource("waste-points-source") as mapboxgl.GeoJSONSource;
@@ -626,6 +833,9 @@ export default function MapCanvasMapbox({
 
       const mlSource = map.getSource("ml-estimates-source") as mapboxgl.GeoJSONSource;
       if (mlSource) mlSource.setData(mlGeojson);
+
+      const bufSource = map.getSource("prediction-buffer-source") as mapboxgl.GeoJSONSource;
+      if (bufSource) bufSource.setData(bufferGeojson);
     };
 
     if (map.isStyleLoaded()) {
@@ -633,7 +843,7 @@ export default function MapCanvasMapbox({
     } else {
       map.once("idle", setSourceData);
     }
-  }, [points, selectedCategories, selectedTimeRanges, selectedAreas, confidenceMin]);
+  }, [points, customPredictionPoint, selectedCategories, selectedTimeRanges, selectedAreas, confidenceMin, isExperimental]);
 
   // Focus on map point from URL search parameters on load
   useEffect(() => {
@@ -677,6 +887,22 @@ export default function MapCanvasMapbox({
   return (
     <div className="flex-1 h-full relative overflow-hidden">
       <div id="map" ref={mapContainerRef} className="w-full h-full" />
+
+      {/* Experimental mode banner */}
+      {isExperimental && (
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-warning/95 text-warning-foreground text-[11px] font-bold px-4 py-2 rounded-full shadow-[0_0_15px_rgba(245,158,11,0.4)] border border-warning/30 backdrop-blur-md z-20 flex items-center gap-1.5">
+          <Brain size={13} className="shrink-0 animate-pulse text-warning-foreground" />
+          <span>EXPERIMENTAL MODE: Live ML Inference Active. Click anywhere on map to run prediction.</span>
+        </div>
+      )}
+
+      {/* Loading overlay when running python inference */}
+      {predictingCoords && (
+        <div className="absolute bottom-16 right-4 bg-card/90 border border-border text-foreground px-4 py-2.5 rounded-xl shadow-2xl flex items-center gap-2.5 z-20 text-xs font-medium backdrop-blur-md">
+          <div className="w-3.5 h-3.5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+          <span>Executing XGBoost Subprocess...</span>
+        </div>
+      )}
 
       {/* Point Detail Popup */}
       {selectedPoint && (

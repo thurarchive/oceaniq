@@ -6,6 +6,7 @@ import WasteTrendChart from './components/WasteTrendChart';
 import WasteCompositionChart from './components/WasteCompositionChart';
 import RainfallCorrelationChart from './components/RainfallCorrelationChart';
 import DataSourceChart from './components/DataSourceChart';
+import ModelBenchmarkingChart from './components/ModelBenchmarkingChart';
 import RecentActivityFeed from './components/RecentActivityFeed';
 
 export default function AnalyticsDashboardPage() {
@@ -31,6 +32,11 @@ export default function AnalyticsDashboardPage() {
           <RainfallCorrelationChart />
         </div>
 
+        {/* Benchmarking Row */}
+        <div className="mt-5">
+          <ModelBenchmarkingChart />
+        </div>
+
         {/* Activity feed */}
         <div className="mt-5">
           <RecentActivityFeed />
@@ -38,4 +44,4 @@ export default function AnalyticsDashboardPage() {
       </div>
     </AppLayout>
   );
-}
+}

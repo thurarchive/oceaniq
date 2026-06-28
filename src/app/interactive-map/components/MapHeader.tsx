@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
-import { Search, Download, RefreshCw, Clock, ChevronDown, MapPin } from 'lucide-react';
+import { Search, Download, RefreshCw, Clock, ChevronDown, MapPin, Brain } from 'lucide-react';
 import { ZONES } from '@/constants/zones';
 import { supabase } from '@/lib/supabase';
 
@@ -42,9 +42,11 @@ type MapHeaderProps = {
   selectedZone: string;
   onZoneChange: (zone: string) => void;
   onRefresh: () => void;
+  isExperimental: boolean;
+  onToggleExperimental: () => void;
 };
 
-export default function MapHeader({ selectedZone, onZoneChange, onRefresh }: MapHeaderProps) {
+export default function MapHeader({ selectedZone, onZoneChange, onRefresh, isExperimental, onToggleExperimental }: MapHeaderProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -53,9 +55,10 @@ export default function MapHeader({ selectedZone, onZoneChange, onRefresh }: Map
 
   const fetchLastUpdated = async () => {
     try {
+      const tableName = isExperimental ? 'waste_observations_test' : 'waste_observations';
       const [wasteRes, citizenRes] = await Promise.all([
         supabase
-          .from('waste_observations')
+          .from(tableName)
           .select('observation_time')
           .not('observation_time', 'is', null)
           .order('observation_time', { ascending: false })
@@ -94,10 +97,17 @@ export default function MapHeader({ selectedZone, onZoneChange, onRefresh }: Map
 
   const fetchSiteNames = async () => {
     try {
-      const { data, error } = await supabase
-        .from('waste_observations')
+      const tableName = isExperimental ? 'waste_observations_test' : 'waste_observations';
+      let query = supabase
+        .from(tableName)
         .select('site_name')
         .not('site_name', 'is', null);
+
+      if (isExperimental) {
+        query = query.eq('observation_time', '2025-12-31T12:00:00Z');
+      }
+
+      const { data, error } = await query;
 
       if (error) throw error;
 
@@ -113,7 +123,9 @@ export default function MapHeader({ selectedZone, onZoneChange, onRefresh }: Map
   useEffect(() => {
     fetchLastUpdated();
     fetchSiteNames();
+  }, [isExperimental]);
 
+  useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
       fetchLastUpdated();
       fetchSiteNames();
@@ -241,6 +253,18 @@ export default function MapHeader({ selectedZone, onZoneChange, onRefresh }: Map
         <span className="w-1.5 h-1.5 bg-positive rounded-full animate-pulse ml-1"></span>
       </div>
       <div className="ml-auto flex items-center gap-2">
+        <button
+          onClick={onToggleExperimental}
+          className={`flex items-center gap-1.5 text-xs border rounded-lg px-3 py-1.5 transition-all duration-200 cursor-pointer ${
+            isExperimental
+              ? 'bg-warning/20 hover:bg-warning/30 border-warning text-warning font-semibold shadow-[0_0_8px_rgba(245,158,11,0.2)]'
+              : 'bg-muted/40 hover:bg-muted/70 border-border text-muted-foreground hover:text-foreground'
+          }`}
+          title="Toggle Experimental ML Pipeline mode"
+        >
+          <Brain size={13} className={isExperimental ? 'animate-pulse' : ''} />
+          <span>{isExperimental ? 'ML Mode (Active) (Experimental)' : 'ML Mode (Experimental)'}</span>
+        </button>
         <button
           onClick={handleRefresh}
           disabled={isRefreshing}

@@ -168,7 +168,7 @@ export default function MapPointDetail({ point, onClose }: MapPointDetailProps) 
                 {typeLabel[point.type]}
               </span>
             </div>
-            <h3 className="text-sm font-bold text-foreground truncate">{point.zone}</h3>
+            <h3 className="text-sm font-bold text-foreground break-words">{point.zone}</h3>
 
             {point.type === 'citizen' && contributor && (
               <div className="flex items-center gap-1.5 mt-1.5 text-[10px] text-muted-foreground bg-muted/40 px-2 py-0.5 rounded-full w-fit border border-border/40">
@@ -230,8 +230,8 @@ export default function MapPointDetail({ point, onClose }: MapPointDetailProps) 
                 <div className="flex items-center justify-between">
                   <div>
                     <span className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider block">Waste Density</span>
-                    <h2 className="text-3xl font-bold font-mono tracking-tight text-foreground mt-0.5">
-                      {point.wasteDensity} <span className="text-xs font-normal text-muted-foreground font-sans">kg/m²</span>
+                    <h2 className="text-3xl font-bold font-mono tracking-tight text-foreground mt-0.5 break-words">
+                      {point.wasteDensity.toFixed(2)} <span className="text-xs font-normal text-muted-foreground font-sans">kg/m²</span>
                     </h2>
                   </div>
                   <span className={`text-[10px] font-extrabold uppercase px-2.5 py-1 rounded border ${intensityCfg.bg} ${intensityCfg.color} ${intensityCfg.border}`}>
@@ -386,8 +386,8 @@ export default function MapPointDetail({ point, onClose }: MapPointDetailProps) 
                 ) : (
                   <div className="flex items-center justify-between">
                     <div>
-                      <h2 className="text-3xl font-bold font-mono tracking-tight text-foreground">
-                        {simResult !== null ? simResult.toFixed(1) : point.wasteDensity.toFixed(1)}
+                      <h2 className="text-3xl font-bold font-mono tracking-tight text-foreground break-words">
+                        {simResult !== null ? simResult.toFixed(2) : point.wasteDensity.toFixed(2)}
                         <span className="text-xs font-normal text-muted-foreground font-sans ml-1">kg/m²</span>
                       </h2>
                       {simResult !== null && (

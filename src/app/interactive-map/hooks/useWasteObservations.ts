@@ -27,7 +27,7 @@ interface WasteObservationRow {
   data_source: string | null;
 }
 
-export function useWasteObservations(refreshTrigger: number) {
+export function useWasteObservations(refreshTrigger: number, isExperimental?: boolean) {
   const [points, setPoints] = useState<MapPoint[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -35,8 +35,14 @@ export function useWasteObservations(refreshTrigger: number) {
     async function loadData() {
       setLoading(true);
       try {
+        const tableName = isExperimental ? "waste_observations_test" : "waste_observations";
+        let query = supabase.from(tableName).select("*");
+        if (isExperimental) {
+          query = query.eq("observation_time", "2025-12-31T12:00:00Z");
+        }
+
         const [obsResult, citizenResult] = await Promise.all([
-          supabase.from("waste_observations").select("*"),
+          query,
           supabase.from("citizen_reports").select("*").eq("status", "approved"),
         ]);
 
@@ -174,7 +180,7 @@ export function useWasteObservations(refreshTrigger: number) {
       }
     }
     loadData();
-  }, [refreshTrigger]);
+  }, [refreshTrigger, isExperimental]);
 
   return { points, loading };
 }
