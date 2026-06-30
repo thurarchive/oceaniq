@@ -402,7 +402,7 @@ export default function MapCanvasMapbox({
         type: "heatmap",
         source: "ml-estimates-source",
         paint: {
-          "heatmap-weight": ["interpolate", ["linear"], ["get", "wasteDensity"], 0, 0, 80, 1],
+          "heatmap-weight": ["interpolate", ["linear"], ["get", "wasteDensity"], 0, 0, 1000, 1],
           "heatmap-intensity": ["interpolate", ["linear"], ["zoom"], 0, 1, 9, 3],
           "heatmap-color": [
             "interpolate",
@@ -428,13 +428,12 @@ export default function MapCanvasMapbox({
         filter: ["==", ["get", "type"], "observation"],
         paint: {
           "circle-color": [
-            "interpolate",
-            ["linear"],
+            "step",
             ["get", "wasteDensity"],
-            0, "#0ea5e9",
-            20, "#f59e0b",
-            50, "#ea580c",
-            80, "#ef4444",
+            "#10b981",
+            200, "#0ea5e9",
+            500, "#f59e0b",
+            1000, "#ef4444",
           ],
           "circle-radius": ["interpolate", ["linear"], ["zoom"], 5, 4, 15, 12],
           "circle-opacity": 0.85,
@@ -453,13 +452,12 @@ export default function MapCanvasMapbox({
         filter: ["==", ["get", "type"], "citizen"],
         paint: {
           "circle-color": [
-            "interpolate",
-            ["linear"],
+            "step",
             ["get", "wasteDensity"],
-            0, "#0ea5e9",
-            20, "#f59e0b",
-            50, "#ea580c",
-            80, "#ef4444",
+            "#10b981",
+            200, "#0ea5e9",
+            500, "#f59e0b",
+            1000, "#ef4444",
           ],
           "circle-radius": ["interpolate", ["linear"], ["zoom"], 5, 4, 15, 12],
           "circle-opacity": 0.85,
