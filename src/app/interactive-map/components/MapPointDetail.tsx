@@ -114,9 +114,9 @@ export default function MapPointDetail({ point, onClose }: MapPointDetailProps) 
   }, [activeTab, point.lat, point.lng, point.type, simWeather, simTides, simMsl, simTidesInNumber]);
 
   const getSimulatedIntensityCfg = (val: number) => {
-    if (val > 80) return intensityConfig.critical;
-    if (val > 45) return intensityConfig.high;
-    if (val > 10) return intensityConfig.medium;
+    if (val > 1000) return intensityConfig.critical;
+    if (val > 500) return intensityConfig.high;
+    if (val > 200) return intensityConfig.medium;
     return intensityConfig.low;
   };
   const simIntensity = simResult !== null ? getSimulatedIntensityCfg(simResult) : null;
@@ -229,9 +229,9 @@ export default function MapPointDetail({ point, onClose }: MapPointDetailProps) 
               <div className={`p-4 bg-gradient-to-br ${intensityCfg.gradient} border-b border-border`}>
                 <div className="flex items-center justify-between">
                   <div>
-                    <span className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider block">Waste Density</span>
+                    <span className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider block">Debris Quantity</span>
                     <h2 className="text-3xl font-bold font-mono tracking-tight text-foreground mt-0.5 break-words">
-                      {point.wasteDensity.toFixed(2)} <span className="text-xs font-normal text-muted-foreground font-sans">kg/m²</span>
+                      {point.wasteDensity.toLocaleString(undefined, { maximumFractionDigits: 0 })} <span className="text-xs font-normal text-muted-foreground font-sans">items</span>
                     </h2>
                   </div>
                   <span className={`text-[10px] font-extrabold uppercase px-2.5 py-1 rounded border ${intensityCfg.bg} ${intensityCfg.color} ${intensityCfg.border}`}>

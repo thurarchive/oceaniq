@@ -186,9 +186,9 @@ export default function MapCanvasMapbox({
 
       const density = result.predicted_density;
       let intensity: "critical" | "high" | "medium" | "low" = "low";
-      if (density > 80) intensity = "critical";
-      else if (density > 45) intensity = "high";
-      else if (density > 10) intensity = "medium";
+      if (density > 1000) intensity = "critical";
+      else if (density > 500) intensity = "high";
+      else if (density > 200) intensity = "medium";
 
       const customPoint: MapPoint = {
         id: `ml-custom-${Date.now()}`,

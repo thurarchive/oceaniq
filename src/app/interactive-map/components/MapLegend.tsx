@@ -77,13 +77,13 @@ export default function MapLegend() {
 
       {/* Waste Intensity */}
       <div className="border-t border-border pt-2.5 mb-2.5">
-        <p className="text-xs font-semibold text-muted-foreground mb-1.5 uppercase tracking-wide text-[10px]">Debris Density</p>
+        <p className="text-xs font-semibold text-muted-foreground mb-1.5 uppercase tracking-wide text-[10px]">Debris Quantity</p>
         <div className="space-y-1">
           {[
-            { label: 'Critical (>80 kg/m²)', color: 'bg-danger', size: 'w-2.5 h-2.5' },
-            { label: 'High (45-80 kg/m²)', color: 'bg-warning', size: 'w-2.5 h-2.5' },
-            { label: 'Medium (10-45 kg/m²)', color: 'bg-primary', size: 'w-2.5 h-2.5' },
-            { label: 'Low (<10 kg/m²)', color: 'bg-positive', size: 'w-2.5 h-2.5' },
+            { label: 'Critical (> 1000 items)', color: 'bg-danger', size: 'w-2.5 h-2.5' },
+            { label: 'High (500-1000 items)', color: 'bg-warning', size: 'w-2.5 h-2.5' },
+            { label: 'Medium (200-500 items)', color: 'bg-primary', size: 'w-2.5 h-2.5' },
+            { label: 'Low (< 200 items)', color: 'bg-positive', size: 'w-2.5 h-2.5' },
           ].map((item) => (
             <div key={`legend-intensity-${item.label}`} className="flex items-center gap-2">
               <div className={`${item.size} rounded-full ${item.color} border border-white/20 shrink-0`} />

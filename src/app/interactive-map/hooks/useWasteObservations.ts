@@ -56,12 +56,12 @@ export function useWasteObservations(refreshTrigger: number, isExperimental?: bo
 
         if (hasDbData) {
           const mappedObs: MapPoint[] = obsData.map((item: WasteObservationRow) => {
-            const density = item.debris_coverage_m2 ?? item.debris_quantity ?? 0.0;
+            const density = item.debris_quantity ?? item.debris_coverage_m2 ?? 0.0;
 
             let intensity: "critical" | "high" | "medium" | "low" = "low";
-            if (density > 80) intensity = "critical";
-            else if (density > 45) intensity = "high";
-            else if (density > 10) intensity = "medium";
+            if (density > 1000) intensity = "critical";
+            else if (density > 500) intensity = "high";
+            else if (density > 200) intensity = "medium";
 
             let category = "Mixed Debris";
             if (item.plastic_pct !== null && item.organic_pct !== null) {
@@ -120,9 +120,9 @@ export function useWasteObservations(refreshTrigger: number, isExperimental?: bo
             const density = item.weight_estimate_kg ?? item.area_estimate_m2 ?? 0.0;
 
             let intensity: "critical" | "high" | "medium" | "low" = "low";
-            if (density > 80) intensity = "critical";
-            else if (density > 45) intensity = "high";
-            else if (density > 10) intensity = "medium";
+            if (density > 1000) intensity = "critical";
+            else if (density > 500) intensity = "high";
+            else if (density > 200) intensity = "medium";
             else if (item.volume_estimate === "Large Accumulation") intensity = "critical";
             else if (item.volume_estimate === "Small Truck Load") intensity = "high";
             else if (item.volume_estimate === "1–5 Bags") intensity = "medium";
