@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import AppLogo from '@/components/ui/AppLogo';
-import { Map, BarChart3, Home, Menu, X, Bell, Waves, LogOut, Loader2, BookOpen, LayoutDashboard } from 'lucide-react';
+import { Map, BarChart3, Home, Menu, X, Bell, Waves, LogOut, Loader2, BookOpen, LayoutDashboard, ShieldCheck } from 'lucide-react';
 import { toast } from 'sonner';
 import { User as SupabaseUser } from '@supabase/supabase-js';
 
@@ -25,6 +25,12 @@ const navItems: NavItem[] = [
 const authNavItems: NavItem[] = [
   { label: 'Dashboard', href: '/user-dashboard', icon: <LayoutDashboard size={16} /> },
 ];
+
+const adminNavItem: NavItem = {
+  label: 'Admin Panel',
+  href: '/admin',
+  icon: <ShieldCheck size={16} />,
+};
 
 interface TopbarProps {
   currentPath?: string;
@@ -97,7 +103,11 @@ export default function Topbar({ currentPath = '/' }: TopbarProps) {
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-1">
-          {[...navItems, ...(user ? authNavItems : [])].map((item) => {
+          {(() => {
+            const role = user?.app_metadata?.role || user?.user_metadata?.role;
+            const items = [...navItems, ...(user ? authNavItems : []), ...(role === 'admin' ? [adminNavItem] : [])];
+            return items;
+          })().map((item) => {
             const isActive = currentPath === item.href;
             return (
               <Link
@@ -230,7 +240,10 @@ export default function Topbar({ currentPath = '/' }: TopbarProps) {
       {mobileOpen && (
         <div className="md:hidden glass-card-elevated border-t border-border px-4 py-4">
           <nav className="flex flex-col gap-1">
-            {[...navItems, ...(user ? authNavItems : [])].map((item) => {
+            {(() => {
+              const role = user?.app_metadata?.role || user?.user_metadata?.role;
+              return [...navItems, ...(user ? authNavItems : []), ...(role === 'admin' ? [adminNavItem] : [])];
+            })().map((item) => {
               const isActive = currentPath === item.href;
               return (
                 <Link

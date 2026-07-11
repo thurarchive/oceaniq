@@ -44,3 +44,7 @@ next-env.d.ts
 
 #dataset
 /dataset
+
+skills-lock.json
+AGENTS.md
+CLAUDE.md

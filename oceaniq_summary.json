@@ -1,0 +1,61 @@
+{
+  "projectName": "Oceaniq",
+  "version": "0.1.0",
+  "description": "A marine-waste monitoring capstone web application designed to track, visualize, and analyze marine waste data.",
+  "techStack": {
+    "framework": "Next.js (v16.2.9)",
+    "language": "TypeScript",
+    "styling": "Tailwind CSS",
+    "databaseAndBackend": "Supabase",
+    "maps": [
+      "mapbox-gl",
+      "react-map-gl",
+      "maplibre-gl",
+      "pmtiles"
+    ],
+    "charts": "recharts",
+    "icons": [
+      "lucide-react",
+      "@heroicons/react"
+    ]
+  },
+  "coreFeatures": [
+    {
+      "feature": "Analytics Dashboard",
+      "description": "Provides data visualization and key performance indicators (KPIs) for marine waste monitoring.",
+      "components": [
+        "KPI Bento Grid",
+        "Data Source Chart",
+        "Rainfall Correlation Chart",
+        "Waste Composition Chart",
+        "Waste Trend Chart",
+        "Recent Activity Feed"
+      ]
+    },
+    {
+      "feature": "Interactive Map",
+      "description": "Geospatial visualization of marine waste data and hotspots.",
+      "components": [
+        "Map Canvas (Mapbox integration)",
+        "Layer Panel (for managing different data layers)",
+        "Map Filter Sidebar",
+        "Map Legend",
+        "Map Point Detail (for displaying details of specific waste locations)"
+      ]
+    },
+    {
+      "feature": "Public Landing Page",
+      "description": "Informational page introducing the project, its methodology, and live statistics.",
+      "components": [
+        "Hero Section",
+        "Feature Highlights",
+        "Hotspot Banner",
+        "How It Works",
+        "Live Stats Bar",
+        "Methodology Note",
+        "Landing Call to Action (CTA)"
+      ]
+    }
+  ],
+  "targetAudience": "Environmental researchers, local authorities, and the general public interested in tracking and reducing marine waste."
+}
