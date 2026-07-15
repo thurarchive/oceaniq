@@ -10,6 +10,15 @@ function getAdminClient() {
   });
 }
 
+// Normal client — uses anon key to verify JWTs
+function getAnonClient() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+  return createClient(url, anonKey, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  });
+}
+
 // Verify the caller is an admin via their JWT
 async function verifyAdmin(request: NextRequest): Promise<{ isAdmin: boolean; error?: string }> {
   const authHeader = request.headers.get('authorization');
@@ -17,8 +26,8 @@ async function verifyAdmin(request: NextRequest): Promise<{ isAdmin: boolean; er
   const token = authHeader.split(' ')[1];
 
   try {
-    const adminClient = getAdminClient();
-    const { data: { user }, error } = await adminClient.auth.getUser(token);
+    const anonClient = getAnonClient();
+    const { data: { user }, error } = await anonClient.auth.getUser(token);
     if (error) return { isAdmin: false, error: `getUser error: ${error.message}` };
     if (!user) return { isAdmin: false, error: 'No user found from token' };
 
