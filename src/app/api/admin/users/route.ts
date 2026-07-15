@@ -24,7 +24,7 @@ async function verifyAdmin(request: NextRequest): Promise<{ isAdmin: boolean; er
 
     const role = user.app_metadata?.role || user.user_metadata?.role;
     if (role !== 'admin') return { isAdmin: false, error: `Role is ${role}, not admin` };
-    
+
     return { isAdmin: true };
   } catch (err: any) {
     return { isAdmin: false, error: `verifyAdmin exception: ${err.message}` };
@@ -46,17 +46,17 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-  // Shape the response — only expose what the UI needs
-  const users = data.users.map((u) => ({
-    id: u.id,
-    email: u.email ?? '',
-    full_name: u.user_metadata?.full_name ?? u.email?.split('@')[0] ?? 'Unknown',
-    role: (u.app_metadata?.role || u.user_metadata?.role || 'user') as string,
-    created_at: u.created_at,
-    last_sign_in_at: u.last_sign_in_at ?? null,
-  }));
+    // Shape the response — only expose what the UI needs
+    const users = data.users.map((u) => ({
+      id: u.id,
+      email: u.email ?? '',
+      full_name: u.user_metadata?.full_name ?? u.email?.split('@')[0] ?? 'Unknown',
+      role: (u.app_metadata?.role || u.user_metadata?.role || 'user') as string,
+      created_at: u.created_at,
+      last_sign_in_at: u.last_sign_in_at ?? null,
+    }));
 
-  return NextResponse.json({ users });
+    return NextResponse.json({ users });
   } catch (err: any) {
     return NextResponse.json({ error: 'Exception in GET', details: err.message }, { status: 500 });
   }
