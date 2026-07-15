@@ -181,11 +181,14 @@ export default function AdminPage() {
       const res = await fetch('/api/admin/users', {
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (!res.ok) throw new Error('Failed to fetch users');
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.details || errorData.error || 'Failed to fetch users');
+      }
       const json = await res.json();
       setUsers(json.users);
-    } catch (err) {
-      toast.error('Could not load user list');
+    } catch (err: any) {
+      toast.error(`Error: ${err.message}`);
     } finally {
       setDataLoading(false);
     }

@@ -11,32 +11,40 @@ function getAdminClient() {
 }
 
 // Verify the caller is an admin via their JWT
-async function verifyAdmin(request: NextRequest): Promise<boolean> {
+async function verifyAdmin(request: NextRequest): Promise<{ isAdmin: boolean; error?: string }> {
   const authHeader = request.headers.get('authorization');
-  if (!authHeader?.startsWith('Bearer ')) return false;
+  if (!authHeader?.startsWith('Bearer ')) return { isAdmin: false, error: 'No Bearer token found' };
   const token = authHeader.split(' ')[1];
 
-  const adminClient = getAdminClient();
-  const { data: { user }, error } = await adminClient.auth.getUser(token);
-  if (error || !user) return false;
+  try {
+    const adminClient = getAdminClient();
+    const { data: { user }, error } = await adminClient.auth.getUser(token);
+    if (error) return { isAdmin: false, error: `getUser error: ${error.message}` };
+    if (!user) return { isAdmin: false, error: 'No user found from token' };
 
-  const role = user.app_metadata?.role || user.user_metadata?.role;
-  return role === 'admin';
+    const role = user.app_metadata?.role || user.user_metadata?.role;
+    if (role !== 'admin') return { isAdmin: false, error: `Role is ${role}, not admin` };
+    
+    return { isAdmin: true };
+  } catch (err: any) {
+    return { isAdmin: false, error: `verifyAdmin exception: ${err.message}` };
+  }
 }
 
 // GET /api/admin/users — list all users
 export async function GET(request: NextRequest) {
-  const isAdmin = await verifyAdmin(request);
+  const { isAdmin, error: authError } = await verifyAdmin(request);
   if (!isAdmin) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
+    return NextResponse.json({ error: 'Unauthorized', details: authError }, { status: 403 });
   }
 
-  const adminClient = getAdminClient();
-  const { data, error } = await adminClient.auth.admin.listUsers({ perPage: 1000 });
+  try {
+    const adminClient = getAdminClient();
+    const { data, error } = await adminClient.auth.admin.listUsers({ perPage: 1000 });
 
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
 
   // Shape the response — only expose what the UI needs
   const users = data.users.map((u) => ({
@@ -49,13 +57,16 @@ export async function GET(request: NextRequest) {
   }));
 
   return NextResponse.json({ users });
+  } catch (err: any) {
+    return NextResponse.json({ error: 'Exception in GET', details: err.message }, { status: 500 });
+  }
 }
 
 // PATCH /api/admin/users — update a user's role
 export async function PATCH(request: NextRequest) {
-  const isAdmin = await verifyAdmin(request);
+  const { isAdmin, error: authError } = await verifyAdmin(request);
   if (!isAdmin) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
+    return NextResponse.json({ error: 'Unauthorized', details: authError }, { status: 403 });
   }
 
   const body = await request.json();
@@ -65,14 +76,18 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid userId or role' }, { status: 400 });
   }
 
-  const adminClient = getAdminClient();
-  const { error } = await adminClient.auth.admin.updateUserById(userId, {
-    app_metadata: { role },
-  });
+  try {
+    const adminClient = getAdminClient();
+    const { error } = await adminClient.auth.admin.updateUserById(userId, {
+      app_metadata: { role },
+    });
 
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (err: any) {
+    return NextResponse.json({ error: 'Exception in PATCH', details: err.message }, { status: 500 });
   }
-
-  return NextResponse.json({ success: true });
 }
