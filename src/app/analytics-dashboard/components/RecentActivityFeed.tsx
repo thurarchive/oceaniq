@@ -36,7 +36,7 @@ const activities = [
     iconBg: 'bg-warning/10',
     title: 'ML prediction completed',
     detail: 'pred_3517 — Karawang Offshore Zone, confidence 78%',
-    meta: 'Model: waste-estimator-v1.3.0',
+    meta: 'Model: XGBoost (Tuned Tabular)',
     time: '1 hr ago',
     badge: <StatusBadge variant="estimated" />,
   },

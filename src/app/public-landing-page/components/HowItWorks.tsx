@@ -45,7 +45,7 @@ const steps: Step[] = [
     title: 'ML Estimation',
     description:
       'Environmental inputs (rainfall, tidal levels, wind, wave height) are fed into tabular ML models trained on historical observation data to estimate waste quantity and composition for unmonitored zones.',
-    detail: 'XGBoost / LightGBM models',
+    detail: 'XGBoost / Chronos T5',
     color: 'text-warning',
     bgColor: 'bg-warning/10',
     borderColor: 'border-warning/20',

@@ -164,10 +164,11 @@ export default function LazySignUpModal({ isOpen, onClose, onAuthSuccess }: Lazy
               type="button"
               onClick={() => setMode('signup')}
               disabled={loading}
-              className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all ${mode === 'signup'
-                ? 'bg-primary text-white shadow-md'
-                : 'text-muted-foreground hover:text-foreground'
-                }`}
+              className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all ${
+                mode === 'signup'
+                  ? 'bg-primary text-white shadow-md'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
             >
               Create Account
             </button>
@@ -175,10 +176,11 @@ export default function LazySignUpModal({ isOpen, onClose, onAuthSuccess }: Lazy
               type="button"
               onClick={() => setMode('login')}
               disabled={loading}
-              className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all ${mode === 'login'
-                ? 'bg-primary text-white shadow-md'
-                : 'text-muted-foreground hover:text-foreground'
-                }`}
+              className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all ${
+                mode === 'login'
+                  ? 'bg-primary text-white shadow-md'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
             >
               Sign In
             </button>

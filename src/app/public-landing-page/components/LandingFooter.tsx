@@ -91,7 +91,7 @@ export default function LandingFooter() {
             ML outputs are estimates — not measured data.
           </p>
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
-            <span>Model: waste-estimator-v1.3.0</span>
+            <span>Model: XGBoost (Tuned Tabular)</span>
             <span className="flex items-center gap-1">
               <span className="w-1.5 h-1.5 bg-positive rounded-full animate-pulse"></span>
               All systems operational
