@@ -1,6 +1,8 @@
 {
   "name": "oceaniq",
   "version": "0.1.0",
+  "description": "A marine-waste monitoring capstone web application designed to track, visualize, and analyze marine waste data.",
+  "license": "MIT",
   "private": true,
   "scripts": {
     "dev": "next dev",
