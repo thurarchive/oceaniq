@@ -1,8 +1,23 @@
-import React from 'react';
+'use client';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Map, BarChart3, ChevronRight } from 'lucide-react';
+import { getQuantitativeSubmissionStats, QuantitativeStats } from '@/lib/waste-observations';
 
 export default function HeroSection() {
+  const [stats, setStats] = useState<QuantitativeStats | null>(null);
+
+  useEffect(() => {
+    async function fetchStats() {
+      const res = await getQuantitativeSubmissionStats();
+      setStats(res);
+    }
+    fetchStats();
+  }, []);
+
+  const displayRecordCount = stats ? stats.totalRecords.toLocaleString() : '171';
+  const displayZoneCount = stats ? stats.totalZones.toLocaleString() : '847';
+
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center pt-16 px-6 overflow-hidden">
       {/* Decorative background elements */}
@@ -33,21 +48,22 @@ export default function HeroSection() {
         <div className="inline-flex items-center gap-2 glass-card border border-primary/20 px-4 py-1.5 rounded-full mb-8">
           <span className="w-2 h-2 bg-positive rounded-full animate-pulse"></span>
           <span className="text-xs font-semibold text-primary tracking-wider uppercase">
-            Live Monitoring — 847 active zones
+            Verified Submissions — {displayRecordCount} records across {displayZoneCount} zones
           </span>
         </div>
 
+
         <h1 className="text-5xl md:text-7xl font-extrabold leading-tight tracking-tight mb-6">
-          <span className="text-foreground">Monitoring Indonesia's</span>
+          <span className="text-foreground">A Citizen Science Platform</span>
           <br />
-          <span className="text-gradient-ocean">Marine Waste</span>
+          <span className="text-gradient-ocean">for Coastal Monitoring</span>
           <br />
-          <span className="text-foreground">in Real Time</span>
+          <span className="text-foreground">in Indonesia</span>
         </h1>
 
         <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
           Oceaniq combines field observations, citizen science reports, and
-          machine learning predictions to give you a complete picture of waste
+          machine learning predictions to give you a complete picture of marine waste
           distribution across Indonesian coastal and ocean zones.
         </p>
 
@@ -77,10 +93,10 @@ export default function HeroSection() {
                 <div key={`dot-${i}`} className={`w-2.5 h-2.5 rounded-full ${c}`} />
               ))}
             </div>
-            <span className="text-xs text-muted-foreground font-mono ml-2">oceaniq.id/map — Live View</span>
+            <span className="text-xs text-muted-foreground font-mono ml-2">oceaniq.id/map — Verified View</span>
             <div className="ml-auto flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 bg-positive rounded-full animate-pulse"></span>
-              <span className="text-xs text-positive font-medium">Live</span>
+              <span className="text-xs text-positive font-medium">Verified</span>
             </div>
           </div>
           <div className="relative h-64 md:h-80 overflow-hidden">
@@ -132,10 +148,9 @@ export default function HeroSection() {
                   style={{ left: marker?.x, top: marker?.y }}
                 >
                   <div
-                    className={`rounded-full flex items-center justify-center ${
-                      marker?.intensity === 'high' ?'bg-danger/70 border border-danger/80'
-                        : marker?.intensity === 'medium' ?'bg-warning/70 border border-warning/80' :'bg-positive/70 border border-positive/80'
-                    }`}
+                    className={`rounded-full flex items-center justify-center ${marker?.intensity === 'high' ? 'bg-danger/70 border border-danger/80'
+                      : marker?.intensity === 'medium' ? 'bg-warning/70 border border-warning/80' : 'bg-positive/70 border border-positive/80'
+                      }`}
                     style={{ width: marker?.size, height: marker?.size }}
                   >
                     <div

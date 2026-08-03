@@ -55,7 +55,6 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    // Shape the response — only expose what the UI needs
     const users = data.users.map((u) => ({
       id: u.id,
       email: u.email ?? '',

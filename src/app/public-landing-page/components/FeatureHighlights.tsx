@@ -1,11 +1,24 @@
 import React from 'react';
 import Link from 'next/link';
-import { Map, BarChart3, Brain, Users, ArrowRight } from 'lucide-react';
+import { Map, BarChart3, Brain, Users, ArrowRight, LucideIcon } from 'lucide-react';
 
-const features = [
+interface Feature {
+  id: string;
+  icon: LucideIcon;
+  title: string;
+  description: string;
+  href: string;
+  cta: string;
+  accent: string;
+  accentBg: string;
+  borderColor: string;
+  tags: string[];
+}
+
+const features: Feature[] = [
   {
     id: 'feature-map',
-    icon: <Map size={28} />,
+    icon: Map,
     title: 'Interactive Monitoring Map',
     description:
       'Explore marine waste distribution across Indonesian coastal zones with layered data visualization — verified observations, citizen reports, and ML-estimated density overlays on a single geospatial canvas.',
@@ -18,7 +31,7 @@ const features = [
   },
   {
     id: 'feature-analytics',
-    icon: <BarChart3 size={28} />,
+    icon: BarChart3,
     title: 'Analytics Dashboard',
     description:
       'Track waste density trends over time, understand composition breakdowns by category, and correlate environmental factors like rainfall and tidal levels with observed waste patterns.',
@@ -31,7 +44,7 @@ const features = [
   },
   {
     id: 'feature-ml',
-    icon: <Brain size={28} />,
+    icon: Brain,
     title: 'ML Waste Estimation',
     description:
       'Run interpretable predictions for any monitored zone using environmental inputs — rainfall, wind, tidal levels, wave height. Every estimate includes confidence scores and top contributing features.',
@@ -44,7 +57,7 @@ const features = [
   },
   {
     id: 'feature-citizen',
-    icon: <Users size={28} />,
+    icon: Users,
     title: 'Citizen Science',
     description:
       'Join thousands of coastal observers. Submit geo-tagged field reports with photos, waste category, and quantity estimates. Approved reports enrich the monitoring dataset after expert moderation.',
@@ -75,37 +88,41 @@ export default function FeatureHighlights() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
-          {features?.map((feature) => (
-            <div
-              key={feature?.id}
-              className={`glass-card-elevated border ${feature?.borderColor} p-6 rounded-xl transition-all duration-300 group flex flex-col`}
-            >
-              <div className={`${feature?.accentBg} ${feature?.accent} w-12 h-12 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-200`}>
-                {feature?.icon}
-              </div>
-              <h3 className="text-base font-700 text-foreground mb-2 font-semibold">{feature?.title}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed mb-4 flex-1">{feature?.description}</p>
-
-              <div className="flex flex-wrap gap-1.5 mb-5">
-                {feature?.tags?.map((tag) => (
-                  <span
-                    key={`${feature?.id}-tag-${tag}`}
-                    className="text-xs px-2 py-0.5 rounded-full glass-card border border-border text-muted-foreground"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-
-              <Link
-                href={feature?.href}
-                className={`flex items-center gap-1.5 text-sm font-semibold ${feature?.accent} group-hover:gap-2.5 transition-all duration-200`}
+          {features?.map((feature) => {
+            const IconComponent = feature?.icon;
+            return (
+              <div
+                key={feature?.id}
+                className={`glass-card-elevated border ${feature?.borderColor} p-6 rounded-xl transition-all duration-300 group flex flex-col`}
               >
-                {feature?.cta}
-                <ArrowRight size={14} />
-              </Link>
-            </div>
-          ))}
+                <div className={`${feature?.accentBg} ${feature?.accent} w-12 h-12 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-200`}>
+                  {IconComponent && <IconComponent size={28} />}
+                </div>
+                <h3 className="text-base font-700 text-foreground mb-2 font-semibold">{feature?.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-4 flex-1">{feature?.description}</p>
+
+                <div className="flex flex-wrap gap-1.5 mb-5">
+                  {feature?.tags?.map((tag) => (
+                    <span
+                      key={`${feature?.id}-tag-${tag}`}
+                      suppressHydrationWarning
+                      className="text-xs px-2 py-0.5 rounded-full glass-card border border-border text-muted-foreground"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                <Link
+                  href={feature?.href}
+                  className={`flex items-center gap-1.5 text-sm font-semibold ${feature?.accent} group-hover:gap-2.5 transition-all duration-200`}
+                >
+                  {feature?.cta}
+                  <ArrowRight size={14} />
+                </Link>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

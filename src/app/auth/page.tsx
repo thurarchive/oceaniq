@@ -83,7 +83,7 @@ export default function AuthPage() {
     const router = useRouter();
     const [mode, setMode] = useState<AuthMode>('login');
     const [loading, setLoading] = useState(false);
-    
+
     // Auto-redirect if already logged in
     useEffect(() => {
         const checkUser = async () => {
@@ -140,7 +140,7 @@ export default function AuthPage() {
                     },
                 });
                 if (error) throw error;
-                
+
                 if (data.session) {
                     toast.success('Account created and signed in successfully!');
                     router.push('/interactive-map');
