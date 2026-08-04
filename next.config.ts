@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
   images: {
     qualities: [75, 85],
   },
+  serverExternalPackages: ["onnxruntime-node"],
 };
 
 export default nextConfig;

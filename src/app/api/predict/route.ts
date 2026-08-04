@@ -3,33 +3,56 @@ import { spawn } from 'child_process';
 import path from 'path';
 import fs from 'fs';
 import * as ort from 'onnxruntime-node';
+import siteLagsData from '@/data/site_lags.json';
+
+interface SiteLagItem {
+  site_id: number;
+  site_name: string;
+  lat: number;
+  lng: number;
+  lags: {
+    lag_1: number;
+    lag_2: number;
+    lag_7: number;
+    roll_mean_3: number;
+    roll_mean_7: number;
+  };
+}
+
+async function getOnnxModelBuffer(requestUrl?: string): Promise<Buffer | string> {
+  const candidatePaths = [
+    path.join(process.cwd(), 'public', 'xgboost_model.onnx'),
+    path.join(process.cwd(), 'src', 'data', 'xgboost_model.onnx'),
+  ];
+
+  for (const p of candidatePaths) {
+    if (fs.existsSync(p)) {
+      return fs.readFileSync(p);
+    }
+  }
+
+  // Fallback: If deployed on Vercel CDN and local file path is absent, fetch via HTTP URL
+  if (requestUrl) {
+    try {
+      const url = new URL(requestUrl);
+      const onnxUrl = `${url.origin}/xgboost_model.onnx`;
+      const res = await fetch(onnxUrl);
+      if (res.ok) {
+        const arrayBuf = await res.arrayBuffer();
+        return Buffer.from(arrayBuf);
+      }
+    } catch (e) {
+      console.warn('Failed to fetch ONNX model from CDN URL:', e);
+    }
+  }
+
+  throw new Error('ONNX model file not found locally or via CDN URL');
+}
 
 // Helper to run ONNX model inference using onnxruntime-node
-async function runOnnxInference(body: any) {
-  const onnxPath = path.join(process.cwd(), 'public', 'xgboost_model.onnx');
-  const siteLagsPath = path.join(process.cwd(), 'src', 'data', 'site_lags.json');
-
-  if (!fs.existsSync(onnxPath)) {
-    throw new Error(`ONNX model file not found at ${onnxPath}`);
-  }
-
-  let siteLags: Array<{
-    site_id: number;
-    site_name: string;
-    lat: number;
-    lng: number;
-    lags: {
-      lag_1: number;
-      lag_2: number;
-      lag_7: number;
-      roll_mean_3: number;
-      roll_mean_7: number;
-    };
-  }> = [];
-
-  if (fs.existsSync(siteLagsPath)) {
-    siteLags = JSON.parse(fs.readFileSync(siteLagsPath, 'utf8'));
-  }
+async function runOnnxInference(body: any, requestUrl?: string) {
+  const modelBufferOrPath = await getOnnxModelBuffer(requestUrl);
+  const siteLags = siteLagsData as SiteLagItem[];
 
   const lat = Number(body.lat ?? -6.1);
   const lng = Number(body.lng ?? 106.8);
@@ -74,7 +97,9 @@ async function runOnnxInference(body: any) {
   ]);
 
   const tensor = new ort.Tensor('float32', floatInputs, [1, 14]);
-  const session = await ort.InferenceSession.create(onnxPath);
+
+  // ort.InferenceSession.create accepts a Buffer/Uint8Array or file path string
+  const session = await ort.InferenceSession.create(modelBufferOrPath as any);
 
   const feeds: Record<string, ort.Tensor> = {};
   feeds[session.inputNames[0]] = tensor;
@@ -143,12 +168,20 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
 
-    // 1. Primary Strategy: Fast, zero-dependency ONNX runtime (Vercel & Local ready)
+    // 1. Primary Strategy: Fast, zero-dependency ONNX runtime
     try {
-      const onnxResult = await runOnnxInference(body);
+      const onnxResult = await runOnnxInference(body, request.url);
       return NextResponse.json(onnxResult);
     } catch (onnxErr: any) {
-      console.warn('ONNX inference not available or failed:', onnxErr?.message);
+      console.error('ONNX inference failed:', onnxErr);
+
+      // If running on Vercel deployment, return detailed JSON error instead of falling back to Python subprocess
+      if (process.env.VERCEL === '1' || process.env.NODE_ENV === 'production') {
+        return NextResponse.json(
+          { error: `ONNX inference error on Vercel: ${onnxErr?.message || 'Unknown error'}` },
+          { status: 500 }
+        );
+      }
     }
 
     // 2. External Service Proxy (if MODEL_SERVICE_URL is set)
@@ -169,7 +202,7 @@ export async function POST(request: Request) {
       }
     }
 
-    // 3. Fallback: Local Python Virtual Environment Subprocess
+    // 3. Fallback: Local Python Virtual Environment Subprocess (Local development only)
     return await runLocalPythonSubprocess(body);
   } catch (err: any) {
     return NextResponse.json({ error: err.message || 'Internal Server Error' }, { status: 500 });
