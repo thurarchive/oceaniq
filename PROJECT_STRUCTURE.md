@@ -19,6 +19,9 @@ oceaniq/
 │   │   ├── layout.tsx
 │   │   ├── not-found.tsx
 │   │   ├── page.tsx
+│   │   ├── api/
+│   │   │   └── predict/
+│   │   │       └── route.ts              # POST /api/predict — waste density forecast
 │   │   ├── analytics-dashboard/
 │   │   │   ├── page.tsx
 │   │   │   └── components/
@@ -58,6 +61,11 @@ oceaniq/
 │   │       ├── AppImage.tsx
 │   │       ├── AppLogo.tsx
 │   │       └── StatusBadge.tsx
+│   ├── data/
+│   │   ├── site_lags.json               # Pre-computed lag features per monitoring station
+│   │   └── xgboost_tuned_model.json     # Trained XGBoost model (200 trees, native JSON)
+│   ├── lib/
+│   │   └── xgboost-inference.ts         # Pure-TS XGBoost tree walker (zero dependencies)
 │   └── styles/
 │       ├── index.css
 │       └── tailwind.css
@@ -77,7 +85,7 @@ oceaniq/
 ```
 
 ## Tech Stack
-- **Framework**: Next.js 15 (with breaking changes)
+- **Framework**: Next.js 16 (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS + PostCSS
 - **UI Icons**: Lucide React

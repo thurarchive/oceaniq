@@ -32,6 +32,7 @@
 | **📊 Analytics Dashboard** | Real-time KPI Bento Grid, waste material breakdown charts, rainfall-waste correlation analysis, and live activity streams. |
 | **🗺️ Interactive Map** | High-performance Mapbox GL canvas with multi-layer filtering (PMTiles / vector layers), hotspot visualization, and point details. |
 | **📝 Citizen Reporting Flow** | Interactive location picker map and multi-step contribution form for logging waste reports in the field. |
+| **🤖 ML Waste Density Forecast** | `POST /api/predict` — XGBoost regression (200 trees) served via a pure-TypeScript inference engine with zero dependencies. |
 | **⚡ Supabase Backend** | Row Level Security (RLS), custom RPC database functions, and automated migration pipeline for data safety. |
 | **🎯 Public Landing Page** | Public-facing landing showcase featuring live stats counters, methodology note, and project roadmap. |
 
@@ -54,11 +55,17 @@
 oceaniq/
 ├── src/
 │   ├── app/
+│   │   ├── api/predict/             # POST /api/predict — ML waste density forecast
 │   │   ├── analytics-dashboard/     # Analytics components, Bento grid & Recharts
 │   │   ├── interactive-map/         # Mapbox canvas, layer sidebar & filter controls
 │   │   ├── contribute/              # Citizen reporting form & map location picker
 │   │   └── public-landing-page/     # Hero section, feature highlights & live stats
 │   ├── components/                  # Shared UI components (Topbar, AppLayout, Badges)
+│   ├── data/
+│   │   ├── site_lags.json           # Pre-computed lag features per monitoring station
+│   │   └── xgboost_tuned_model.json # Trained XGBoost model (200 trees, native JSON)
+│   ├── lib/
+│   │   └── xgboost-inference.ts     # Pure-TS XGBoost tree walker (zero dependencies)
 │   └── styles/                      # Tailwind & global CSS configurations
 ├── supabase/
 │   └── migrations/                  # Database schema migrations & RPC functions
@@ -107,6 +114,51 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser to view the application.
+
+---
+
+## 🤖 ML Inference — Waste Density Prediction
+
+Oceaniq exposes a `POST /api/predict` endpoint that returns a predicted marine waste density score for any coastal coordinate.
+
+### How It Works
+
+The model is an **XGBoost regressor** (200 trees, `reg:squarederror`) trained on synthetic coastal monitoring data. Inference is handled by a **pure TypeScript tree-walker** — no Python runtime, no WASM, no native binaries — making it fully compatible with Vercel's serverless environment.
+
+```
+POST /api/predict
+Content-Type: application/json
+
+{
+  "lat": -6.1,
+  "lng": 106.8,
+  "weather": "Clear",
+  "tides": "High",
+  "msl": 1.0,
+  "tides_in_number": 1.0,
+  "day_of_year": 178,
+  "day_of_week": 2,
+  "month": 6
+}
+```
+
+**Response:**
+```json
+{
+  "predicted_density": 1099.02,
+  "closest_station": { "id": 5, "name": "Jawa Barat Sector 5", "distance_degrees": 0.44703 },
+  "lags_used": { "lag_1": 1414, "lag_2": 1284, "lag_7": 1552 },
+  "inference_method": "pure-js-xgboost"
+}
+```
+
+### Model Pipeline
+
+| Stage | Tool | Script |
+| :--- | :--- | :--- |
+| Hyperparameter tuning | `RandomizedSearchCV` + `TimeSeriesSplit` | `scratch/run_tuning.py` |
+| Final training & export | `XGBRegressor.save_model()` | `scratch/run_benchmarking.py` |
+| Inference (production) | Pure TypeScript tree walker | `src/lib/xgboost-inference.ts` |
 
 ---
 
