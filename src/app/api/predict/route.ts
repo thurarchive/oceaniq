@@ -52,7 +52,9 @@ async function getOnnxModelBuffer(requestUrl?: string): Promise<Buffer | string>
 async function runOnnxInference(body: any, requestUrl?: string) {
   let ort: any;
   try {
-    ort = await import('onnxruntime-node');
+    ort = await import('onnxruntime-web');
+    // Tell onnxruntime-web to use local files from the node_modules path
+    ort.env.wasm.numThreads = 1; 
   } catch (err: any) {
     throw new Error(`Failed to initialize ONNX runtime: ${err.message}`);
   }

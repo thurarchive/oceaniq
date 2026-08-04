@@ -5,7 +5,9 @@ const nextConfig: NextConfig = {
   images: {
     qualities: [75, 85],
   },
-  serverExternalPackages: ["onnxruntime-node"],
+  outputFileTracingIncludes: {
+    "/api/predict": ["./node_modules/onnxruntime-web/dist/*.wasm"],
+  },
 };
 
 export default nextConfig;
