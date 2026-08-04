@@ -1,0 +1,1302 @@
+[
+  {
+    "site_id": 1,
+    "site_name": "Kutai Barat Sector 1",
+    "lat": -0.7615004644606858,
+    "lng": 116.50301774121613,
+    "lags": {
+      "lag_1": 1439.0,
+      "lag_2": 1260.0,
+      "lag_7": 1585.0,
+      "roll_mean_3": 1362.67,
+      "roll_mean_7": 1415.14
+    }
+  },
+  {
+    "site_id": 2,
+    "site_name": "Maluku Utara Sector 2",
+    "lat": -1.523355477299518,
+    "lng": 125.11886463604895,
+    "lags": {
+      "lag_1": 953.0,
+      "lag_2": 1048.0,
+      "lag_7": 903.0,
+      "roll_mean_3": 943.67,
+      "roll_mean_7": 984.71
+    }
+  },
+  {
+    "site_id": 3,
+    "site_name": "Sulawesi Tenggara Sector 3",
+    "lat": -4.143160350772332,
+    "lng": 121.60920032689474,
+    "lags": {
+      "lag_1": 733.0,
+      "lag_2": 755.0,
+      "lag_7": 878.0,
+      "roll_mean_3": 735.0,
+      "roll_mean_7": 718.14
+    }
+  },
+  {
+    "site_id": 4,
+    "site_name": "Timor Tengah Utara Sector 4",
+    "lat": -9.5,
+    "lng": 124.66777261797678,
+    "lags": {
+      "lag_1": 1243.0,
+      "lag_2": 1202.0,
+      "lag_7": 1113.0,
+      "roll_mean_3": 1196.33,
+      "roll_mean_7": 1030.86
+    }
+  },
+  {
+    "site_id": 5,
+    "site_name": "Jawa Barat Sector 5",
+    "lat": -5.678084264324238,
+    "lng": 106.94772223998532,
+    "lags": {
+      "lag_1": 1414.0,
+      "lag_2": 1284.0,
+      "lag_7": 1552.0,
+      "roll_mean_3": 1298.33,
+      "roll_mean_7": 1330.86
+    }
+  },
+  {
+    "site_id": 6,
+    "site_name": "Mahakam Delta Station 6",
+    "lat": 4.0,
+    "lng": 120.496747664097,
+    "lags": {
+      "lag_1": 895.0,
+      "lag_2": 993.0,
+      "lag_7": 984.0,
+      "roll_mean_3": 928.33,
+      "roll_mean_7": 810.71
+    }
+  },
+  {
+    "site_id": 7,
+    "site_name": "Barito River Station 7",
+    "lat": -4.6022354147158175,
+    "lng": 115.35229687655044,
+    "lags": {
+      "lag_1": 1406.0,
+      "lag_2": 1255.0,
+      "lag_7": 1501.0,
+      "roll_mean_3": 1254.67,
+      "roll_mean_7": 1211.86
+    }
+  },
+  {
+    "site_id": 8,
+    "site_name": "Jeneberang River Station 8",
+    "lat": -4.367770813448704,
+    "lng": 117.49854103259906,
+    "lags": {
+      "lag_1": 1340.0,
+      "lag_2": 1216.0,
+      "lag_7": 1353.0,
+      "roll_mean_3": 1261.0,
+      "roll_mean_7": 1290.29
+    }
+  },
+  {
+    "site_id": 9,
+    "site_name": "Batanghari River Station 9",
+    "lat": -1.768977417483356,
+    "lng": 102.84247407090167,
+    "lags": {
+      "lag_1": 1004.0,
+      "lag_2": 1068.0,
+      "lag_7": 1187.0,
+      "roll_mean_3": 1038.67,
+      "roll_mean_7": 1070.71
+    }
+  },
+  {
+    "site_id": 10,
+    "site_name": "Saddang River Station 10",
+    "lat": -1.7347658938114814,
+    "lng": 124.1532077921146,
+    "lags": {
+      "lag_1": 1218.0,
+      "lag_2": 1210.0,
+      "lag_7": 1329.0,
+      "roll_mean_3": 1208.33,
+      "roll_mean_7": 1144.57
+    }
+  },
+  {
+    "site_id": 11,
+    "site_name": "Barito River Station 11",
+    "lat": -2.9047689883588417,
+    "lng": 115.28172228308034,
+    "lags": {
+      "lag_1": 922.0,
+      "lag_2": 837.0,
+      "lag_7": 1037.0,
+      "roll_mean_3": 911.0,
+      "roll_mean_7": 962.43
+    }
+  },
+  {
+    "site_id": 12,
+    "site_name": "Brantas River Station 12",
+    "lat": -7.213373340764711,
+    "lng": 110.9355655046467,
+    "lags": {
+      "lag_1": 1023.0,
+      "lag_2": 956.0,
+      "lag_7": 1183.0,
+      "roll_mean_3": 976.0,
+      "roll_mean_7": 1009.57
+    }
+  },
+  {
+    "site_id": 13,
+    "site_name": "Jeneberang River Station 13",
+    "lat": -4.869227001070856,
+    "lng": 122.12757216630652,
+    "lags": {
+      "lag_1": 933.0,
+      "lag_2": 831.0,
+      "lag_7": 1057.0,
+      "roll_mean_3": 840.67,
+      "roll_mean_7": 828.14
+    }
+  },
+  {
+    "site_id": 14,
+    "site_name": "Saddang River Station 14",
+    "lat": 0.6301631553806653,
+    "lng": 123.20248347933553,
+    "lags": {
+      "lag_1": 632.0,
+      "lag_2": 737.0,
+      "lag_7": 1091.0,
+      "roll_mean_3": 720.0,
+      "roll_mean_7": 760.71
+    }
+  },
+  {
+    "site_id": 15,
+    "site_name": "Saddang River Station 15",
+    "lat": -1.340577990087526,
+    "lng": 124.8565884534177,
+    "lags": {
+      "lag_1": 898.0,
+      "lag_2": 751.0,
+      "lag_7": 845.0,
+      "roll_mean_3": 796.67,
+      "roll_mean_7": 753.29
+    }
+  },
+  {
+    "site_id": 16,
+    "site_name": "Kapuas River Station 16",
+    "lat": 1.629007206452453,
+    "lng": 110.80344045408242,
+    "lags": {
+      "lag_1": 1649.0,
+      "lag_2": 1311.0,
+      "lag_7": 1599.0,
+      "roll_mean_3": 1432.33,
+      "roll_mean_7": 1354.57
+    }
+  },
+  {
+    "site_id": 17,
+    "site_name": "Barito River Station 17",
+    "lat": -1.2342739123332804,
+    "lng": 112.70160184046158,
+    "lags": {
+      "lag_1": 1477.0,
+      "lag_2": 1225.0,
+      "lag_7": 1572.0,
+      "roll_mean_3": 1333.67,
+      "roll_mean_7": 1332.57
+    }
+  },
+  {
+    "site_id": 18,
+    "site_name": "Kapuas River Station 18",
+    "lat": 4.0,
+    "lng": 110.63706896199469,
+    "lags": {
+      "lag_1": 787.0,
+      "lag_2": 789.0,
+      "lag_7": 787.0,
+      "roll_mean_3": 768.33,
+      "roll_mean_7": 759.43
+    }
+  },
+  {
+    "site_id": 19,
+    "site_name": "Barito River Station 19",
+    "lat": -2.1953352611664005,
+    "lng": 115.297444871506,
+    "lags": {
+      "lag_1": 1213.0,
+      "lag_2": 1151.0,
+      "lag_7": 1316.0,
+      "roll_mean_3": 1189.67,
+      "roll_mean_7": 1181.43
+    }
+  },
+  {
+    "site_id": 20,
+    "site_name": "Ciliwung River Station 20",
+    "lat": -4.370457587857269,
+    "lng": 106.32709596889248,
+    "lags": {
+      "lag_1": 1193.0,
+      "lag_2": 1110.0,
+      "lag_7": 1145.0,
+      "roll_mean_3": 1107.0,
+      "roll_mean_7": 1051.71
+    }
+  },
+  {
+    "site_id": 21,
+    "site_name": "Barito River Station 21",
+    "lat": -5.329727610126157,
+    "lng": 113.776822173116,
+    "lags": {
+      "lag_1": 2037.0,
+      "lag_2": 1863.0,
+      "lag_7": 1877.0,
+      "roll_mean_3": 1844.0,
+      "roll_mean_7": 1771.29
+    }
+  },
+  {
+    "site_id": 22,
+    "site_name": "Saddang River Station 22",
+    "lat": -1.6000909548030222,
+    "lng": 119.8988467189738,
+    "lags": {
+      "lag_1": 1317.0,
+      "lag_2": 1008.0,
+      "lag_7": 1534.0,
+      "roll_mean_3": 1137.67,
+      "roll_mean_7": 1197.29
+    }
+  },
+  {
+    "site_id": 23,
+    "site_name": "Barito River Station 23",
+    "lat": -4.957185828570733,
+    "lng": 115.08253390051676,
+    "lags": {
+      "lag_1": 806.0,
+      "lag_2": 757.0,
+      "lag_7": 1186.0,
+      "roll_mean_3": 743.33,
+      "roll_mean_7": 894.0
+    }
+  },
+  {
+    "site_id": 24,
+    "site_name": "Jeneberang River Station 24",
+    "lat": -9.5,
+    "lng": 120.13138457916575,
+    "lags": {
+      "lag_1": 770.0,
+      "lag_2": 668.0,
+      "lag_7": 809.0,
+      "roll_mean_3": 710.33,
+      "roll_mean_7": 678.86
+    }
+  },
+  {
+    "site_id": 25,
+    "site_name": "Saddang River Station 25",
+    "lat": -3.064499990831032,
+    "lng": 120.57038142610904,
+    "lags": {
+      "lag_1": 1485.0,
+      "lag_2": 1376.0,
+      "lag_7": 1487.0,
+      "roll_mean_3": 1419.33,
+      "roll_mean_7": 1302.14
+    }
+  },
+  {
+    "site_id": 26,
+    "site_name": "Musi River Station 26",
+    "lat": -2.5649278157907407,
+    "lng": 104.98871533507334,
+    "lags": {
+      "lag_1": 993.0,
+      "lag_2": 907.0,
+      "lag_7": 839.0,
+      "roll_mean_3": 935.33,
+      "roll_mean_7": 805.71
+    }
+  },
+  {
+    "site_id": 27,
+    "site_name": "Mamberamo River Station 27",
+    "lat": -2.289194265206408,
+    "lng": 136.01431584363965,
+    "lags": {
+      "lag_1": 644.0,
+      "lag_2": 695.0,
+      "lag_7": 668.0,
+      "roll_mean_3": 647.33,
+      "roll_mean_7": 687.43
+    }
+  },
+  {
+    "site_id": 28,
+    "site_name": "Barito River Station 28",
+    "lat": -4.511482226646898,
+    "lng": 114.37876334745089,
+    "lags": {
+      "lag_1": 1828.0,
+      "lag_2": 1237.0,
+      "lag_7": 1802.0,
+      "roll_mean_3": 1423.33,
+      "roll_mean_7": 1355.0
+    }
+  },
+  {
+    "site_id": 29,
+    "site_name": "Saddang River Station 29",
+    "lat": 1.499879850802572,
+    "lng": 123.1794977451508,
+    "lags": {
+      "lag_1": 1109.0,
+      "lag_2": 981.0,
+      "lag_7": 1292.0,
+      "roll_mean_3": 1039.33,
+      "roll_mean_7": 1121.43
+    }
+  },
+  {
+    "site_id": 30,
+    "site_name": "Saddang River Station 30",
+    "lat": 2.418218570573658,
+    "lng": 127.98244315118929,
+    "lags": {
+      "lag_1": 778.0,
+      "lag_2": 768.0,
+      "lag_7": 884.0,
+      "roll_mean_3": 789.0,
+      "roll_mean_7": 828.0
+    }
+  },
+  {
+    "site_id": 31,
+    "site_name": "Solo River Station 31",
+    "lat": -5.966877137957409,
+    "lng": 113.2927670279792,
+    "lags": {
+      "lag_1": 873.0,
+      "lag_2": 1015.0,
+      "lag_7": 992.0,
+      "roll_mean_3": 936.67,
+      "roll_mean_7": 873.57
+    }
+  },
+  {
+    "site_id": 32,
+    "site_name": "Barito River Station 32",
+    "lat": -2.467994789909519,
+    "lng": 114.79845527375592,
+    "lags": {
+      "lag_1": 867.0,
+      "lag_2": 843.0,
+      "lag_7": 1191.0,
+      "roll_mean_3": 860.33,
+      "roll_mean_7": 942.71
+    }
+  },
+  {
+    "site_id": 33,
+    "site_name": "Mamberamo River Station 33",
+    "lat": -5.717984819818311,
+    "lng": 129.16450803763155,
+    "lags": {
+      "lag_1": 1156.0,
+      "lag_2": 1072.0,
+      "lag_7": 1302.0,
+      "roll_mean_3": 1146.67,
+      "roll_mean_7": 1150.86
+    }
+  },
+  {
+    "site_id": 34,
+    "site_name": "Saddang River Station 34",
+    "lat": -3.74860759018868,
+    "lng": 121.71091348900477,
+    "lags": {
+      "lag_1": 1290.0,
+      "lag_2": 1318.0,
+      "lag_7": 1647.0,
+      "roll_mean_3": 1205.33,
+      "roll_mean_7": 1340.57
+    }
+  },
+  {
+    "site_id": 35,
+    "site_name": "Jeneberang River Station 35",
+    "lat": -8.126191320964296,
+    "lng": 118.92475393899228,
+    "lags": {
+      "lag_1": 1420.0,
+      "lag_2": 972.0,
+      "lag_7": 1251.0,
+      "roll_mean_3": 1133.67,
+      "roll_mean_7": 1099.0
+    }
+  },
+  {
+    "site_id": 36,
+    "site_name": "Jeneberang River Station 36",
+    "lat": -7.540145066893293,
+    "lng": 126.4704544208523,
+    "lags": {
+      "lag_1": 1696.0,
+      "lag_2": 1419.0,
+      "lag_7": 1477.0,
+      "roll_mean_3": 1512.0,
+      "roll_mean_7": 1349.0
+    }
+  },
+  {
+    "site_id": 37,
+    "site_name": "Saddang River Station 37",
+    "lat": -1.6232750237894322,
+    "lng": 120.13836157122732,
+    "lags": {
+      "lag_1": 870.0,
+      "lag_2": 914.0,
+      "lag_7": 1153.0,
+      "roll_mean_3": 903.0,
+      "roll_mean_7": 929.57
+    }
+  },
+  {
+    "site_id": 38,
+    "site_name": "Saddang River Station 38",
+    "lat": -1.7079910567539385,
+    "lng": 123.8955107443248,
+    "lags": {
+      "lag_1": 587.0,
+      "lag_2": 660.0,
+      "lag_7": 673.0,
+      "roll_mean_3": 675.33,
+      "roll_mean_7": 603.0
+    }
+  },
+  {
+    "site_id": 39,
+    "site_name": "Mahakam Delta Station 39",
+    "lat": 4.0,
+    "lng": 121.09374690683842,
+    "lags": {
+      "lag_1": 1081.0,
+      "lag_2": 1094.0,
+      "lag_7": 1202.0,
+      "roll_mean_3": 1054.33,
+      "roll_mean_7": 1090.0
+    }
+  },
+  {
+    "site_id": 40,
+    "site_name": "Citarum River Station 40",
+    "lat": -5.129127986323749,
+    "lng": 109.06178960159605,
+    "lags": {
+      "lag_1": 1597.0,
+      "lag_2": 1472.0,
+      "lag_7": 1695.0,
+      "roll_mean_3": 1422.0,
+      "roll_mean_7": 1485.86
+    }
+  },
+  {
+    "site_id": 41,
+    "site_name": "Mamberamo River Station 41",
+    "lat": 0.3772105599807149,
+    "lng": 131.7659473699046,
+    "lags": {
+      "lag_1": 902.0,
+      "lag_2": 952.0,
+      "lag_7": 756.0,
+      "roll_mean_3": 834.67,
+      "roll_mean_7": 745.0
+    }
+  },
+  {
+    "site_id": 42,
+    "site_name": "Mahakam Delta Station 42",
+    "lat": 0.5753574186681352,
+    "lng": 115.74304118854644,
+    "lags": {
+      "lag_1": 1378.0,
+      "lag_2": 1474.0,
+      "lag_7": 1737.0,
+      "roll_mean_3": 1450.33,
+      "roll_mean_7": 1438.71
+    }
+  },
+  {
+    "site_id": 43,
+    "site_name": "Mamberamo River Station 43",
+    "lat": -3.426298916332846,
+    "lng": 137.94126874942214,
+    "lags": {
+      "lag_1": 1268.0,
+      "lag_2": 1126.0,
+      "lag_7": 1346.0,
+      "roll_mean_3": 1139.67,
+      "roll_mean_7": 1130.71
+    }
+  },
+  {
+    "site_id": 44,
+    "site_name": "Mahakam Delta Station 44",
+    "lat": -2.35306977435492,
+    "lng": 116.51046137176638,
+    "lags": {
+      "lag_1": 1427.0,
+      "lag_2": 1405.0,
+      "lag_7": 1558.0,
+      "roll_mean_3": 1383.0,
+      "roll_mean_7": 1320.29
+    }
+  },
+  {
+    "site_id": 45,
+    "site_name": "Saddang River Station 45",
+    "lat": -3.2821197486404783,
+    "lng": 122.8950037056907,
+    "lags": {
+      "lag_1": 939.0,
+      "lag_2": 1325.0,
+      "lag_7": 1342.0,
+      "roll_mean_3": 1193.67,
+      "roll_mean_7": 1300.71
+    }
+  },
+  {
+    "site_id": 46,
+    "site_name": "Saddang River Station 46",
+    "lat": -4.083617813206342,
+    "lng": 123.36787346177708,
+    "lags": {
+      "lag_1": 1538.0,
+      "lag_2": 1226.0,
+      "lag_7": 1669.0,
+      "roll_mean_3": 1358.33,
+      "roll_mean_7": 1373.14
+    }
+  },
+  {
+    "site_id": 47,
+    "site_name": "Kapuas River Station 47",
+    "lat": -1.750671895544286,
+    "lng": 108.1969591596601,
+    "lags": {
+      "lag_1": 1794.0,
+      "lag_2": 1883.0,
+      "lag_7": 1719.0,
+      "roll_mean_3": 1766.33,
+      "roll_mean_7": 1686.0
+    }
+  },
+  {
+    "site_id": 48,
+    "site_name": "Kapuas River Station 48",
+    "lat": -1.691661969692035,
+    "lng": 111.4729733145723,
+    "lags": {
+      "lag_1": 1257.0,
+      "lag_2": 1363.0,
+      "lag_7": 1389.0,
+      "roll_mean_3": 1242.0,
+      "roll_mean_7": 1243.57
+    }
+  },
+  {
+    "site_id": 49,
+    "site_name": "Saddang River Station 49",
+    "lat": -1.2477442387810085,
+    "lng": 121.74588394776175,
+    "lags": {
+      "lag_1": 1342.0,
+      "lag_2": 1467.0,
+      "lag_7": 1746.0,
+      "roll_mean_3": 1419.67,
+      "roll_mean_7": 1431.43
+    }
+  },
+  {
+    "site_id": 50,
+    "site_name": "Kapuas River Station 50",
+    "lat": 0.6679268598479573,
+    "lng": 113.01071720636604,
+    "lags": {
+      "lag_1": 1707.0,
+      "lag_2": 1597.0,
+      "lag_7": 1843.0,
+      "roll_mean_3": 1570.67,
+      "roll_mean_7": 1520.43
+    }
+  },
+  {
+    "site_id": 51,
+    "site_name": "Mamberamo River Station 51",
+    "lat": -0.6973330979288324,
+    "lng": 140.0,
+    "lags": {
+      "lag_1": 1515.0,
+      "lag_2": 1677.0,
+      "lag_7": 1450.0,
+      "roll_mean_3": 1513.67,
+      "roll_mean_7": 1489.29
+    }
+  },
+  {
+    "site_id": 52,
+    "site_name": "Saddang River Station 52",
+    "lat": -1.6869634463825824,
+    "lng": 118.86135691539242,
+    "lags": {
+      "lag_1": 996.0,
+      "lag_2": 662.0,
+      "lag_7": 1108.0,
+      "roll_mean_3": 824.0,
+      "roll_mean_7": 843.14
+    }
+  },
+  {
+    "site_id": 53,
+    "site_name": "Jeneberang River Station 53",
+    "lat": -4.198772417401862,
+    "lng": 118.15405604539744,
+    "lags": {
+      "lag_1": 1154.0,
+      "lag_2": 1233.0,
+      "lag_7": 1122.0,
+      "roll_mean_3": 1206.0,
+      "roll_mean_7": 1067.71
+    }
+  },
+  {
+    "site_id": 54,
+    "site_name": "Saddang River Station 54",
+    "lat": -3.95086131886462,
+    "lng": 118.14149034405612,
+    "lags": {
+      "lag_1": 1181.0,
+      "lag_2": 1241.0,
+      "lag_7": 1214.0,
+      "roll_mean_3": 1226.0,
+      "roll_mean_7": 1152.14
+    }
+  },
+  {
+    "site_id": 55,
+    "site_name": "Kapuas River Station 55",
+    "lat": -2.2750199331658805,
+    "lng": 109.4569141655302,
+    "lags": {
+      "lag_1": 1295.0,
+      "lag_2": 1185.0,
+      "lag_7": 1518.0,
+      "roll_mean_3": 1214.33,
+      "roll_mean_7": 1226.43
+    }
+  },
+  {
+    "site_id": 56,
+    "site_name": "Mamberamo River Station 56",
+    "lat": 4.0,
+    "lng": 131.36560318740402,
+    "lags": {
+      "lag_1": 1868.0,
+      "lag_2": 1744.0,
+      "lag_7": 1503.0,
+      "roll_mean_3": 1645.33,
+      "roll_mean_7": 1508.57
+    }
+  },
+  {
+    "site_id": 57,
+    "site_name": "Jeneberang River Station 57",
+    "lat": -9.5,
+    "lng": 118.93840736077073,
+    "lags": {
+      "lag_1": 1061.0,
+      "lag_2": 1195.0,
+      "lag_7": 1415.0,
+      "roll_mean_3": 1146.33,
+      "roll_mean_7": 1153.43
+    }
+  },
+  {
+    "site_id": 58,
+    "site_name": "Mamberamo River Station 58",
+    "lat": -5.201366772148643,
+    "lng": 129.99976297956115,
+    "lags": {
+      "lag_1": 1010.0,
+      "lag_2": 647.0,
+      "lag_7": 795.0,
+      "roll_mean_3": 729.67,
+      "roll_mean_7": 750.71
+    }
+  },
+  {
+    "site_id": 59,
+    "site_name": "Mahakam Delta Station 59",
+    "lat": 3.6790898409838393,
+    "lng": 120.57736283220716,
+    "lags": {
+      "lag_1": 1206.0,
+      "lag_2": 1206.0,
+      "lag_7": 1274.0,
+      "roll_mean_3": 1203.33,
+      "roll_mean_7": 1129.29
+    }
+  },
+  {
+    "site_id": 60,
+    "site_name": "Mamberamo River Station 60",
+    "lat": -1.1794630708885678,
+    "lng": 129.9251323985962,
+    "lags": {
+      "lag_1": 1269.0,
+      "lag_2": 1415.0,
+      "lag_7": 1340.0,
+      "roll_mean_3": 1281.0,
+      "roll_mean_7": 1303.14
+    }
+  },
+  {
+    "site_id": 61,
+    "site_name": "Kapuas River Station 61",
+    "lat": 1.93418902215318,
+    "lng": 112.23247900785915,
+    "lags": {
+      "lag_1": 706.0,
+      "lag_2": 425.0,
+      "lag_7": 809.0,
+      "roll_mean_3": 543.67,
+      "roll_mean_7": 581.43
+    }
+  },
+  {
+    "site_id": 62,
+    "site_name": "Mamberamo River Station 62",
+    "lat": -3.330871864223341,
+    "lng": 131.5800426035423,
+    "lags": {
+      "lag_1": 1080.0,
+      "lag_2": 846.0,
+      "lag_7": 1055.0,
+      "roll_mean_3": 904.67,
+      "roll_mean_7": 914.86
+    }
+  },
+  {
+    "site_id": 63,
+    "site_name": "Citarum River Station 63",
+    "lat": -3.383988529876061,
+    "lng": 108.18162613526364,
+    "lags": {
+      "lag_1": 1256.0,
+      "lag_2": 1282.0,
+      "lag_7": 1421.0,
+      "roll_mean_3": 1240.0,
+      "roll_mean_7": 1263.86
+    }
+  },
+  {
+    "site_id": 64,
+    "site_name": "Barito River Station 64",
+    "lat": -2.9494425128889787,
+    "lng": 114.04751421559092,
+    "lags": {
+      "lag_1": 1393.0,
+      "lag_2": 956.0,
+      "lag_7": 1494.0,
+      "roll_mean_3": 1101.33,
+      "roll_mean_7": 1226.29
+    }
+  },
+  {
+    "site_id": 65,
+    "site_name": "Jeneberang River Station 65",
+    "lat": -5.935280278667828,
+    "lng": 121.00577605697454,
+    "lags": {
+      "lag_1": 1164.0,
+      "lag_2": 991.0,
+      "lag_7": 1370.0,
+      "roll_mean_3": 1009.67,
+      "roll_mean_7": 1002.86
+    }
+  },
+  {
+    "site_id": 66,
+    "site_name": "Mahakam Delta Station 66",
+    "lat": -0.2349305612453465,
+    "lng": 118.48571120868024,
+    "lags": {
+      "lag_1": 1267.0,
+      "lag_2": 1274.0,
+      "lag_7": 1388.0,
+      "roll_mean_3": 1257.67,
+      "roll_mean_7": 1274.71
+    }
+  },
+  {
+    "site_id": 67,
+    "site_name": "Asahan River Station 67",
+    "lat": 4.0,
+    "lng": 102.89934150358124,
+    "lags": {
+      "lag_1": 1411.0,
+      "lag_2": 1516.0,
+      "lag_7": 1621.0,
+      "roll_mean_3": 1549.67,
+      "roll_mean_7": 1549.29
+    }
+  },
+  {
+    "site_id": 68,
+    "site_name": "Saddang River Station 68",
+    "lat": -4.202514681183262,
+    "lng": 119.0969869596429,
+    "lags": {
+      "lag_1": 1526.0,
+      "lag_2": 1714.0,
+      "lag_7": 1536.0,
+      "roll_mean_3": 1628.0,
+      "roll_mean_7": 1481.43
+    }
+  },
+  {
+    "site_id": 69,
+    "site_name": "Saddang River Station 69",
+    "lat": -4.56277664930474,
+    "lng": 123.91201572765767,
+    "lags": {
+      "lag_1": 1270.0,
+      "lag_2": 970.0,
+      "lag_7": 1324.0,
+      "roll_mean_3": 1055.0,
+      "roll_mean_7": 1034.71
+    }
+  },
+  {
+    "site_id": 70,
+    "site_name": "Saddang River Station 70",
+    "lat": -1.2329513082013528,
+    "lng": 121.89985600526794,
+    "lags": {
+      "lag_1": 1185.0,
+      "lag_2": 1166.0,
+      "lag_7": 1362.0,
+      "roll_mean_3": 1129.33,
+      "roll_mean_7": 1234.57
+    }
+  },
+  {
+    "site_id": 71,
+    "site_name": "Saddang River Station 71",
+    "lat": 0.1155276179314164,
+    "lng": 122.117776990751,
+    "lags": {
+      "lag_1": 1643.0,
+      "lag_2": 1444.0,
+      "lag_7": 1670.0,
+      "roll_mean_3": 1511.0,
+      "roll_mean_7": 1411.43
+    }
+  },
+  {
+    "site_id": 72,
+    "site_name": "Saddang River Station 72",
+    "lat": -4.842209548634246,
+    "lng": 126.25452988310082,
+    "lags": {
+      "lag_1": 1816.0,
+      "lag_2": 1549.0,
+      "lag_7": 2027.0,
+      "roll_mean_3": 1623.0,
+      "roll_mean_7": 1607.86
+    }
+  },
+  {
+    "site_id": 73,
+    "site_name": "Saddang River Station 73",
+    "lat": 0.3889572214581043,
+    "lng": 123.6413222700048,
+    "lags": {
+      "lag_1": 1622.0,
+      "lag_2": 1527.0,
+      "lag_7": 1417.0,
+      "roll_mean_3": 1483.33,
+      "roll_mean_7": 1230.29
+    }
+  },
+  {
+    "site_id": 74,
+    "site_name": "Saddang River Station 74",
+    "lat": -4.331158327554885,
+    "lng": 124.6585724083575,
+    "lags": {
+      "lag_1": 1448.0,
+      "lag_2": 1213.0,
+      "lag_7": 1404.0,
+      "roll_mean_3": 1253.0,
+      "roll_mean_7": 1290.71
+    }
+  },
+  {
+    "site_id": 75,
+    "site_name": "Mahakam Delta Station 75",
+    "lat": -1.3654177662904523,
+    "lng": 116.56392709224237,
+    "lags": {
+      "lag_1": 1462.0,
+      "lag_2": 1709.0,
+      "lag_7": 1492.0,
+      "roll_mean_3": 1554.33,
+      "roll_mean_7": 1517.57
+    }
+  },
+  {
+    "site_id": 76,
+    "site_name": "Solo River Station 76",
+    "lat": -8.772157850473253,
+    "lng": 114.1891986615757,
+    "lags": {
+      "lag_1": 1279.0,
+      "lag_2": 1343.0,
+      "lag_7": 1463.0,
+      "roll_mean_3": 1325.33,
+      "roll_mean_7": 1299.71
+    }
+  },
+  {
+    "site_id": 77,
+    "site_name": "Saddang River Station 77",
+    "lat": -0.315580640317457,
+    "lng": 122.25259131948212,
+    "lags": {
+      "lag_1": 917.0,
+      "lag_2": 600.0,
+      "lag_7": 1104.0,
+      "roll_mean_3": 755.0,
+      "roll_mean_7": 818.14
+    }
+  },
+  {
+    "site_id": 78,
+    "site_name": "Digul River Station 78",
+    "lat": -9.5,
+    "lng": 130.8182363742504,
+    "lags": {
+      "lag_1": 1531.0,
+      "lag_2": 1402.0,
+      "lag_7": 1421.0,
+      "roll_mean_3": 1383.67,
+      "roll_mean_7": 1313.43
+    }
+  },
+  {
+    "site_id": 79,
+    "site_name": "Barito River Station 79",
+    "lat": -1.0547399100353148,
+    "lng": 113.3120658539702,
+    "lags": {
+      "lag_1": 1099.0,
+      "lag_2": 1066.0,
+      "lag_7": 885.0,
+      "roll_mean_3": 1028.0,
+      "roll_mean_7": 924.71
+    }
+  },
+  {
+    "site_id": 80,
+    "site_name": "Saddang River Station 80",
+    "lat": -4.01656192415896,
+    "lng": 119.068670456456,
+    "lags": {
+      "lag_1": 1617.0,
+      "lag_2": 1457.0,
+      "lag_7": 1701.0,
+      "roll_mean_3": 1492.67,
+      "roll_mean_7": 1470.29
+    }
+  },
+  {
+    "site_id": 81,
+    "site_name": "Citarum River Station 81",
+    "lat": -7.568295195240634,
+    "lng": 106.98402169217584,
+    "lags": {
+      "lag_1": 1365.0,
+      "lag_2": 1642.0,
+      "lag_7": 2029.0,
+      "roll_mean_3": 1539.67,
+      "roll_mean_7": 1648.0
+    }
+  },
+  {
+    "site_id": 82,
+    "site_name": "Saddang River Station 82",
+    "lat": -4.82479605156548,
+    "lng": 127.7408352468613,
+    "lags": {
+      "lag_1": 1234.0,
+      "lag_2": 963.0,
+      "lag_7": 1355.0,
+      "roll_mean_3": 1056.0,
+      "roll_mean_7": 1072.86
+    }
+  },
+  {
+    "site_id": 83,
+    "site_name": "Mahakam Delta Station 83",
+    "lat": 0.5018086812070677,
+    "lng": 116.34046102527432,
+    "lags": {
+      "lag_1": 956.0,
+      "lag_2": 593.0,
+      "lag_7": 1152.0,
+      "roll_mean_3": 762.67,
+      "roll_mean_7": 867.43
+    }
+  },
+  {
+    "site_id": 84,
+    "site_name": "Jeneberang River Station 84",
+    "lat": -4.888199103920538,
+    "lng": 117.17853385848142,
+    "lags": {
+      "lag_1": 880.0,
+      "lag_2": 534.0,
+      "lag_7": 837.0,
+      "roll_mean_3": 673.33,
+      "roll_mean_7": 695.57
+    }
+  },
+  {
+    "site_id": 85,
+    "site_name": "Mamberamo River Station 85",
+    "lat": -0.6822872001558971,
+    "lng": 129.03554184751934,
+    "lags": {
+      "lag_1": 1239.0,
+      "lag_2": 1518.0,
+      "lag_7": 1554.0,
+      "roll_mean_3": 1370.0,
+      "roll_mean_7": 1405.29
+    }
+  },
+  {
+    "site_id": 86,
+    "site_name": "Saddang River Station 86",
+    "lat": -3.701204328209088,
+    "lng": 120.97257340821628,
+    "lags": {
+      "lag_1": 1183.0,
+      "lag_2": 1205.0,
+      "lag_7": 1163.0,
+      "roll_mean_3": 1174.0,
+      "roll_mean_7": 1173.71
+    }
+  },
+  {
+    "site_id": 87,
+    "site_name": "Mahakam Delta Station 87",
+    "lat": -1.7156763136635411,
+    "lng": 117.63444300586347,
+    "lags": {
+      "lag_1": 777.0,
+      "lag_2": 767.0,
+      "lag_7": 998.0,
+      "roll_mean_3": 752.67,
+      "roll_mean_7": 843.14
+    }
+  },
+  {
+    "site_id": 88,
+    "site_name": "Mahakam Delta Station 88",
+    "lat": 4.0,
+    "lng": 120.58670013787447,
+    "lags": {
+      "lag_1": 1436.0,
+      "lag_2": 1411.0,
+      "lag_7": 1335.0,
+      "roll_mean_3": 1474.33,
+      "roll_mean_7": 1308.57
+    }
+  },
+  {
+    "site_id": 89,
+    "site_name": "Mahakam Delta Station 89",
+    "lat": 0.5531222285223736,
+    "lng": 118.91506504303764,
+    "lags": {
+      "lag_1": 729.0,
+      "lag_2": 782.0,
+      "lag_7": 865.0,
+      "roll_mean_3": 752.33,
+      "roll_mean_7": 781.43
+    }
+  },
+  {
+    "site_id": 90,
+    "site_name": "Saddang River Station 90",
+    "lat": -2.888261774703285,
+    "lng": 124.86231844860828,
+    "lags": {
+      "lag_1": 1067.0,
+      "lag_2": 1093.0,
+      "lag_7": 1383.0,
+      "roll_mean_3": 1107.33,
+      "roll_mean_7": 1153.57
+    }
+  },
+  {
+    "site_id": 91,
+    "site_name": "Solo River Station 91",
+    "lat": -9.5,
+    "lng": 113.5968373373943,
+    "lags": {
+      "lag_1": 893.0,
+      "lag_2": 1054.0,
+      "lag_7": 1066.0,
+      "roll_mean_3": 1019.0,
+      "roll_mean_7": 1021.43
+    }
+  },
+  {
+    "site_id": 92,
+    "site_name": "Jeneberang River Station 92",
+    "lat": -9.194472809724768,
+    "lng": 120.25857344103976,
+    "lags": {
+      "lag_1": 1576.0,
+      "lag_2": 1610.0,
+      "lag_7": 1585.0,
+      "roll_mean_3": 1513.0,
+      "roll_mean_7": 1396.71
+    }
+  },
+  {
+    "site_id": 93,
+    "site_name": "Digul River Station 93",
+    "lat": -7.120816224572248,
+    "lng": 131.27594074390765,
+    "lags": {
+      "lag_1": 1698.0,
+      "lag_2": 1745.0,
+      "lag_7": 2023.0,
+      "roll_mean_3": 1718.0,
+      "roll_mean_7": 1716.14
+    }
+  },
+  {
+    "site_id": 94,
+    "site_name": "Barito River Station 94",
+    "lat": -2.757638905271672,
+    "lng": 115.42334108259593,
+    "lags": {
+      "lag_1": 2010.0,
+      "lag_2": 1677.0,
+      "lag_7": 1822.0,
+      "roll_mean_3": 1746.67,
+      "roll_mean_7": 1569.71
+    }
+  },
+  {
+    "site_id": 95,
+    "site_name": "Jeneberang River Station 95",
+    "lat": -8.495970851818072,
+    "lng": 127.6940428062406,
+    "lags": {
+      "lag_1": 1897.0,
+      "lag_2": 1506.0,
+      "lag_7": 2027.0,
+      "roll_mean_3": 1652.67,
+      "roll_mean_7": 1769.43
+    }
+  },
+  {
+    "site_id": 96,
+    "site_name": "Brantas River Station 96",
+    "lat": -9.5,
+    "lng": 110.780296360015,
+    "lags": {
+      "lag_1": 781.0,
+      "lag_2": 925.0,
+      "lag_7": 968.0,
+      "roll_mean_3": 832.67,
+      "roll_mean_7": 807.14
+    }
+  },
+  {
+    "site_id": 97,
+    "site_name": "Saddang River Station 97",
+    "lat": -2.481647050986359,
+    "lng": 117.89235445323555,
+    "lags": {
+      "lag_1": 1988.0,
+      "lag_2": 1987.0,
+      "lag_7": 1865.0,
+      "roll_mean_3": 1947.67,
+      "roll_mean_7": 1808.0
+    }
+  },
+  {
+    "site_id": 98,
+    "site_name": "Musi River Station 98",
+    "lat": -3.595582978757542,
+    "lng": 105.54657395596888,
+    "lags": {
+      "lag_1": 1441.0,
+      "lag_2": 1321.0,
+      "lag_7": 1403.0,
+      "roll_mean_3": 1309.33,
+      "roll_mean_7": 1161.0
+    }
+  },
+  {
+    "site_id": 99,
+    "site_name": "Kapuas River Station 99",
+    "lat": -0.0093479266888856,
+    "lng": 109.105184311216,
+    "lags": {
+      "lag_1": 1291.0,
+      "lag_2": 1213.0,
+      "lag_7": 1282.0,
+      "roll_mean_3": 1197.67,
+      "roll_mean_7": 1064.0
+    }
+  },
+  {
+    "site_id": 100,
+    "site_name": "Mamberamo River Station 100",
+    "lat": -1.651832098709106,
+    "lng": 132.8954919084768,
+    "lags": {
+      "lag_1": 1409.0,
+      "lag_2": 1401.0,
+      "lag_7": 1574.0,
+      "roll_mean_3": 1428.67,
+      "roll_mean_7": 1418.14
+    }
+  }
+]
