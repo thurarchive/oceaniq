@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { spawn } from 'child_process';
 import path from 'path';
 import fs from 'fs';
-import * as ort from 'onnxruntime-node';
 import siteLagsData from '@/data/site_lags.json';
 
 interface SiteLagItem {
@@ -51,6 +50,13 @@ async function getOnnxModelBuffer(requestUrl?: string): Promise<Buffer | string>
 
 // Helper to run ONNX model inference using onnxruntime-node
 async function runOnnxInference(body: any, requestUrl?: string) {
+  let ort: any;
+  try {
+    ort = await import('onnxruntime-node');
+  } catch (err: any) {
+    throw new Error(`Failed to initialize ONNX runtime: ${err.message}`);
+  }
+
   const modelBufferOrPath = await getOnnxModelBuffer(requestUrl);
   const siteLags = siteLagsData as SiteLagItem[];
 
@@ -101,7 +107,7 @@ async function runOnnxInference(body: any, requestUrl?: string) {
   // ort.InferenceSession.create accepts a Buffer/Uint8Array or file path string
   const session = await ort.InferenceSession.create(modelBufferOrPath as any);
 
-  const feeds: Record<string, ort.Tensor> = {};
+  const feeds: Record<string, any> = {};
   feeds[session.inputNames[0]] = tensor;
 
   const results = await session.run(feeds);
@@ -143,6 +149,11 @@ function runLocalPythonSubprocess(body: any): Promise<Response> {
       stderr += data.toString();
     });
 
+    child.on('error', (err) => {
+      console.error('Failed to start Python subprocess:', err);
+      resolve(NextResponse.json({ error: `Python subprocess error: ${err.message}` }, { status: 500 }));
+    });
+
     child.on('close', (code) => {
       if (code !== 0) {
         console.error(`Subprocess exited with code ${code}. Stderr: ${stderr}`);
@@ -175,10 +186,14 @@ export async function POST(request: Request) {
     } catch (onnxErr: any) {
       console.error('ONNX inference failed:', onnxErr);
 
-      // If running on Vercel deployment, return detailed JSON error instead of falling back to Python subprocess
-      if (process.env.VERCEL === '1' || process.env.NODE_ENV === 'production') {
+      const isWindows = process.platform === 'win32';
+      const venvPythonPath = isWindows
+        ? path.join(process.cwd(), '.venv', 'Scripts', 'python.exe')
+        : path.join(process.cwd(), '.venv', 'bin', 'python');
+
+      if (!fs.existsSync(venvPythonPath)) {
         return NextResponse.json(
-          { error: `ONNX inference error on Vercel: ${onnxErr?.message || 'Unknown error'}` },
+          { error: `ONNX inference failed and local Python fallback is unavailable: ${onnxErr?.message || 'Unknown error'}` },
           { status: 500 }
         );
       }
