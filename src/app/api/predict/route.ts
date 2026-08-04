@@ -2,11 +2,10 @@ import { NextResponse } from 'next/server';
 import { spawn } from 'child_process';
 import path from 'path';
 import fs from 'fs';
+import * as ort from 'onnxruntime-node';
 
 // Helper to run ONNX model inference using onnxruntime-node
 async function runOnnxInference(body: any) {
-  const ort = await import('onnxruntime-node');
-
   const onnxPath = path.join(process.cwd(), 'public', 'xgboost_model.onnx');
   const siteLagsPath = path.join(process.cwd(), 'src', 'data', 'site_lags.json');
 
