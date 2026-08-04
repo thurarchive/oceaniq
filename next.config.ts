@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
     qualities: [75, 85],
   },
   outputFileTracingIncludes: {
-    "/api/predict": ["./node_modules/onnxruntime-web/dist/*.wasm"],
+    "/api/predict": ["./src/data/xgboost_tuned_model.json"],
   },
 };
 
