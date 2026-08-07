@@ -17,7 +17,9 @@ export default function AuthCallback() {
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (session) {
+      if (event === 'PASSWORD_RECOVERY') {
+        router.replace('/auth/reset-password');
+      } else if (session) {
         router.replace('/interactive-map');
       } else {
         // Give client a small window to resolve auth state, otherwise go to auth page
