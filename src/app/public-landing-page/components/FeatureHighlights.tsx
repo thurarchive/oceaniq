@@ -47,13 +47,13 @@ const features: Feature[] = [
     icon: Brain,
     title: 'ML Waste Estimation',
     description:
-      'Run interpretable predictions for any monitored zone using environmental inputs — rainfall, wind, tidal levels, wave height. Every estimate includes confidence scores and top contributing features.',
-    href: '/estimate',
-    cta: 'Run Estimate',
+      'Experimental waste density predictions powered by our core XGBoost model using environmental inputs (rainfall, tides, MSL). Kept experimental due to dataset constraints.',
+    href: '/interactive-map?experimental=true',
+    cta: 'Explore ML Mode',
     accent: 'text-warning',
     accentBg: 'bg-warning/10',
     borderColor: 'border-warning/20 hover:border-warning/40',
-    tags: ['Confidence Bands', 'SHAP Features', 'Model v1.3'],
+    tags: ['XGBoost Core', 'Experimental', 'Environmental Lags'],
   },
   {
     id: 'feature-citizen',
