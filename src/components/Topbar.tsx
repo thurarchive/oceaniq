@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import AppLogo from '@/components/ui/AppLogo';
-import { Map, BarChart3, Home, Menu, X, Bell, Waves, LogOut, Loader2, BookOpen, LayoutDashboard, ShieldCheck } from 'lucide-react';
+import { Map, BarChart3, Home, Menu, X, Bell, Waves, LogOut, Loader2, BookOpen, LayoutDashboard, ShieldCheck, Trophy } from 'lucide-react';
 import { toast } from 'sonner';
 import { User as SupabaseUser } from '@supabase/supabase-js';
 
@@ -20,6 +20,7 @@ const navItems: NavItem[] = [
   { label: 'About', href: '/about', icon: <BookOpen size={16} /> },
   { label: 'Map', href: '/interactive-map', icon: <Map size={16} /> },
   { label: 'Analytics', href: '/analytics-dashboard', icon: <BarChart3 size={16} /> },
+  { label: 'Leaderboard', href: '/leaderboard', icon: <Trophy size={16} /> },
 ];
 
 const authNavItems: NavItem[] = [
@@ -90,11 +91,24 @@ export default function Topbar({ currentPath = '/' }: TopbarProps) {
     }
   };
 
+  const handleHomeClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (href === '/') {
+      if (typeof window !== 'undefined' && window.location.pathname === '/') {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+  };
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 glass-card-elevated border-b border-border h-16">
       <div className="max-w-screen-2xl mx-auto px-4 lg:px-8 h-full flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2.5 group">
+        <Link
+          href="/"
+          onClick={(e) => handleHomeClick(e, '/')}
+          className="flex items-center gap-2.5 group cursor-pointer"
+        >
           <AppLogo size={34} />
           <span className="font-bold text-lg tracking-tight text-gradient-ocean hidden sm:block">
             Oceaniq
@@ -113,6 +127,7 @@ export default function Topbar({ currentPath = '/' }: TopbarProps) {
               <Link
                 key={`nav-${item.href}`}
                 href={item.href}
+                onClick={(e) => handleHomeClick(e, item.href)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
                   ? 'bg-primary/10 text-primary border border-primary/20' : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
                   }`}
@@ -249,7 +264,10 @@ export default function Topbar({ currentPath = '/' }: TopbarProps) {
                 <Link
                   key={`mobile-nav-${item.href}`}
                   href={item.href}
-                  onClick={() => setMobileOpen(false)}
+                  onClick={(e) => {
+                    setMobileOpen(false);
+                    handleHomeClick(e, item.href);
+                  }}
                   className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all ${isActive
                     ? 'bg-primary/10 text-primary border border-primary/20' : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
                     }`}

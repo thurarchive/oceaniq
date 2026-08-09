@@ -35,6 +35,8 @@ import {
   WeightRange,
 } from '@/types/citizen-reports';
 import LocationPickerMap from './LocationPickerMap';
+import LocationSearchInput from './LocationSearchInput';
+import SiteNameInput from './SiteNameInput';
 import LazySignUpModal from './LazySignUpModal';
 import { User as SupabaseUser } from '@supabase/supabase-js';
 
@@ -160,6 +162,16 @@ export default function ContributeForm() {
   // Location selector handler
   const handleLocationSelect = (latNum: number, lngNum: number) => {
     setForm((f) => ({ ...f, lat: String(latNum), lng: String(lngNum) }));
+    setErrors((e) => ({ ...e, location: '' }));
+  };
+
+  const handleSearchLocationSelect = ({ lat, lng, placeName }: { lat: number; lng: number; placeName: string }) => {
+    setForm((f) => ({
+      ...f,
+      lat: String(lat),
+      lng: String(lng),
+      site_name: f.site_name ? f.site_name : placeName,
+    }));
     setErrors((e) => ({ ...e, location: '' }));
   };
 
@@ -290,7 +302,10 @@ export default function ContributeForm() {
 
       await insertCitizenReport(payload);
 
-      toast.success('Report submitted successfully! Thank you for your contribution.');
+      toast.success('🎉 Report Submitted for Moderation!', {
+        description: "You're 1 step away from unlocking your 🛡️ Coast Scout badge as soon as your submission is verified!",
+        duration: 7000,
+      });
       router.push('/user-dashboard');
     } catch (err: any) {
       console.error('Submission error:', err);
@@ -369,8 +384,20 @@ export default function ContributeForm() {
           <div>
             <h2 className="text-lg font-bold text-foreground">Location &amp; Context</h2>
             <p className="text-xs text-muted-foreground mt-0.5">
-              Drop a pin on the map where you observed the waste debris.
+              Search an area or drop a pin on the map where you observed the waste debris.
             </p>
+          </div>
+
+          {/* Location Search Bar */}
+          <div>
+            <label className="auth-label mb-1.5 flex items-center justify-between">
+              <span>Search Location / Area</span>
+              <span className="text-[11px] text-muted-foreground font-normal">Geocoded search &amp; map sync</span>
+            </label>
+            <LocationSearchInput
+              onSelectLocation={handleSearchLocationSelect}
+              placeholder="Search location, city, island, or beach name…"
+            />
           </div>
 
           {/* Location Picker Map */}
@@ -396,13 +423,9 @@ export default function ContributeForm() {
               <label className="auth-label" htmlFor="field-site-name">
                 Site / Beach Name <span className="normal-case text-muted-foreground">(optional)</span>
               </label>
-              <input
-                id="field-site-name"
-                type="text"
-                placeholder="e.g., Ancol Beach, North Coast"
+              <SiteNameInput
                 value={form.site_name}
-                onChange={(e) => setForm((f) => ({ ...f, site_name: e.target.value }))}
-                className="auth-input text-xs"
+                onChange={(val) => setForm((f) => ({ ...f, site_name: val }))}
               />
             </div>
             <div className="auth-input-group">
@@ -416,6 +439,7 @@ export default function ContributeForm() {
                 onChange={(e) => setForm((f) => ({ ...f, observation_time: e.target.value }))}
                 className="auth-input text-xs"
                 style={{ colorScheme: 'dark' }}
+                suppressHydrationWarning
               />
             </div>
           </div>

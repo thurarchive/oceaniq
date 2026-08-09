@@ -8,10 +8,14 @@ import {
   Loader2,
   Plus,
   Minus,
+  Info,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { insertObservation, updateObservation } from '@/lib/waste-observations';
 import { DetailedCompositionItem, WeatherCondition, TideCondition } from '@/types/waste-observations';
+import LocationPickerMap from '@/app/contribute/components/LocationPickerMap';
+import LocationSearchInput from '@/app/contribute/components/LocationSearchInput';
+import SiteNameInput from '@/app/contribute/components/SiteNameInput';
 import { FormRef } from './CitizenReportForm';
 
 // ─────────────────────────────────────────────
@@ -311,28 +315,75 @@ const ExpertScientificForm = forwardRef<FormRef, ExpertScientificFormProps>(
       }));
     };
 
+    const handleLocationSelect = (latNum: number, lngNum: number) => {
+      setForm((f) => ({ ...f, lat: String(latNum), lng: String(lngNum) }));
+      setErrors((e) => ({ ...e, coords: '' }));
+    };
+
+    const handleSearchLocationSelect = ({ lat, lng, placeName }: { lat: number; lng: number; placeName: string }) => {
+      setForm((f) => ({
+        ...f,
+        lat: String(lat),
+        lng: String(lng),
+        site_name: f.site_name ? f.site_name : placeName,
+      }));
+      setErrors((e) => ({ ...e, coords: '', site_name: '' }));
+    };
+
+    const [attemptedNext, setAttemptedNext] = useState(false);
+
+    // Dynamic missing fields calculator for current step
+    const getMissingFields = () => {
+      const missing: { key: string; label: string; desc: string }[] = [];
+      if (step === 0) {
+        if (!form.lat || !form.lng) {
+          missing.push({ key: 'coords', label: 'Interactive Location Pin', desc: 'Tap on map or use GPS search' });
+        }
+        if (!form.weather) {
+          missing.push({ key: 'weather', label: 'Weather Condition', desc: 'Select weather condition' });
+        }
+      } else if (step === 1) {
+        if (!form.transect_length_m) {
+          missing.push({ key: 'transect_length', label: 'Distance Surveyed (meters)', desc: 'Enter survey distance in meters' });
+        }
+        if (!form.transect_area_m2) {
+          missing.push({ key: 'transect_area', label: 'Total Area Coverage (m²)', desc: 'Enter survey area in m²' });
+        }
+      } else if (step === 2) {
+        if (!form.total_weight_kg) {
+          missing.push({ key: 'weight', label: 'Total Weight (kg)', desc: 'Enter total weight in kg' });
+        }
+        if (!form.total_items) {
+          missing.push({ key: 'items', label: 'Total Items Count', desc: 'Enter total items count' });
+        }
+      }
+      return missing;
+    };
+
+    const missingFields = getMissingFields();
+
     // ── Validation ──
     const validateStep = (): boolean => {
+      setAttemptedNext(true);
+      const activeMissing = getMissingFields();
       const newErrors: Record<string, string> = {};
-      if (step === 0) {
-        if (!form.site_name.trim()) newErrors.site_name = 'Site name is required.';
-        if (!form.lat || !form.lng) newErrors.coords = 'Coordinates are required.';
-        if (!form.weather) newErrors.weather = 'Select weather condition.';
-      }
-      if (step === 1) {
-        if (!form.transect_length_m) newErrors.transect_length = 'Enter transect length.';
-        if (!form.transect_area_m2) newErrors.transect_area = 'Enter transect area.';
-      }
-      if (step === 2) {
-        if (!form.total_weight_kg) newErrors.weight = 'Enter total weight.';
-        if (!form.total_items) newErrors.items = 'Enter total item count.';
-      }
+      activeMissing.forEach((m) => {
+        newErrors[m.key] = m.desc;
+      });
       setErrors(newErrors);
-      return Object.keys(newErrors).length === 0;
+
+      if (activeMissing.length > 0) {
+        toast.error('Required fields missing. Please complete all highlighted fields on this step.');
+        return false;
+      }
+      return true;
     };
 
     const handleNext = () => {
-      if (validateStep()) setStep((s) => s + 1);
+      if (validateStep()) {
+        setAttemptedNext(false);
+        setStep((s) => s + 1);
+      }
     };
 
     // ── Build detailed_composition array from counts ──
@@ -402,245 +453,240 @@ const ExpertScientificForm = forwardRef<FormRef, ExpertScientificFormProps>(
             <div className="flex flex-col gap-4 flex-1">
               <div>
                 <h3 className="text-base font-semibold text-foreground mb-0.5">
-                  Environmental Metadata
+                  Environmental Metadata &amp; Location
                 </h3>
                 <p className="text-xs text-muted-foreground">
-                  Record the site conditions at the time of the survey.
+                  Search an area or drop a pin on the map to record survey site conditions.
                 </p>
               </div>
 
+              {/* Location Search Bar */}
+              <div>
+                <label className="auth-label mb-1.5 flex items-center justify-between">
+                  <span>Search Location / Area</span>
+                  <span className="text-[11px] text-muted-foreground font-normal">Geocoded search &amp; map sync</span>
+                </label>
+                <LocationSearchInput
+                  onSelectLocation={handleSearchLocationSelect}
+                  placeholder="Search location, city, island, or beach name…"
+                />
+              </div>
+
+              {/* Interactive Location Map Pin */}
+              <div>
+                <label className="auth-label mb-1.5 flex items-center justify-between">
+                  <span>
+                    Interactive Location Pin <span className="text-danger font-bold">*</span>
+                  </span>
+                  {errors.coords && <span className="text-xs text-danger font-semibold">{errors.coords}</span>}
+                </label>
+                <LocationPickerMap
+                  lat={form.lat ? parseFloat(form.lat) : null}
+                  lng={form.lng ? parseFloat(form.lng) : null}
+                  onLocationSelect={handleLocationSelect}
+                />
+              </div>
+
               {/* Site name */}
-            <div className="auth-input-group">
-              <label className="auth-label" htmlFor="field-site-name">
-                Site Name
-              </label>
-              {errors.site_name && (
-                <p className="text-xs text-danger mb-1">{errors.site_name}</p>
-              )}
-              <input
-                id="field-site-name"
-                type="text"
-                placeholder="e.g., Ancol Beach North Transect A"
-                value={form.site_name}
-                onChange={(e) => setForm((f) => ({ ...f, site_name: e.target.value }))}
-                className="auth-input"
-                style={{ paddingLeft: '0.75rem' }}
-              />
-            </div>
-
-            {/* Coordinates */}
-            <div>
-              <label className="auth-label">Coordinates (Decimal Degrees)</label>
-              {errors.coords && (
-                <p className="text-xs text-danger mb-1">{errors.coords}</p>
-              )}
-              <div className="flex gap-2">
-                <input
-                  id="field-exp-lat"
-                  type="number"
-                  step="any"
-                  placeholder="Latitude"
-                  value={form.lat}
-                  onChange={(e) => setForm((f) => ({ ...f, lat: e.target.value }))}
-                  className="auth-input flex-1"
-                  aria-label="Latitude"
-                />
-                <input
-                  id="field-exp-lng"
-                  type="number"
-                  step="any"
-                  placeholder="Longitude"
-                  value={form.lng}
-                  onChange={(e) => setForm((f) => ({ ...f, lng: e.target.value }))}
-                  className="auth-input flex-1"
-                  aria-label="Longitude"
+              <div className="auth-input-group">
+                <label className="auth-label" htmlFor="field-site-name">
+                  Site Name <span className="normal-case font-normal text-muted-foreground">(optional)</span>
+                </label>
+                <SiteNameInput
+                  value={form.site_name}
+                  onChange={(val) => setForm((f) => ({ ...f, site_name: val }))}
+                  placeholder="e.g., Ancol Beach North Transect A"
                 />
               </div>
-            </div>
 
-            {/* Weather */}
-            <div>
-              <label className="auth-label">Weather Condition</label>
-              {errors.weather && (
-                <p className="text-xs text-danger mb-1">{errors.weather}</p>
+              {/* Coordinates */}
+              <div>
+                <label className="auth-label mb-1.5 block">Coordinates (Decimal Degrees)</label>
+                <div className="flex gap-2">
+                  <input
+                    id="field-exp-lat"
+                    type="number"
+                    step="any"
+                    placeholder="Latitude"
+                    value={form.lat}
+                    onChange={(e) => setForm((f) => ({ ...f, lat: e.target.value }))}
+                    className="auth-input flex-1 text-xs"
+                    aria-label="Latitude"
+                  />
+                  <input
+                    id="field-exp-lng"
+                    type="number"
+                    step="any"
+                    placeholder="Longitude"
+                    value={form.lng}
+                    onChange={(e) => setForm((f) => ({ ...f, lng: e.target.value }))}
+                    className="auth-input flex-1 text-xs"
+                    aria-label="Longitude"
+                  />
+                </div>
+              </div>
+
+              {/* Weather */}
+              <div>
+                <label className="auth-label">Weather Condition</label>
+                {errors.weather && (
+                  <p className="text-xs text-danger mb-1">{errors.weather}</p>
+                )}
+                <div className="flex gap-2">
+                  {WEATHER_OPTIONS.map((opt) => (
+                    <button
+                      key={opt}
+                      type="button"
+                      id={`weather-${opt}`}
+                      onClick={() => setForm((f) => ({ ...f, weather: opt }))}
+                      className={`flex-1 py-2 rounded-xl text-sm font-medium border transition-all duration-150 ${form.weather === opt
+                        ? 'bg-primary/15 border-primary/50 text-primary'
+                        : 'border-border/50 text-muted-foreground hover:text-foreground bg-card/20'
+                        }`}
+                    >
+                      {opt}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Tide */}
+              <div>
+                <label className="auth-label">Tide Condition</label>
+                {errors.tide && (
+                  <p className="text-xs text-danger mb-1">{errors.tide}</p>
+                )}
+                <div className="grid grid-cols-4 gap-2">
+                  {TIDE_OPTIONS.map((opt) => (
+                    <button
+                      key={opt}
+                      type="button"
+                      id={`tide-${opt}`}
+                      onClick={() => setForm((f) => ({ ...f, tide: opt }))}
+                      className={`py-2 rounded-xl text-sm font-medium border transition-all duration-150 ${form.tide === opt
+                        ? 'bg-accent/15 border-accent/50 text-accent'
+                        : 'border-border/50 text-muted-foreground hover:text-foreground bg-card/20'
+                        }`}
+                    >
+                      {opt}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Validation Alert Warning Box if attemptedNext and missing fields exist */}
+              {attemptedNext && missingFields.length > 0 && (
+                <div className="mt-4 p-3.5 rounded-2xl bg-danger/10 border border-danger/30 text-danger text-xs flex items-start gap-2.5 animate-in fade-in duration-200">
+                  <Info size={16} className="shrink-0 mt-0.5 text-danger" />
+                  <div>
+                    <p className="font-bold">Submission Warning — Required Fields Missing</p>
+                    <p className="text-[11px] text-danger/90 mt-0.5 leading-snug">
+                      Please complete all required fields on this step before proceeding:
+                    </p>
+                    <ul className="list-disc list-inside text-[11px] mt-1.5 space-y-1 opacity-90">
+                      {missingFields.map((item) => (
+                        <li key={item.key}>
+                          <strong className="font-semibold text-danger">{item.label}</strong> — {item.desc}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
               )}
-              <div className="flex gap-2">
-                {WEATHER_OPTIONS.map((opt) => (
-                  <button
-                    key={opt}
-                    type="button"
-                    id={`weather-${opt}`}
-                    onClick={() => setForm((f) => ({ ...f, weather: opt }))}
-                    className={`flex-1 py-2 rounded-xl text-sm font-medium border transition-all duration-150 ${form.weather === opt
-                      ? 'bg-primary/15 border-primary/50 text-primary'
-                      : 'border-border/50 text-muted-foreground hover:text-foreground bg-card/20'
-                      }`}
-                  >
-                    {opt}
-                  </button>
+            </div>
+          )}
+
+          {/* ── Step 2: Methodology (Transect) ── */}
+          {step === 1 && (
+            <div className="flex flex-col gap-5 flex-1">
+              <div>
+                <h3 className="text-base font-semibold text-foreground mb-0.5">
+                  Methodology — Transect
+                </h3>
+                <p className="text-xs text-muted-foreground">
+                  Enter the survey dimensions used during this observation.
+                </p>
+              </div>
+
+              {/* Visual info card */}
+              <div className="glass-card-elevated border border-accent/20 rounded-xl p-4 bg-accent/5">
+                <p className="text-xs text-accent font-semibold uppercase tracking-wider mb-1">
+                  UoP Standard
+                </p>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Follow the University of Portsmouth transect protocol. Standard transects are
+                  100m × 5m (500m²) for beach surveys. Adjust based on site conditions.
+                </p>
+              </div>
+
+              {/* Validation Alert Warning Box if attemptedNext and missing fields exist */}
+              {attemptedNext && missingFields.length > 0 && (
+                <div className="mt-4 p-3.5 rounded-2xl bg-danger/10 border border-danger/30 text-danger text-xs flex items-start gap-2.5 animate-in fade-in duration-200">
+                  <Info size={16} className="shrink-0 mt-0.5 text-danger" />
+                  <div>
+                    <p className="font-bold">Submission Warning — Required Fields Missing</p>
+                    <p className="text-[11px] text-danger/90 mt-0.5 leading-snug">
+                      Please complete all required fields on this step before proceeding:
+                    </p>
+                    <ul className="list-disc list-inside text-[11px] mt-1.5 space-y-1 opacity-90">
+                      {missingFields.map((item) => (
+                        <li key={item.key}>
+                          <strong className="font-semibold text-danger">{item.label}</strong> — {item.desc}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ── Step 3: Granular Composition ── */}
+          {step === 2 && (
+            <div className="flex flex-col gap-4 flex-1 overflow-y-auto scrollbar-ocean">
+              <div>
+                <h3 className="text-base font-semibold text-foreground mb-0.5">
+                  Granular Composition — UoP Standard
+                </h3>
+                <p className="text-xs text-muted-foreground">
+                  Record item counts per category, plus total weight and item count.
+                </p>
+              </div>
+
+              {/* Dynamic Accordion sections */}
+              <div className="flex flex-col gap-3">
+                {ACCORDION_SECTIONS.map((sec) => (
+                  <AccordionSection
+                    key={sec.category}
+                    category={sec.category}
+                    items={sec.items}
+                    counts={form.composition_counts}
+                    onCountChange={handleCountChange}
+                  />
                 ))}
               </div>
-            </div>
 
-            {/* Tide */}
-            <div>
-              <label className="auth-label">Tide Condition</label>
-              {errors.tide && (
-                <p className="text-xs text-danger mb-1">{errors.tide}</p>
+              {/* Validation Alert Warning Box if attemptedNext and missing fields exist */}
+              {attemptedNext && missingFields.length > 0 && (
+                <div className="mt-4 p-3.5 rounded-2xl bg-danger/10 border border-danger/30 text-danger text-xs flex items-start gap-2.5 animate-in fade-in duration-200">
+                  <Info size={16} className="shrink-0 mt-0.5 text-danger" />
+                  <div>
+                    <p className="font-bold">Submission Warning — Required Fields Missing</p>
+                    <p className="text-[11px] text-danger/90 mt-0.5 leading-snug">
+                      Please complete all required fields on this step before proceeding:
+                    </p>
+                    <ul className="list-disc list-inside text-[11px] mt-1.5 space-y-1 opacity-90">
+                      {missingFields.map((item) => (
+                        <li key={item.key}>
+                          <strong className="font-semibold text-danger">{item.label}</strong> — {item.desc}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
               )}
-              <div className="grid grid-cols-4 gap-2">
-                {TIDE_OPTIONS.map((opt) => (
-                  <button
-                    key={opt}
-                    type="button"
-                    id={`tide-${opt}`}
-                    onClick={() => setForm((f) => ({ ...f, tide: opt }))}
-                    className={`py-2 rounded-xl text-sm font-medium border transition-all duration-150 ${form.tide === opt
-                      ? 'bg-accent/15 border-accent/50 text-accent'
-                      : 'border-border/50 text-muted-foreground hover:text-foreground bg-card/20'
-                      }`}
-                  >
-                    {opt}
-                  </button>
-                ))}
-              </div>
             </div>
-          </div>
-        )}
-
-        {/* ── Step 2: Methodology (Transect) ── */}
-        {step === 1 && (
-          <div className="flex flex-col gap-5 flex-1">
-            <div>
-              <h3 className="text-base font-semibold text-foreground mb-0.5">
-                Methodology — Transect
-              </h3>
-              <p className="text-xs text-muted-foreground">
-                Enter the survey dimensions used during this observation.
-              </p>
-            </div>
-
-            <div className="auth-input-group">
-              <label className="auth-label" htmlFor="field-transect-length">
-                Distance Surveyed (meters)
-              </label>
-              {errors.transect_length && (
-                <p className="text-xs text-danger mb-1">{errors.transect_length}</p>
-              )}
-              <input
-                id="field-transect-length"
-                type="number"
-                min="0"
-                step="0.1"
-                placeholder="e.g., 100"
-                value={form.transect_length_m}
-                onChange={(e) => setForm((f) => ({ ...f, transect_length_m: e.target.value }))}
-                className="auth-input"
-                style={{ paddingLeft: '0.75rem' }}
-              />
-            </div>
-
-            <div className="auth-input-group">
-              <label className="auth-label" htmlFor="field-transect-area">
-                Total Area Coverage (m²)
-              </label>
-              {errors.transect_area && (
-                <p className="text-xs text-danger mb-1">{errors.transect_area}</p>
-              )}
-              <input
-                id="field-transect-area"
-                type="number"
-                min="0"
-                step="0.1"
-                placeholder="e.g., 500"
-                value={form.transect_area_m2}
-                onChange={(e) => setForm((f) => ({ ...f, transect_area_m2: e.target.value }))}
-                className="auth-input"
-                style={{ paddingLeft: '0.75rem' }}
-              />
-            </div>
-
-            {/* Visual info card */}
-            <div className="glass-card-elevated border border-accent/20 rounded-xl p-4 bg-accent/5">
-              <p className="text-xs text-accent font-semibold uppercase tracking-wider mb-1">
-                UoP Standard
-              </p>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                Follow the University of Portsmouth transect protocol. Standard transects are
-                100m × 5m (500m²) for beach surveys. Adjust based on site conditions.
-              </p>
-            </div>
-          </div>
-        )}
-
-        {/* ── Step 3: Granular Composition ── */}
-        {step === 2 && (
-          <div className="flex flex-col gap-4 flex-1 overflow-y-auto scrollbar-ocean">
-            <div>
-              <h3 className="text-base font-semibold text-foreground mb-0.5">
-                Granular Composition — UoP Standard
-              </h3>
-              <p className="text-xs text-muted-foreground">
-                Record item counts per category, plus total weight and item count.
-              </p>
-            </div>
-
-            {/* Totals */}
-            <div className="grid grid-cols-2 gap-3">
-              <div className="auth-input-group">
-                <label className="auth-label" htmlFor="field-weight">
-                  Total Weight (kg)
-                </label>
-                {errors.weight && (
-                  <p className="text-xs text-danger mb-1">{errors.weight}</p>
-                )}
-                <input
-                  id="field-weight"
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  placeholder="0.00"
-                  value={form.total_weight_kg}
-                  onChange={(e) => setForm((f) => ({ ...f, total_weight_kg: e.target.value }))}
-                  className="auth-input"
-                  style={{ paddingLeft: '0.75rem' }}
-                />
-              </div>
-              <div className="auth-input-group">
-                <label className="auth-label" htmlFor="field-total-items">
-                  Total Items
-                </label>
-                {errors.items && (
-                  <p className="text-xs text-danger mb-1">{errors.items}</p>
-                )}
-                <input
-                  id="field-total-items"
-                  type="number"
-                  min="0"
-                  step="1"
-                  placeholder="0"
-                  value={form.total_items}
-                  onChange={(e) => setForm((f) => ({ ...f, total_items: e.target.value }))}
-                  className="auth-input"
-                  style={{ paddingLeft: '0.75rem' }}
-                />
-              </div>
-            </div>
-
-            {/* Dynamic Accordion sections */}
-            <div className="flex flex-col gap-3">
-              {ACCORDION_SECTIONS.map((sec) => (
-                <AccordionSection
-                  key={sec.category}
-                  category={sec.category}
-                  items={sec.items}
-                  counts={form.composition_counts}
-                  onCountChange={handleCountChange}
-                />
-              ))}
-            </div>
-          </div>
-        )}
+          )}
         </div>
 
         {/* ── Nav buttons ── */}

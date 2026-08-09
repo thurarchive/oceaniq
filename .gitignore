@@ -42,8 +42,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-#dataset
-/dataset
+# dataset (ignore heavy data files, keep documentation tracked)
+/dataset/*
+!/dataset/README.md
 
 skills-lock.json
 AGENTS.md

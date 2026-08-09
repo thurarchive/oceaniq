@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import AppLogo from '@/components/ui/AppLogo';
-import { Map, BarChart3, Menu, X, Waves, BookOpen, Loader2, Home, LogOut, LayoutDashboard } from 'lucide-react';
+import { Map, BarChart3, Menu, X, Waves, BookOpen, Loader2, Home, LogOut, LayoutDashboard, Trophy } from 'lucide-react';
 import { toast } from 'sonner';
 import { User as SupabaseUser } from '@supabase/supabase-js';
 
@@ -13,6 +13,7 @@ const navLinks = [
   { label: 'About', href: '/about', icon: <BookOpen size={15} /> },
   { label: 'Map', href: '/interactive-map', icon: <Map size={15} /> },
   { label: 'Analytics', href: '/analytics-dashboard', icon: <BarChart3 size={15} /> },
+  { label: 'Leaderboard', href: '/leaderboard', icon: <Trophy size={15} /> },
 ];
 
 const authNavLinks = [
@@ -73,13 +74,26 @@ export default function LandingTopbar() {
     }
   };
 
+  const handleHomeClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (href === '/') {
+      if (typeof window !== 'undefined' && window.location.pathname === '/') {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+  };
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 h-16 transition-all duration-300 ${scrolled ? 'glass-card-elevated border-b border-border' : 'bg-transparent'
         }`}
     >
       <div className="max-w-screen-2xl mx-auto px-6 lg:px-10 h-full flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2.5">
+        <Link
+          href="/"
+          onClick={(e) => handleHomeClick(e, '/')}
+          className="flex items-center gap-2.5 cursor-pointer"
+        >
           <AppLogo size={32} />
           <span className="font-bold text-lg tracking-tight text-gradient-ocean">Oceaniq</span>
         </Link>
@@ -89,6 +103,7 @@ export default function LandingTopbar() {
             <Link
               key={`landing-nav-${link?.href}`}
               href={link?.href}
+              onClick={(e) => handleHomeClick(e, link?.href)}
               className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-all duration-200"
             >
               {link?.icon}
@@ -177,7 +192,10 @@ export default function LandingTopbar() {
               <Link
                 key={`mobile-landing-nav-${link?.href}`}
                 href={link?.href}
-                onClick={() => setMobileOpen(false)}
+                onClick={(e) => {
+                  setMobileOpen(false);
+                  handleHomeClick(e, link?.href);
+                }}
                 className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-all"
               >
                 {link?.icon}

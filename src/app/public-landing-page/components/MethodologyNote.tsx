@@ -1,18 +1,19 @@
 import React from 'react';
 import Link from 'next/link';
-import { FlaskConical, Info, ExternalLink, AlertCircle } from 'lucide-react';
+import { FlaskConical, Info, ExternalLink, AlertCircle, Waves } from 'lucide-react';
 
 export default function MethodologyNote() {
   return (
     <section className="px-6 lg:px-10 py-12">
-      <div className="max-w-screen-2xl mx-auto">
+      <div className="max-w-screen-2xl mx-auto space-y-4">
+        {/* Main Transparency Card */}
         <div className="glass-card border border-primary/15 rounded-2xl p-8">
           <div className="flex items-start gap-4">
             <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
               <FlaskConical size={20} className="text-primary" />
             </div>
             <div className="flex-1">
-              <h3 className="text-base font-semibold text-foreground mb-2 flex items-center gap-2">
+              <h3 className="text-base font-semibold text-foreground mb-2 flex items-center gap-2 flex-wrap">
                 Data Transparency &amp; Methodology
                 <span className="text-xs bg-primary/10 text-primary border border-primary/20 px-2 py-0.5 rounded-full">
                   Scientific Standards
@@ -50,15 +51,33 @@ export default function MethodologyNote() {
                     color: 'text-warning',
                     bg: 'bg-warning/8',
                   },
-                ]?.map((item) => (
-                  <div key={item?.id} className={`${item?.bg} rounded-lg p-4 border border-border`}>
-                    <div className={`flex items-center gap-1.5 ${item?.color} mb-1.5`}>
-                      {item?.icon}
-                      <span className="text-xs font-semibold">{item?.title}</span>
+                ].map((item) => (
+                  <div key={item.id} className={`${item.bg} rounded-lg p-4 border border-border`}>
+                    <div className={`flex items-center gap-1.5 ${item.color} mb-1.5`}>
+                      {item.icon}
+                      <span className="text-xs font-semibold">{item.title}</span>
                     </div>
-                    <p className="text-xs text-muted-foreground">{item?.desc}</p>
+                    <p className="text-xs text-muted-foreground">{item.desc}</p>
                   </div>
                 ))}
+              </div>
+
+              {/* OceanKita Data Source Partnership Credit */}
+              <div className="p-4 rounded-xl bg-cyan-500/10 border border-cyan-500/25 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-400 flex items-center justify-center shrink-0">
+                    <Waves size={16} />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-foreground">Environmental Data Partnership — OceanKita</h4>
+                    <p className="text-[11px] text-muted-foreground">
+                      Historical environmental datasets supporting our ML density forecasting engine are credited to <strong>OceanKita</strong> as our primary data partner.
+                    </p>
+                  </div>
+                </div>
+                <span className="text-[10px] font-mono font-semibold text-cyan-400 bg-cyan-500/20 px-2.5 py-1 rounded-md shrink-0">
+                  Data Partner
+                </span>
               </div>
 
               <Link
