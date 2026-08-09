@@ -1,29 +1,39 @@
-# 📊 Oceaniq Marine Waste Observation Datasets
+# 📊 Oceaniq Marine Waste & Environmental Datasets
 
-Welcome to the **Oceaniq Open Marine Waste Dataset** directory. This repository contains verified observation records, station lag metrics, environmental parameters, and synthetic training observations for coastal waste monitoring in Indonesia.
+Welcome to the **Oceaniq Open Marine Waste Dataset** repository. This directory contains verified observation schemas, baseline dataset citations, environmental parameters, and station lag metrics for coastal waste monitoring in Indonesia.
+
+---
+
+## 🌊 OceanKita Data Partnership & Attribution
+
+Historical environmental datasets (weather, tidal levels, rainfall parameters, and coastal monitoring station logs) utilized in Oceaniq are provided in collaboration with **OceanKita**. 
+
+> **Official Data Source Credit**:  
+> *Historical environmental datasets supporting Oceaniq's machine learning forecasting engine and baseline analysis are generously provided by **OceanKita** for academic research and coastal environmental monitoring.*
 
 ---
 
 ## 📜 Dataset Licensing (CC BY 4.0)
 
-Unless otherwise indicated, all verified and published Oceaniq observation datasets and data documentation in this directory are licensed under the **Creative Commons Attribution 4.0 International License ([CC BY 4.0](https://creativecommons.org/licenses/by/4.0/))**.
+Unless otherwise indicated, verified and published Oceaniq observation datasets and data documentation in this directory are licensed under the **Creative Commons Attribution 4.0 International License ([CC BY 4.0](https://creativecommons.org/licenses/by/4.0/))**.
 
 See full dataset licensing details in [DATA_LICENSE.md](file:///c:/Oceaniq/DATA_LICENSE.md).
 
 ---
 
-## 📁 Dataset Scope & Directory Contents
+## 📁 Dataset Scope & Storage Governance
 
-| File / Dataset | Description | License | Storage Status |
+| File / Dataset | Description | License | Data Source / Access |
 | :--- | :--- | :--- | :--- |
-| `Data.csv` | Field observation logs with GPS coordinates, waste volume, and category composition. | CC BY 4.0 | Ignored in git (Local/External) |
-| `DataCompatible.csv` | Normalized tabular observation dataset formatted for ML model training. | CC BY 4.0 | Ignored in git (Local/External) |
-| `Parameter Lingkungan.csv` | Weather, tidal, rainfall, and sea level anomaly parameters per monitoring station. | CC BY 4.0 | Ignored in git (Local/External) |
-| `mock_waste_observations.csv` | High-density synthetic observation dataset for XGBoost baseline training. | CC BY 4.0 | Ignored in git (Local/External) |
-| `Guide.txt` | Dataset column definitions and measurement unit guide. | CC BY 4.0 | Ignored in git (Local/External) |
-| `README.md` | Dataset documentation, baseline citations, and schema details. | CC BY 4.0 | **Tracked in Git** |
+| `Data.csv` | Field observation logs with GPS coordinates, waste volume, and category composition. | CC BY 4.0 | Local / Research Storage |
+| `DataCompatible.csv` | Normalized tabular observation dataset formatted for ML model training. | CC BY 4.0 | Local / Research Storage |
+| `Parameter Lingkungan.csv` | Weather, tidal, rainfall, and sea level anomaly parameters per monitoring station. | CC BY 4.0 | **OceanKita** Historical Environmental Data |
+| `mock_waste_observations.csv` | High-density synthetic observation dataset for XGBoost baseline training. | CC BY 4.0 | Synthetic Simulation |
+| `Guide.txt` | Dataset column definitions and measurement unit guide. | CC BY 4.0 | Local / Research Storage |
+| `README.md` | Dataset documentation, partnership attributions, baseline citations, and schema details. | CC BY 4.0 | **Tracked in Git** |
 
-> 💡 **Note on Repository Tracking**: Heavy dataset files (`*.csv`, `*.xlsx`, `*.json`) are excluded from Git commits via `.gitignore` (`/dataset/*` with `!/dataset/README.md`) to keep the repository lightweight. Documentation remain fully tracked on GitHub.
+> 📌 **Note on Dataset Access & Repository Scope**:  
+> In accordance with our academic data collaboration agreement with **OceanKita** and data governance guidelines, raw historical environmental tables and local dataset files are managed in dedicated research storage repositories, while public schema definitions, citations, and documentation remain fully tracked on GitHub via `.gitignore`.
 
 ---
 
@@ -46,18 +56,18 @@ Oceaniq utilizes public baseline marine debris data and research from Indonesian
 
 - **Dataset Version**: `v1.0.0`
 - **Geographic Coverage**: Indonesian Coastal Waters & River Mouth Hotspots (Java Sea, Sunda Strait, Jakarta Bay, Bali Coast)
-- **Time Horizon**: 2024 – 2026
+- **Primary Data Partner**: **OceanKita** (Environmental Datasets)
 
 ### Recommended Citation Format
 ```bibtex
 @dataset{oceaniq_2026_dataset,
-  author       = {Oceaniq Contributors & Citizen Science Network},
+  author       = {Oceaniq Contributors, OceanKita & Citizen Science Network},
   title        = {Oceaniq Marine Debris & Environmental Observation Dataset},
   year         = 2026,
   publisher    = {Oceaniq Platform},
   version      = {1.0.0},
   url          = {https://github.com/thurarchive/oceaniq},
-  note         = {Licensed under CC BY 4.0}
+  note         = {Environmental datasets provided by OceanKita. Licensed under CC BY 4.0}
 }
 ```
 

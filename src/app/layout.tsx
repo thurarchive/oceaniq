@@ -36,8 +36,8 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${plusJakarta.variable} ${ibmPlexMono.variable} dark`}>
-      <body className={plusJakarta.className}>
+    <html lang="en" className={`${plusJakarta.variable} ${ibmPlexMono.variable} dark`} suppressHydrationWarning>
+      <body className={plusJakarta.className} suppressHydrationWarning>
         {children}
         <Toaster
           position="bottom-right"

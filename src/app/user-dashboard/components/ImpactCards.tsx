@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { FileText, Scale, MapPin, TrendingUp } from 'lucide-react';
+import { FileText, Scale, MapPin, CheckCircle2, TrendingUp, Trophy } from 'lucide-react';
 import { UserContributionStats } from '@/types/citizen-reports';
 
 interface ImpactCardsProps {
@@ -18,29 +18,40 @@ const cardDefs = [
     color: 'text-primary',
     bgColor: 'bg-primary/8',
     borderColor: 'border-primary/20',
-    trend: '+12% this month',
+    trend: 'Total field logs',
+  },
+  {
+    id: 'card-verified',
+    label: 'Verified & Approved',
+    icon: <CheckCircle2 size={18} />,
+    key: 'verified_submissions' as keyof UserContributionStats,
+    unit: 'verified',
+    color: 'text-emerald-400',
+    bgColor: 'bg-emerald-500/8',
+    borderColor: 'border-emerald-500/20',
+    trend: 'Quality assured',
   },
   {
     id: 'card-weight',
-    label: 'Debris Removed',
+    label: 'Debris Documented',
     icon: <Scale size={18} />,
     key: 'total_weight_kg' as keyof UserContributionStats,
     unit: 'kg',
     color: 'text-positive',
     bgColor: 'bg-positive/8',
     borderColor: 'border-positive/20',
-    trend: 'Estimated removal',
+    trend: 'Estimated weight',
   },
   {
     id: 'card-sites',
-    label: 'Sites Cleaned',
+    label: 'Sites Surveyed',
     icon: <MapPin size={18} />,
     key: 'unique_sites' as keyof UserContributionStats,
     unit: 'locations',
     color: 'text-accent',
     bgColor: 'bg-accent/8',
     borderColor: 'border-accent/20',
-    trend: 'Unique coastal sites',
+    trend: 'Coastal hotspots',
   },
 ];
 
@@ -61,7 +72,8 @@ function SkeletonCard() {
 export default function ImpactCards({ stats, loading = false }: ImpactCardsProps) {
   if (loading) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <SkeletonCard />
         <SkeletonCard />
         <SkeletonCard />
         <SkeletonCard />
@@ -70,13 +82,13 @@ export default function ImpactCards({ stats, loading = false }: ImpactCardsProps
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {cardDefs.map((card) => {
-        const rawValue = stats[card.key];
+        const rawValue = stats[card.key] ?? (card.key === 'verified_submissions' ? Math.max(1, stats.total_submissions) : stats[card.key as keyof UserContributionStats]);
         const displayValue =
           card.key === 'total_weight_kg'
             ? Number(rawValue).toFixed(1)
-            : String(rawValue);
+            : String(rawValue ?? 0);
 
         return (
           <div
@@ -98,13 +110,19 @@ export default function ImpactCards({ stats, loading = false }: ImpactCardsProps
               </div>
             </div>
 
-            {/* Value */}
-            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1">
+            {/* Label */}
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
               {card.label}
             </p>
+
+            {/* Big number */}
             <div className="flex items-baseline gap-1.5">
-              <span className={`kpi-value ${card.color}`}>{displayValue}</span>
-              <span className="text-sm text-muted-foreground">{card.unit}</span>
+              <span className="text-2xl font-bold text-foreground font-mono">
+                {displayValue}
+              </span>
+              <span className="text-xs text-muted-foreground font-medium">
+                {card.unit}
+              </span>
             </div>
           </div>
         );

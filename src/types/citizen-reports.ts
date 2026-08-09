@@ -76,6 +76,11 @@ export type CitizenReportInsert = Omit<
 // Aggregated stats across both citizen_reports and waste_observations
 export interface UserContributionStats {
   total_submissions: number;
+  verified_submissions?: number;
   total_weight_kg: number;
   unique_sites: number;
+  unlocked_badges_count?: number;
+  current_tier_name?: string;
+  is_public_leaderboard?: boolean;
 }
+

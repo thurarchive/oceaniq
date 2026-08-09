@@ -131,9 +131,15 @@ export default function LocationPickerMap({ lat, lng, onLocationSelect }: Locati
       (err) => {
         console.error(err);
         setDetecting(false);
-        toast.error('Could not detect location. Please tap on the map to set your pin.');
+        if (err.code === 3) {
+          toast.error('GPS request timed out. Search location or click on the map.');
+        } else if (err.code === 1) {
+          toast.error('Location permission denied in browser settings.');
+        } else {
+          toast.error('Could not detect location. Click on the map to set your pin.');
+        }
       },
-      { timeout: 10000, enableHighAccuracy: true }
+      { timeout: 8000, enableHighAccuracy: false, maximumAge: 60000 }
     );
   };
 

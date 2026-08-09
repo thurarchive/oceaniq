@@ -1,5 +1,5 @@
 import React from 'react';
-import { Camera, FlaskConical, ShieldCheck, BarChart3, LucideIcon } from 'lucide-react';
+import { Camera, FlaskConical, ShieldCheck, BarChart3, Trophy, LucideIcon } from 'lucide-react';
 
 interface Step {
   id: string;
@@ -18,10 +18,10 @@ const steps: Step[] = [
     id: 'step-1',
     number: '01',
     icon: Camera,
-    title: 'Field Observation',
+    title: '1. Log & Capture',
     description:
-      'Trained monitors and citizen scientists conduct field surveys at coastal zones, river mouths, and ocean areas. Observations are recorded with GPS coordinates, waste categories, and photographic evidence.',
-    detail: 'Manual + citizen-submitted data',
+      'Citizen scientists and monitors snap field photos, select waste volume/type, and pin precise GPS coastal coordinates in our multi-step reporting form.',
+    detail: 'Field Photo & GPS Capture',
     color: 'text-primary',
     bgColor: 'bg-primary/10',
     borderColor: 'border-primary/20',
@@ -30,10 +30,10 @@ const steps: Step[] = [
     id: 'step-2',
     number: '02',
     icon: ShieldCheck,
-    title: 'Moderation & Validation',
+    title: '2. Expert & AI Verification',
     description:
-      'All citizen-submitted reports enter a structured moderation queue. Expert reviewers verify location accuracy, waste categorization, and photo authenticity before approving data for public display.',
-    detail: 'Expert-reviewed workflow',
+      'Submitted observations are audited by regional moderators and validated through XGBoost anomaly detectors to ensure scientific precision.',
+    detail: 'Quality & Authenticity Audit',
     color: 'text-accent',
     bgColor: 'bg-accent/10',
     borderColor: 'border-accent/20',
@@ -41,11 +41,11 @@ const steps: Step[] = [
   {
     id: 'step-3',
     number: '03',
-    icon: FlaskConical,
-    title: 'ML Estimation',
+    icon: BarChart3,
+    title: '3. Map & Policy Action',
     description:
-      'Environmental inputs (rainfall, tidal levels, wind, wave height) are fed into tabular ML models trained on historical observation data to estimate waste quantity and composition for unmonitored zones.',
-    detail: 'XGBoost / Chronos T5',
+      'Approved reports instantly update public hotspot maps, forecasting density trends and guiding local government clean-up teams directly to hotspots.',
+    detail: 'Real-World Cleanups Triggered',
     color: 'text-warning',
     bgColor: 'bg-warning/10',
     borderColor: 'border-warning/20',
@@ -53,11 +53,11 @@ const steps: Step[] = [
   {
     id: 'step-4',
     number: '04',
-    icon: BarChart3,
-    title: 'Analytics & Insights',
+    icon: Trophy,
+    title: '4. Unlock Badges & Rank',
     description:
-      'Unified data from verified observations, approved citizen reports, and ML estimates flows into the analytics dashboard, enabling temporal trend analysis, spatial hotspot identification, and policy reporting.',
-    detail: 'Integrated analytics platform',
+      'Every verified submission earns contribution points, unlocks achievement badges (Coast Scout to Ocean Guardian), and elevates your standing on the leaderboards.',
+    detail: 'Badges, Tiers & Citation',
     color: 'text-positive',
     bgColor: 'bg-positive/10',
     borderColor: 'border-positive/20',

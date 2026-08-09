@@ -77,12 +77,24 @@ oceaniq/
 ├── next-env.d.ts
 ├── next.config.ts
 ├── package.json
-├── package-lock.json
-├── postcss.config.mjs
+├── dataset/
+│   ├── README.md                        # Dataset scope, versioning, CC BY 4.0 license, exclusions
+│   ├── Data.csv
+│   └── mock_waste_observations.csv
+├── docs/
+│   └── README.md                        # Documentation hub & CC BY 4.0 documentation licensing
+├── DATA_LICENSE.md                      # CC BY 4.0 (verified Oceaniq datasets)
+├── LICENSE                              # MIT License (source code)
+├── PROJECT_STRUCTURE.md
 ├── README.md
 ├── tailwind.config.js
 └── tsconfig.json
 ```
+
+## Licensing Architecture
+- **Software & Source Code**: MIT License (`LICENSE`)
+- **Verified Datasets & Data Documentation**: Creative Commons Attribution 4.0 International (`DATA_LICENSE.md`, `CC BY 4.0`)
+- **Documentation Guides**: Creative Commons Attribution 4.0 International (`docs/README.md`)
 
 ## Tech Stack
 - **Framework**: Next.js 16 (App Router)
@@ -95,4 +107,6 @@ oceaniq/
 - **Analytics Dashboard**: KPIs, data source charts, rainfall correlation, waste composition
 - **Interactive Map**: Layer management, map visualization, filtering, point details
 - **Public Landing Page**: Hero section, features, how it works, CTA, stats bar
+- **Contributor Gamification & Leaderboard**: Tiers, badges, public leaderboard, CC BY 4.0 data attribution
 - **Custom Components**: App layout, topbar, UI components (icon, image, logo, badge)
+

@@ -11,7 +11,8 @@
   <a href="https://tailwindcss.com"><img src="https://img.shields.io/badge/Tailwind_CSS-v4.0-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS"></a>
   <a href="https://supabase.com"><img src="https://img.shields.io/badge/Supabase-Database-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase"></a>
   <a href="https://www.mapbox.com"><img src="https://img.shields.io/badge/Mapbox-GL_JS-000000?style=for-the-badge&logo=mapbox&logoColor=white" alt="Mapbox"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge" alt="License: MIT"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/Code_License-MIT-blue.svg?style=for-the-badge" alt="Code License: MIT"></a>
+  <a href="DATA_LICENSE.md"><img src="https://img.shields.io/badge/Data_License-CC_BY_4.0-orange.svg?style=for-the-badge" alt="Data License: CC BY 4.0"></a>
 </p>
 
 ---
@@ -173,9 +174,14 @@ npx supabase db push
 
 ---
 
-## 📄 License
+## 📄 Licensing & Terms
 
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+Oceaniq uses a dual-licensing structure to clearly separate platform code from published marine dataset research:
+
+- **Source Code & Software**: Licensed under the **[MIT License](LICENSE)**.
+- **Verified Observation Datasets & Data Documentation**: Licensed under the **[Creative Commons Attribution 4.0 International License (CC BY 4.0)](DATA_LICENSE.md)**.
+
+Unless otherwise indicated, verified observation data published on Oceaniq can be shared and adapted with proper attribution to Oceaniq and its citizen science contributors.
 
 ---
 

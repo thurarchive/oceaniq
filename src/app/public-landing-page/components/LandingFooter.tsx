@@ -87,8 +87,8 @@ export default function LandingFooter() {
         <div className="border-t border-border pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-muted-foreground">
             © 2026 Oceaniq. Data provided under{' '}
-            <a href="/attribution" className="text-primary hover:underline">CC BY 4.0</a>.
-            ML outputs are estimates — not measured data.
+            <a href="/DATA_LICENSE.md" className="text-primary hover:underline">CC BY 4.0</a>.
+            Environmental data credited to <strong>OceanKita</strong>.
           </p>
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
             <span>Model: XGBoost (Tuned Tabular)</span>

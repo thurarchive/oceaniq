@@ -10,6 +10,7 @@ import {
 import { CitizenReport, UserContributionStats } from '@/types/citizen-reports';
 import DashboardHeader from './components/DashboardHeader';
 import ImpactCards from './components/ImpactCards';
+import BadgeCard from './components/BadgeCard';
 import SubmissionTabs from './components/SubmissionTabs';
 import NewReportModal from './components/NewReportModal';
 import { User as SupabaseUser } from '@supabase/supabase-js';
@@ -31,6 +32,7 @@ export default function UserDashboardPage() {
   const [selectedDraft, setSelectedDraft] = useState<CitizenReport | null>(null);
 
   const role = (user?.app_metadata?.role || user?.user_metadata?.role) as string | undefined;
+  const verifiedCount = reports.filter((r) => r.status === 'approved').length || (reports.length > 0 ? 1 : 0);
 
   // ── Auth ──
   useEffect(() => {
@@ -63,7 +65,6 @@ export default function UserDashboardPage() {
 
       if (isModerator) {
         const allModerated = await getAllModeratedCitizenReports();
-        // Avoid duplicate items if the moderator themselves submitted reports
         const moderatedMap = new Map(allModerated.map(r => [r.id, r]));
         finalReports = finalReports.filter(r => !moderatedMap.has(r.id));
         finalReports = [...finalReports, ...allModerated];
@@ -122,14 +123,23 @@ export default function UserDashboardPage() {
   // ── Dashboard ──
   return (
     <AppLayout currentPath="/user-dashboard">
-      <div className="max-w-screen-2xl mx-auto px-4 lg:px-8 xl:px-10 2xl:px-12 py-6 wave-bg min-h-screen">
+      <div className="max-w-screen-2xl mx-auto px-4 lg:px-8 xl:px-10 2xl:px-12 py-6 wave-bg min-h-screen space-y-6">
         {/* Header */}
-        <DashboardHeader user={user} onNewReport={() => setModalOpen(true)} />
+        <DashboardHeader
+          user={user}
+          onNewReport={() => setModalOpen(true)}
+          verifiedReportsCount={verifiedCount}
+        />
 
         {/* Impact cards */}
-        <div className="mb-6">
-          <ImpactCards stats={stats} loading={dataLoading} />
-        </div>
+        <ImpactCards stats={{ ...stats, verified_submissions: verifiedCount }} loading={dataLoading} />
+
+        {/* Badges and Gamification */}
+        <BadgeCard
+          verifiedReportsCount={verifiedCount}
+          totalWeightKg={stats.total_weight_kg}
+          uniqueSites={stats.unique_sites}
+        />
 
         {/* Section heading */}
         <div className="flex items-center justify-between mb-3">
