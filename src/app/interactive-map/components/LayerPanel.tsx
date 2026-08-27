@@ -14,6 +14,7 @@ import {
   CloudRain,
 } from 'lucide-react';
 import { BasemapType } from './MapCanvasMapbox';
+import { useLanguage } from '@/context/LanguageContext';
 
 export interface MapLayer {
   id: string;
@@ -86,19 +87,38 @@ type LayerPanelProps = {
   onLayerToggle: (id: string) => void;
 };
 
-const basemapOptions: { value: BasemapType; label: string }[] = [
-  { value: 'ocean-dark', label: 'Ocean Dark' },
-  { value: 'satellite', label: 'Satellite' },
-  { value: 'topographic', label: 'Topographic' },
-];
-
 export default function LayerPanel({
   activeBasemap,
   onBasemapChange,
   layers,
   onLayerToggle,
 }: LayerPanelProps) {
+  const { language, t } = useLanguage();
   const [collapsed, setCollapsed] = useState(false);
+
+  const basemapOptions: { value: BasemapType; label: string }[] = [
+    { value: 'ocean-dark', label: language === 'id' ? 'Peta Gelap Laut' : 'Ocean Dark' },
+    { value: 'satellite', label: language === 'id' ? 'Satelit' : 'Satellite' },
+    { value: 'topographic', label: language === 'id' ? 'Topografi' : 'Topographic' },
+  ];
+
+  const getTranslatedLayerLabel = (id: string, defaultLabel: string) => {
+    if (id === 'layer-observations') return language === 'id' ? 'Observasi Terverifikasi' : 'Verified Observations';
+    if (id === 'layer-citizen') return language === 'id' ? 'Laporan Warga' : 'Citizen Reports';
+    if (id === 'layer-ml') return language === 'id' ? 'Estimasi Model AI' : 'ML Estimates';
+    if (id === 'layer-zones') return language === 'id' ? 'Zona Pemantauan' : 'Monitoring Zones';
+    if (id === 'layer-rainfall') return language === 'id' ? 'Curah Hujan' : 'Rainfall Overlay';
+    return defaultLabel;
+  };
+
+  const getTranslatedLayerDesc = (id: string, defaultDesc: string) => {
+    if (id === 'layer-observations') return language === 'id' ? 'Data survei lapangan resmi oleh analis terlatih' : 'Official field survey data from trained monitors';
+    if (id === 'layer-citizen') return language === 'id' ? 'Laporan lapangan tervalidasi dari masyarakat' : 'Approved community-submitted field reports';
+    if (id === 'layer-ml') return language === 'id' ? 'Prediksi kepadatan sampah oleh model XGBoost' : 'Model-predicted waste density (heatmap)';
+    if (id === 'layer-zones') return language === 'id' ? 'Batas administratif zona observasi maritim' : 'Official monitoring zone boundaries';
+    if (id === 'layer-rainfall') return language === 'id' ? 'Intensitas curah hujan maritim 7 hari terakhir' : 'Recent 7-day precipitation intensity';
+    return defaultDesc;
+  };
 
   return (
     <div
@@ -111,7 +131,7 @@ export default function LayerPanel({
           <div className="flex items-center gap-2">
             <Layers size={14} className="text-primary" />
             <span className="text-xs font-semibold text-foreground uppercase tracking-wider">
-              Layers
+              {t.map.layers}
             </span>
           </div>
         )}
@@ -142,7 +162,7 @@ export default function LayerPanel({
                 <div className="flex items-center gap-2">
                   <div className={`w-2.5 h-2.5 rounded-full ${layer.color} ${!layer.active ? 'opacity-30' : ''}`} />
                   <span className={`text-xs font-semibold ${layer.active ? 'text-foreground' : 'text-muted-foreground'}`}>
-                    {layer.label}
+                    {getTranslatedLayerLabel(layer.id, layer.label)}
                   </span>
                 </div>
                 <button
@@ -156,10 +176,10 @@ export default function LayerPanel({
                   {layer.active ? <Eye size={13} /> : <EyeOff size={13} />}
                 </button>
               </div>
-              <p className="text-xs text-muted-foreground leading-tight mb-1.5">{layer.description}</p>
+              <p className="text-xs text-muted-foreground leading-tight mb-1.5">{getTranslatedLayerDesc(layer.id, layer.description)}</p>
               {layer.count > 0 && (
                 <span className="font-mono text-xs text-muted-foreground/70">
-                  {layer.count.toLocaleString('en-US')} {layer.type === 'heatmap' ? 'zones' : 'points'}
+                  {layer.count.toLocaleString('id-ID')} {layer.type === 'heatmap' ? (language === 'id' ? 'zona' : 'zones') : (language === 'id' ? 'titik' : 'points')}
                 </span>
               )}
             </div>
@@ -167,13 +187,15 @@ export default function LayerPanel({
 
           {/* Basemap selector */}
           <div className="pt-3 border-t border-border mt-2">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-1">Basemap</p>
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-1">
+              {language === 'id' ? 'Tipe Peta' : 'Basemap'}
+            </p>
             {basemapOptions.map((basemap) => (
               <button
                 key={basemap.value}
                 type="button"
                 onClick={() => onBasemapChange(basemap.value)}
-                className={`w-full text-left text-xs px-2 py-1.5 rounded transition-all ${activeBasemap === basemap.value
+                className={`w-full text-left text-xs px-2 py-1.5 rounded transition-all cursor-pointer ${activeBasemap === basemap.value
                     ? 'bg-primary/10 text-primary font-semibold'
                     : 'text-muted-foreground hover:text-foreground hover:bg-muted/40'
                   }`}
@@ -192,8 +214,8 @@ export default function LayerPanel({
             <button
               key={`collapsed-${layer.id}`}
               onClick={() => onLayerToggle(layer.id)}
-              title={`${layer.active ? 'Hide' : 'Show'} ${layer.label}`}
-              className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${layer.active
+              title={`${layer.active ? 'Hide' : 'Show'} ${getTranslatedLayerLabel(layer.id, layer.label)}`}
+              className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all cursor-pointer ${layer.active
                   ? 'bg-primary/15 text-primary'
                   : 'text-muted-foreground/40 hover:text-muted-foreground'
                 }`}

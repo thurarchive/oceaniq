@@ -1,106 +1,10 @@
+'use client';
 import React from 'react';
 import {
   TrendingUp, TrendingDown, Minus,
   Activity, Users, Brain, MapPin, Trash2, AlertTriangle
 } from 'lucide-react';
-
-// 6 cards → grid-cols-3 × 2 rows
-// Row 1: Waste Density (hero, col-span-1), Approved Reports, ML Confidence
-// Row 2: Active Zones, Plastic Fraction, Hotspot Alerts (warning state)
-
-const kpis = [
-  {
-    id: 'kpi-density',
-    label: 'Avg Waste Density',
-    value: '47.3',
-    unit: 'kg/m²',
-    change: '+6.2%',
-    changeTrend: 'up-bad',
-    subtext: 'vs. 44.5 last period',
-    icon: <Activity size={18} />,
-    color: 'text-danger',
-    bgColor: 'bg-danger/8',
-    borderColor: 'border-danger/20',
-    isHero: true,
-    sparkData: [38, 41, 39, 43, 42, 45, 44, 47, 46, 48, 47, 47.3],
-  },
-  {
-    id: 'kpi-reports',
-    label: 'Approved Reports',
-    value: '6,204',
-    unit: 'this month',
-    change: '+312',
-    changeTrend: 'up-good',
-    subtext: '+89 approved this week',
-    icon: <Users size={18} />,
-    color: 'text-positive',
-    bgColor: 'bg-positive/8',
-    borderColor: 'border-positive/20',
-    isHero: false,
-    sparkData: [480, 510, 490, 530, 560, 540, 580, 600, 590, 610, 620, 624],
-  },
-  {
-    id: 'kpi-confidence',
-    label: 'ML Avg Confidence',
-    value: '81.4',
-    unit: '%',
-    change: '-1.2%',
-    changeTrend: 'down-warn',
-    subtext: 'Model v1.3.0 — 3,517 predictions',
-    icon: <Brain size={18} />,
-    color: 'text-warning',
-    bgColor: 'bg-warning/8',
-    borderColor: 'border-warning/20',
-    isHero: false,
-    sparkData: [84, 83, 85, 82, 83, 81, 82, 80, 83, 82, 81, 81.4],
-  },
-  {
-    id: 'kpi-zones',
-    label: 'Active Monitoring Zones',
-    value: '847',
-    unit: 'zones',
-    change: '+14',
-    changeTrend: 'up-good',
-    subtext: '23 new zones added this quarter',
-    icon: <MapPin size={18} />,
-    color: 'text-accent',
-    bgColor: 'bg-accent/8',
-    borderColor: 'border-accent/20',
-    isHero: false,
-    sparkData: [810, 815, 820, 822, 825, 828, 830, 835, 838, 840, 844, 847],
-  },
-  {
-    id: 'kpi-plastic',
-    label: 'Plastic Fraction',
-    value: '62.1',
-    unit: '%',
-    change: '+0.8%',
-    changeTrend: 'up-bad',
-    subtext: 'of total waste composition',
-    icon: <Trash2 size={18} />,
-    color: 'text-primary',
-    bgColor: 'bg-primary/8',
-    borderColor: 'border-primary/20',
-    isHero: false,
-    sparkData: [59, 60, 61, 60, 61, 62, 61, 62, 62, 62, 62, 62.1],
-  },
-  {
-    id: 'kpi-alerts',
-    label: 'Active Hotspot Alerts',
-    value: '3',
-    unit: 'zones critical',
-    change: '+1',
-    changeTrend: 'up-bad',
-    subtext: 'North Jakarta Bay — CRITICAL',
-    icon: <AlertTriangle size={18} />,
-    color: 'text-danger',
-    bgColor: 'bg-danger/12',
-    borderColor: 'border-danger/40',
-    isHero: false,
-    isAlert: true,
-    sparkData: [0, 1, 1, 2, 1, 2, 2, 3, 2, 3, 3, 3],
-  },
-];
+import { useLanguage } from '@/context/LanguageContext';
 
 function MiniSparkline({ data, color }: { data: number[]; color: string }) {
   const min = Math.min(...data);
@@ -145,13 +49,110 @@ function MiniSparkline({ data, color }: { data: number[]; color: string }) {
 }
 
 export default function KPIBentoGrid() {
+  const { language, t } = useLanguage();
+
+  const kpis = [
+    {
+      id: 'kpi-density',
+      label: language === 'id' ? 'Rata-Rata Kepadatan Sampah' : 'Avg Waste Density',
+      value: '47.3',
+      unit: 'kg/m²',
+      change: '+6.2%',
+      changeTrend: 'up-bad',
+      subtext: language === 'id' ? 'vs 44.5 periode lalu' : 'vs. 44.5 last period',
+      icon: <Activity size={18} />,
+      color: 'text-danger',
+      bgColor: 'bg-danger/8',
+      borderColor: 'border-danger/20',
+      isHero: true,
+      sparkData: [38, 41, 39, 43, 42, 45, 44, 47, 46, 48, 47, 47.3],
+    },
+    {
+      id: 'kpi-reports',
+      label: language === 'id' ? 'Laporan Disetujui' : 'Approved Reports',
+      value: '6,204',
+      unit: language === 'id' ? 'bulan ini' : 'this month',
+      change: '+312',
+      changeTrend: 'up-good',
+      subtext: language === 'id' ? '+89 disetujui pekan ini' : '+89 approved this week',
+      icon: <Users size={18} />,
+      color: 'text-positive',
+      bgColor: 'bg-positive/8',
+      borderColor: 'border-positive/20',
+      isHero: false,
+      sparkData: [480, 510, 490, 530, 560, 540, 580, 600, 590, 610, 620, 624],
+    },
+    {
+      id: 'kpi-confidence',
+      label: language === 'id' ? 'Akurasi Model AI' : 'ML Avg Confidence',
+      value: '81.4',
+      unit: '%',
+      change: '-1.2%',
+      changeTrend: 'down-warn',
+      subtext: language === 'id' ? 'Model v1.3.0 — 3.517 prediksi' : 'Model v1.3.0 — 3,517 predictions',
+      icon: <Brain size={18} />,
+      color: 'text-warning',
+      bgColor: 'bg-warning/8',
+      borderColor: 'border-warning/20',
+      isHero: false,
+      sparkData: [84, 83, 85, 82, 83, 81, 82, 80, 83, 82, 81, 81.4],
+    },
+    {
+      id: 'kpi-zones',
+      label: language === 'id' ? 'Zona Terpantau Aktif' : 'Active Monitoring Zones',
+      value: '847',
+      unit: language === 'id' ? 'zona' : 'zones',
+      change: '+14',
+      changeTrend: 'up-good',
+      subtext: language === 'id' ? '23 zona baru kuartal ini' : '23 new zones added this quarter',
+      icon: <MapPin size={18} />,
+      color: 'text-accent',
+      bgColor: 'bg-accent/8',
+      borderColor: 'border-accent/20',
+      isHero: false,
+      sparkData: [810, 815, 820, 822, 825, 828, 830, 835, 838, 840, 844, 847],
+    },
+    {
+      id: 'kpi-plastic',
+      label: language === 'id' ? 'Fraksi Sampah Plastik' : 'Plastic Fraction',
+      value: '62.1',
+      unit: '%',
+      change: '+0.8%',
+      changeTrend: 'up-bad',
+      subtext: language === 'id' ? 'dari total komposisi material' : 'of total waste composition',
+      icon: <Trash2 size={18} />,
+      color: 'text-primary',
+      bgColor: 'bg-primary/8',
+      borderColor: 'border-primary/20',
+      isHero: false,
+      sparkData: [59, 60, 61, 60, 61, 62, 61, 62, 62, 62, 62, 62.1],
+    },
+    {
+      id: 'kpi-alerts',
+      label: language === 'id' ? 'Peringatan Titik Rawan' : 'Active Hotspot Alerts',
+      value: '3',
+      unit: language === 'id' ? 'zona kritis' : 'zones critical',
+      change: '+1',
+      changeTrend: 'up-bad',
+      subtext: language === 'id' ? 'Teluk Jakarta Utara — KRITIS' : 'North Jakarta Bay — CRITICAL',
+      icon: <AlertTriangle size={18} />,
+      color: 'text-danger',
+      bgColor: 'bg-danger/12',
+      borderColor: 'border-danger/40',
+      isHero: false,
+      isAlert: true,
+      sparkData: [0, 1, 1, 2, 1, 2, 2, 3, 2, 3, 3, 3],
+    },
+  ];
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3 gap-4">
       {kpis.map((kpi) => (
         <div
           key={kpi.id}
-          className={`glass-card-elevated border ${kpi.borderColor} ${kpi.bgColor} rounded-xl p-5 transition-all duration-300 hover:brightness-110 ${kpi.isAlert ? 'ring-1 ring-danger/30' : ''
-            }`}
+          className={`glass-card-elevated border ${kpi.borderColor} ${kpi.bgColor} rounded-xl p-5 transition-all duration-300 hover:brightness-105 shadow-sm ${
+            kpi.isAlert ? 'ring-1 ring-danger/30' : ''
+          }`}
         >
           <div className="flex items-start justify-between mb-3">
             <div className={`w-9 h-9 rounded-lg ${kpi.bgColor} ${kpi.color} flex items-center justify-center border ${kpi.borderColor}`}>
@@ -181,12 +182,12 @@ export default function KPIBentoGrid() {
 
           <div className="flex items-end justify-between">
             <div>
-              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
                 {kpi.label}
               </p>
               <div className="flex items-baseline gap-1.5">
                 <span className={`kpi-value ${kpi.color}`}>{kpi.value}</span>
-                <span className="text-sm text-muted-foreground">{kpi.unit}</span>
+                <span className="text-sm text-muted-foreground font-medium">{kpi.unit}</span>
               </div>
               <p className="text-xs text-muted-foreground mt-1">{kpi.subtext}</p>
             </div>

@@ -16,8 +16,10 @@ import NewReportModal from './components/NewReportModal';
 import { User as SupabaseUser } from '@supabase/supabase-js';
 import { Loader2, Lock } from 'lucide-react';
 import Link from 'next/link';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function UserDashboardPage() {
+  const { language, t } = useLanguage();
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
 
@@ -106,14 +108,16 @@ export default function UserDashboardPage() {
           </div>
           <div>
             <h2 className="text-xl font-bold text-foreground mb-2">
-              Sign in to view your dashboard
+              {language === 'id' ? 'Masuk untuk melihat dasbor Anda' : 'Sign in to view your dashboard'}
             </h2>
             <p className="text-sm text-muted-foreground max-w-[340px]">
-              Your contribution dashboard is only visible when you&apos;re logged in.
+              {language === 'id'
+                ? 'Dasbor kontribusi hanya dapat diakses saat Anda telah masuk ke akun Anda.'
+                : 'Your contribution dashboard is only visible when you\'re logged in.'}
             </p>
           </div>
           <Link href="/auth" className="btn-primary flex items-center gap-2 text-sm">
-            Sign In
+            {t.nav.signIn}
           </Link>
         </div>
       </AppLayout>
@@ -145,11 +149,11 @@ export default function UserDashboardPage() {
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider">
             {role === 'analyst' || role === 'admin'
-              ? 'Moderation & Reports'
-              : 'My Reports'}
+              ? (language === 'id' ? 'Moderasi & Laporan Masuk' : 'Moderation & Reports')
+              : t.dashboard.mySubmissions}
           </h2>
           <span className="text-xs text-muted-foreground">
-            {reports.length} total
+            {reports.length} {language === 'id' ? 'total laporan' : 'total'}
           </span>
         </div>
 

@@ -1,63 +1,84 @@
+'use client';
 import React from 'react';
 import Link from 'next/link';
 import { AlertTriangle, MapPin, ArrowRight, Clock } from 'lucide-react';
-
-const hotspots = [
-  {
-    id: 'hotspot-jakarta-bay',
-    zone: 'North Jakarta Bay',
-    density: '84.2 kg/km²',
-    change: '+18% vs last week',
-    category: 'Plastic-dominant',
-    alertLevel: 'critical',
-    updatedAt: '2h ago',
-  },
-  {
-    id: 'hotspot-citarum',
-    zone: 'Citarum River Mouth',
-    density: '67.8 kg/km²',
-    change: '+9% vs last week',
-    category: 'Mixed organic + plastic',
-    alertLevel: 'high',
-    updatedAt: '4h ago',
-  },
-  {
-    id: 'hotspot-bekasi',
-    zone: 'Bekasi Coastal Zone',
-    density: '51.3 kg/km²',
-    change: '+4% vs last week',
-    category: 'Fishing gear + plastic',
-    alertLevel: 'elevated',
-    updatedAt: '6h ago',
-  },
-];
-
-const alertColors = {
-  critical: { bg: 'bg-danger/10', border: 'border-danger/30', text: 'text-danger', badge: 'CRITICAL' },
-  high: { bg: 'bg-warning/10', border: 'border-warning/30', text: 'text-warning', badge: 'HIGH' },
-  elevated: { bg: 'bg-primary/10', border: 'border-primary/30', text: 'text-primary', badge: 'ELEVATED' },
-};
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function HotspotBanner() {
+  const { language, t } = useLanguage();
+
+  const hotspots = [
+    {
+      id: 'hotspot-jakarta-bay',
+      zone: language === 'id' ? 'Teluk Jakarta Utara' : 'North Jakarta Bay',
+      density: '84.2 kg/km²',
+      change: language === 'id' ? '+18% dibanding pekan lalu' : '+18% vs last week',
+      category: language === 'id' ? 'Dominan plastik & styrofoam' : 'Plastic-dominant',
+      alertLevel: 'critical',
+      updatedAt: language === 'id' ? '2j lalu' : '2h ago',
+    },
+    {
+      id: 'hotspot-citarum',
+      zone: language === 'id' ? 'Muara Sungai Citarum' : 'Citarum River Mouth',
+      density: '67.8 kg/km²',
+      change: language === 'id' ? '+9% dibanding pekan lalu' : '+9% vs last week',
+      category: language === 'id' ? 'Campuran organik & plastik' : 'Mixed organic + plastic',
+      alertLevel: 'high',
+      updatedAt: language === 'id' ? '4j lalu' : '4h ago',
+    },
+    {
+      id: 'hotspot-bekasi',
+      zone: language === 'id' ? 'Zona Pesisir Muara Gembong' : 'Bekasi Coastal Zone',
+      density: '51.3 kg/km²',
+      change: language === 'id' ? '+4% dibanding pekan lalu' : '+4% vs last week',
+      category: language === 'id' ? 'Jaring nelayan & plastik' : 'Fishing gear + plastic',
+      alertLevel: 'elevated',
+      updatedAt: language === 'id' ? '6j lalu' : '6h ago',
+    },
+  ];
+
+  const alertColors = {
+    critical: {
+      bg: 'bg-danger/10',
+      border: 'border-danger/30',
+      text: 'text-danger',
+      badge: language === 'id' ? 'KRITIS' : 'CRITICAL',
+    },
+    high: {
+      bg: 'bg-warning/10',
+      border: 'border-warning/30',
+      text: 'text-warning',
+      badge: language === 'id' ? 'TINGGI' : 'HIGH',
+    },
+    elevated: {
+      bg: 'bg-primary/10',
+      border: 'border-primary/30',
+      text: 'text-primary',
+      badge: language === 'id' ? 'WASPADA' : 'ELEVATED',
+    },
+  };
+
   return (
     <section className="px-6 lg:px-10 py-12">
       <div className="max-w-screen-2xl mx-auto">
-        <div className="glass-card-elevated border border-danger/20 rounded-2xl overflow-hidden">
-          <div className="px-6 py-4 border-b border-danger/20 flex items-center justify-between">
+        <div className="glass-card-elevated border border-danger/25 rounded-2xl overflow-hidden shadow-sm">
+          <div className="px-6 py-4 border-b border-danger/20 flex items-center justify-between bg-danger/5">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-danger/15 flex items-center justify-center">
                 <AlertTriangle size={16} className="text-danger" />
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-foreground">Active Waste Hotspots</h3>
-                <p className="text-xs text-muted-foreground">3 zones above alert threshold — updated 17 Jun 2026, 06:32 WIB</p>
+                <h3 className="text-sm font-semibold text-foreground">{t.landing.hotspotBanner.tag}</h3>
+                <p className="text-xs text-muted-foreground">
+                  {language === 'id' ? '3 zona melampaui ambang batas — diperbarui hari ini' : '3 zones above alert threshold — updated today'}
+                </p>
               </div>
             </div>
             <Link
               href="/interactive-map"
               className="flex items-center gap-1.5 text-sm text-primary font-semibold hover:text-accent transition-colors"
             >
-              View on Map
+              {t.landing.hotspotBanner.action}
               <ArrowRight size={14} />
             </Link>
           </div>
@@ -66,7 +87,7 @@ export default function HotspotBanner() {
             {hotspots.map((hotspot) => {
               const colors = alertColors[hotspot.alertLevel as keyof typeof alertColors];
               return (
-                <div key={hotspot.id} className={`${colors.bg} p-5 hover:brightness-110 transition-all duration-200`}>
+                <div key={hotspot.id} className={`${colors.bg} p-5 hover:brightness-105 transition-all duration-200`}>
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-2">
                       <MapPin size={14} className={colors.text} />

@@ -1,8 +1,8 @@
 'use client';
 import React from 'react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine,  } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
+import { useLanguage } from '@/context/LanguageContext';
 
-// Backend integration point: GET /api/v1/analytics/trends?metric=waste_density&range=12w
 const trendData = [
   { week: 'W1 Apr', wasteDensity: 38.4, rainfallMm: 142, baseline: 40 },
   { week: 'W2 Apr', wasteDensity: 41.2, rainfallMm: 168, baseline: 40 },
@@ -27,7 +27,7 @@ interface TooltipPayload {
 function CustomTooltip({ active, payload, label }: { active?: boolean; payload?: TooltipPayload[]; label?: string }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="glass-card-elevated border border-border rounded-xl px-4 py-3 shadow-2xl min-w-44">
+    <div className="glass-card-elevated border border-border rounded-xl px-4 py-3 shadow-2xl min-w-44 bg-card/95">
       <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">{label}</p>
       {payload.map((entry) => (
         <div key={`tt-${entry.name}`} className="flex items-center justify-between gap-4 mb-1">
@@ -43,25 +43,29 @@ function CustomTooltip({ active, payload, label }: { active?: boolean; payload?:
 }
 
 export default function WasteTrendChart() {
+  const { language, t } = useLanguage();
+
   return (
-    <div className="glass-card-elevated border border-border rounded-xl p-5 h-full">
-      <div className="flex items-center justify-between mb-5">
+    <div className="glass-card-elevated border border-border rounded-xl p-5 h-full shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-5">
         <div>
-          <h3 className="text-sm font-semibold text-foreground">Waste Density Trend</h3>
-          <p className="text-xs text-muted-foreground mt-0.5">12-week rolling — kg/km² with rainfall overlay (mm)</p>
+          <h3 className="text-sm font-bold text-foreground">{t.analytics.trendChartTitle}</h3>
+          <p className="text-xs text-muted-foreground mt-0.5">
+            {language === 'id' ? 'Tren bergulir 12 pekan — kg/km² dengan lapisan curah hujan (mm)' : '12-week rolling — kg/km² with rainfall overlay (mm)'}
+          </p>
         </div>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1.5">
             <div className="w-3 h-0.5 rounded-full bg-primary" />
-            <span className="text-xs text-muted-foreground">Density</span>
+            <span className="text-xs text-muted-foreground">{language === 'id' ? 'Densitas' : 'Density'}</span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="w-3 h-0.5 rounded-full bg-accent/60" />
-            <span className="text-xs text-muted-foreground">Rainfall</span>
+            <span className="text-xs text-muted-foreground">{language === 'id' ? 'Hujan (BMKG)' : 'Rainfall'}</span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="w-3 h-px border-t border-dashed border-muted-foreground" />
-            <span className="text-xs text-muted-foreground">Baseline</span>
+            <span className="text-xs text-muted-foreground">{language === 'id' ? 'Ambang Batas' : 'Baseline'}</span>
           </div>
         </div>
       </div>
@@ -105,29 +109,27 @@ export default function WasteTrendChart() {
             yAxisId="density"
             y={40}
             stroke="var(--muted-foreground)"
-            strokeDasharray="4 4"
+            strokeDasharray="3 3"
             strokeOpacity={0.5}
           />
           <Area
             yAxisId="rainfall"
             type="monotone"
             dataKey="rainfallMm"
-            name="Rainfall (mm)"
+            name={language === 'id' ? 'Curah Hujan (mm)' : 'Rainfall (mm)'}
             stroke="var(--accent)"
-            strokeWidth={1.5}
+            strokeOpacity={0.4}
             fill="url(#gradRainfall)"
-            strokeOpacity={0.6}
+            strokeWidth={1.5}
           />
           <Area
             yAxisId="density"
             type="monotone"
             dataKey="wasteDensity"
-            name="Waste Density (kg/km²)"
+            name={language === 'id' ? 'Densitas Sampah (kg/km²)' : 'Waste Density (kg/km²)'}
             stroke="var(--primary)"
-            strokeWidth={2}
             fill="url(#gradDensity)"
-            dot={false}
-            activeDot={{ r: 4, fill: 'var(--primary)', stroke: 'var(--card)', strokeWidth: 2 }}
+            strokeWidth={2}
           />
         </AreaChart>
       </ResponsiveContainer>

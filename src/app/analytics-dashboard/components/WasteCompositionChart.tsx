@@ -1,10 +1,10 @@
 'use client';
 import React, { useState } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,  } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { useLanguage } from '@/context/LanguageContext';
 
-// Backend integration point: GET /api/v1/analytics/composition?groupBy=zone
 const compositionData = [
-  { zone: 'N. Jakarta', plastic: 62, organic: 14, fishingGear: 12, mixed: 12 },
+  { zone: 'Teluk Jakarta', plastic: 62, organic: 14, fishingGear: 12, mixed: 12 },
   { zone: 'Bekasi', plastic: 55, organic: 22, fishingGear: 8, mixed: 15 },
   { zone: 'Citarum', plastic: 48, organic: 28, fishingGear: 10, mixed: 14 },
   { zone: 'Karawang', plastic: 38, organic: 18, fishingGear: 32, mixed: 12 },
@@ -12,22 +12,15 @@ const compositionData = [
   { zone: 'Indramayu', plastic: 35, organic: 15, fishingGear: 38, mixed: 12 },
 ];
 
-const categories = [
-  { key: 'plastic', label: 'Plastic', color: 'var(--primary)' },
-  { key: 'organic', label: 'Organic', color: 'var(--positive)' },
-  { key: 'fishingGear', label: 'Fishing Gear', color: 'var(--accent)' },
-  { key: 'mixed', label: 'Mixed', color: 'var(--muted-foreground)' },
-];
-
 function CustomTooltip({ active, payload, label }: { active?: boolean; payload?: { name: string; value: number; fill: string }[]; label?: string }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="glass-card-elevated border border-border rounded-xl px-4 py-3 shadow-2xl">
+    <div className="glass-card-elevated border border-border rounded-xl px-4 py-3 shadow-2xl bg-card/95">
       <p className="text-xs font-semibold text-foreground mb-2">{label}</p>
       {payload.map((entry) => (
         <div key={`comp-tt-${entry.name}`} className="flex items-center justify-between gap-3 mb-1">
           <div className="flex items-center gap-1.5">
-            <div className="w-2 h-2 rounded-sm" style={{ background: entry.fill }} />
+            <div className="w-2 h-2 rounded-xs" style={{ background: entry.fill }} />
             <span className="text-xs text-muted-foreground">{entry.name}</span>
           </div>
           <span className="font-mono text-xs font-semibold text-foreground">{entry.value}%</span>
@@ -38,14 +31,22 @@ function CustomTooltip({ active, payload, label }: { active?: boolean; payload?:
 }
 
 export default function WasteCompositionChart() {
+  const { language, t } = useLanguage();
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
+  const categories = [
+    { key: 'plastic', label: language === 'id' ? 'Plastik & Polimer' : 'Plastic', color: 'var(--primary)' },
+    { key: 'organic', label: language === 'id' ? 'Organik & Kayu' : 'Organic', color: 'var(--positive)' },
+    { key: 'fishingGear', label: language === 'id' ? 'Jaring & Alat Tangkap' : 'Fishing Gear', color: 'var(--accent)' },
+    { key: 'mixed', label: language === 'id' ? 'Campuran Lainnya' : 'Mixed', color: 'var(--muted-foreground)' },
+  ];
+
   return (
-    <div className="glass-card-elevated border border-border rounded-xl p-5">
+    <div className="glass-card-elevated border border-border rounded-xl p-5 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-sm font-semibold text-foreground">Waste Composition by Zone</h3>
-          <p className="text-xs text-muted-foreground mt-0.5">Category breakdown (% of total) — Jun 2026</p>
+          <h3 className="text-sm font-bold text-foreground">{t.analytics.compositionChartTitle}</h3>
+          <p className="text-xs text-muted-foreground mt-0.5">{t.analytics.compositionChartSub}</p>
         </div>
       </div>
 
@@ -55,13 +56,13 @@ export default function WasteCompositionChart() {
           <button
             key={`comp-cat-${cat.key}`}
             onClick={() => setActiveCategory(activeCategory === cat.key ? null : cat.key)}
-            className={`flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full border transition-all ${
+            className={`flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full border transition-all cursor-pointer ${
               activeCategory === null || activeCategory === cat.key
-                ? 'border-border/60 text-foreground'
+                ? 'border-border/80 bg-muted/30 text-foreground font-medium'
                 : 'border-border/20 text-muted-foreground/40'
             }`}
           >
-            <div className="w-2 h-2 rounded-sm" style={{ background: cat.color }} />
+            <div className="w-2 h-2 rounded-xs" style={{ background: cat.color }} />
             {cat.label}
           </button>
         ))}

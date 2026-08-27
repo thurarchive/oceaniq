@@ -1,6 +1,8 @@
 @import 'tailwindcss';
 
-:root {
+:root,
+html.dark,
+[data-theme='dark'] {
   --background: #030d1a;
   --foreground: #e2f0fb;
   --primary: #0ea5e9;
@@ -10,7 +12,7 @@
   --accent: #06b6d4;
   --accent-foreground: #ffffff;
   --muted: #0a1f38;
-  --muted-foreground: #6b9ab8;
+  --muted-foreground: #7ea4c4;
   --card: #071828;
   --card-foreground: #e2f0fb;
   --border: #0f2d4a;
@@ -19,9 +21,66 @@
   --radius: 12px;
 
   --positive: #10b981;
+  --positive-bg: rgba(16, 185, 129, 0.15);
   --warning: #f59e0b;
+  --warning-bg: rgba(245, 158, 11, 0.15);
   --danger: #ef4444;
+  --danger-bg: rgba(239, 68, 68, 0.15);
   --info: #0ea5e9;
+  --info-bg: rgba(14, 165, 233, 0.15);
+
+  --glass-bg: rgba(7, 24, 40, 0.75);
+  --glass-border: rgba(14, 165, 233, 0.2);
+  --glass-blur: blur(16px);
+  --glass-elevated-bg: rgba(10, 31, 56, 0.88);
+  --glass-elevated-border: rgba(14, 165, 233, 0.25);
+  --glass-elevated-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+  --ocean-grad: linear-gradient(135deg, #030d1a 0%, #041525 40%, #061e35 70%, #030d1a 100%);
+  --wave-grad-1: rgba(14, 165, 233, 0.12);
+  --wave-grad-2: rgba(6, 182, 212, 0.08);
+  --wave-grad-3: rgba(3, 105, 161, 0.1);
+  --auth-input-bg: rgba(7, 24, 40, 0.7);
+}
+
+html.light,
+[data-theme='light'] {
+  --background: #cce5f5;
+  --foreground: #071e38;
+  --primary: #0277b5;
+  --primary-foreground: #ffffff;
+  --secondary: #b8d9f0;
+  --secondary-foreground: #035e94;
+  --accent: #0786a8;
+  --accent-foreground: #ffffff;
+  --muted: #bdd6eb;
+  --muted-foreground: #2e5470;
+  --card: #ddeef9;
+  --card-foreground: #071e38;
+  --border: #9fc7e2;
+  --input: #cee3f4;
+  --ring: #0277b5;
+  --radius: 12px;
+
+  --positive: #047857;
+  --positive-bg: rgba(4, 120, 87, 0.14);
+  --warning: #b45309;
+  --warning-bg: rgba(180, 83, 9, 0.14);
+  --danger: #b91c1c;
+  --danger-bg: rgba(185, 28, 28, 0.14);
+  --info: #0277b5;
+  --info-bg: rgba(2, 119, 181, 0.14);
+
+  --glass-bg: rgba(204, 229, 245, 0.82);
+  --glass-border: rgba(2, 119, 181, 0.28);
+  --glass-blur: blur(16px);
+  --glass-elevated-bg: rgba(221, 238, 249, 0.93);
+  --glass-elevated-border: rgba(2, 119, 181, 0.3);
+  --glass-elevated-shadow: 0 8px 28px rgba(5, 30, 60, 0.12), 0 1px 4px rgba(0, 0, 0, 0.06);
+  --ocean-grad: linear-gradient(135deg, #b8d9f0 0%, #cce5f5 40%, #d8ecfb 70%, #b8d9f0 100%);
+  --wave-grad-1: rgba(2, 119, 181, 0.12);
+  --wave-grad-2: rgba(6, 182, 212, 0.10);
+  --wave-grad-3: rgba(7, 134, 168, 0.09);
+  --auth-input-bg: #cee3f4;
 }
 
 @theme inline {
@@ -61,6 +120,7 @@
   * {
     box-sizing: border-box;
     border-color: var(--border);
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   }
 
   body {
@@ -103,16 +163,16 @@
   }
 
   .glass-card-elevated {
-    background: rgba(10, 31, 56, 0.85);
+    background: var(--glass-elevated-bg);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(14, 165, 233, 0.2);
+    border: 1px solid var(--glass-elevated-border);
     border-radius: var(--radius);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(14, 165, 233, 0.05);
+    box-shadow: var(--glass-elevated-shadow);
   }
 
   .ocean-gradient {
-    background: linear-gradient(135deg, #030d1a 0%, #041525 40%, #061e35 70%, #030d1a 100%);
+    background: var(--ocean-grad);
   }
 
   .hero-glow {
@@ -124,7 +184,14 @@
   }
 
   .text-gradient-ocean {
-    background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 50%, #67e8f9 100%);
+    background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 50%, #0284c7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-sky {
+    background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 50%, #0284c7 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -132,9 +199,9 @@
 
   .wave-bg {
     background-image:
-      radial-gradient(ellipse 120% 80% at 50% -20%, rgba(14, 165, 233, 0.12) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 40% at 80% 80%, rgba(6, 182, 212, 0.08) 0%, transparent 50%),
-      radial-gradient(ellipse 40% 30% at 10% 60%, rgba(3, 105, 161, 0.1) 0%, transparent 50%);
+      radial-gradient(ellipse 120% 80% at 50% -20%, var(--wave-grad-1) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, var(--wave-grad-2) 0%, transparent 50%),
+      radial-gradient(ellipse 40% 30% at 10% 60%, var(--wave-grad-3) 0%, transparent 50%);
   }
 
   .stat-value {
@@ -193,7 +260,7 @@
   }
 
   .shimmer {
-    background: linear-gradient(90deg, var(--muted) 25%, rgba(14, 165, 233, 0.1) 50%, var(--muted) 75%);
+    background: linear-gradient(90deg, var(--muted) 25%, rgba(14, 165, 233, 0.15) 50%, var(--muted) 75%);
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite;
   }
@@ -310,8 +377,8 @@
   /* ── Auth page utilities ── */
   .auth-card-glow {
     box-shadow:
-      0 8px 40px rgba(0, 0, 0, 0.5),
-      0 0 0 1px rgba(14, 165, 233, 0.08),
+      0 8px 40px rgba(0, 0, 0, 0.3),
+      0 0 0 1px rgba(14, 165, 233, 0.12),
       0 0 60px rgba(14, 165, 233, 0.06);
   }
 
@@ -345,8 +412,8 @@
 
   .auth-input {
     width: 100%;
-    background: rgba(7, 24, 40, 0.7);
-    border: 1px solid rgba(14, 165, 233, 0.15);
+    background: var(--auth-input-bg);
+    border: 1px solid var(--border);
     border-radius: 8px;
     padding: 0.625rem 0.75rem 0.625rem 2.25rem;
     color: var(--foreground);
@@ -358,12 +425,12 @@
 
   .auth-input::placeholder {
     color: var(--muted-foreground);
-    opacity: 0.6;
+    opacity: 0.7;
   }
 
   .auth-input:focus {
-    border-color: rgba(14, 165, 233, 0.5);
-    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.08);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
   }
 
   /* Wave ripple on hover */
@@ -402,19 +469,6 @@
     100% {
       transform: translate(-50%, -50%) scale(28);
       opacity: 0;
-    }
-  }
-
-  /* Ambient wave drift for background SVG */
-  @keyframes wave-drift {
-
-    0%,
-    100% {
-      d: path("M0,80 Q180,20 360,80 Q540,140 720,80 Q900,20 1080,80 Q1260,140 1440,80 L1440,180 L0,180 Z");
-    }
-
-    50% {
-      d: path("M0,100 Q180,50 360,100 Q540,150 720,100 Q900,50 1080,100 Q1260,150 1440,100 L1440,180 L0,180 Z");
     }
   }
 }

@@ -21,90 +21,92 @@ export interface UserTier {
   reportsNeededForNextTier: number;
 }
 
-export function getAllBadges(verifiedReportsCount: number, totalKg: number, uniqueSites: number, hasPlastic: boolean): Badge[] {
+export function getAllBadges(verifiedReportsCount: number, totalKg: number, uniqueSites: number, hasPlastic: boolean, lang: 'id' | 'en' = 'id'): Badge[] {
+  const isId = lang === 'id';
   return [
     {
       id: 'coast-scout',
-      title: 'Coast Scout',
+      title: isId ? 'Coast Scout' : 'Coast Scout',
       icon: '🛡️',
-      description: 'Submitted your first verified coastal report.',
+      description: isId ? 'Mengirimkan laporan terverifikasi pertama Anda.' : 'Submitted your first verified coastal report.',
       category: 'milestone',
       color: 'text-sky-400',
       bgColor: 'bg-sky-500/10',
       borderColor: 'border-sky-500/30',
-      requirementText: '1 verified report',
+      requirementText: isId ? '1 laporan terverifikasi' : '1 verified report',
       unlocked: verifiedReportsCount >= 1,
       progressPercent: Math.min(100, (verifiedReportsCount / 1) * 100),
     },
     {
       id: 'tide-master',
-      title: 'Tide Master',
+      title: isId ? 'Tide Master' : 'Tide Master',
       icon: '🌊',
-      description: 'Submitted 5 verified observation reports.',
+      description: isId ? 'Mengirimkan 5 laporan observasi terverifikasi.' : 'Submitted 5 verified observation reports.',
       category: 'milestone',
       color: 'text-cyan-400',
       bgColor: 'bg-cyan-500/10',
       borderColor: 'border-cyan-500/30',
-      requirementText: '5 verified reports',
+      requirementText: isId ? '5 laporan terverifikasi' : '5 verified reports',
       unlocked: verifiedReportsCount >= 5,
       progressPercent: Math.min(100, (verifiedReportsCount / 5) * 100),
     },
     {
       id: 'ocean-guardian',
-      title: 'Ocean Guardian',
+      title: isId ? 'Ocean Guardian' : 'Ocean Guardian',
       icon: '🐬',
-      description: 'Dedicated contributor with 10+ verified reports.',
+      description: isId ? 'Kontributor berdedikasi dengan 10+ laporan terverifikasi.' : 'Dedicated contributor with 10+ verified reports.',
       category: 'milestone',
       color: 'text-emerald-400',
       bgColor: 'bg-emerald-500/10',
       borderColor: 'border-emerald-500/30',
-      requirementText: '10 verified reports',
+      requirementText: isId ? '10 laporan terverifikasi' : '10 verified reports',
       unlocked: verifiedReportsCount >= 10,
       progressPercent: Math.min(100, (verifiedReportsCount / 10) * 100),
     },
     {
       id: 'plastic-hunter',
-      title: 'Plastic Hunter',
+      title: isId ? 'Plastic Hunter' : 'Plastic Hunter',
       icon: '♻️',
-      description: 'Reported plastic pollution items in field surveys.',
+      description: isId ? 'Melaporkan temuan sampah plastik dalam survei lapangan.' : 'Reported plastic pollution items in field surveys.',
       category: 'impact',
       color: 'text-amber-400',
       bgColor: 'bg-amber-500/10',
       borderColor: 'border-amber-500/30',
-      requirementText: 'Document plastic waste',
+      requirementText: isId ? 'Dokumentasi sampah plastik' : 'Document plastic waste',
       unlocked: verifiedReportsCount >= 1 && hasPlastic,
       progressPercent: hasPlastic && verifiedReportsCount >= 1 ? 100 : (verifiedReportsCount >= 1 ? 50 : 0),
     },
     {
       id: 'expedition-specialist',
-      title: 'Expedition Specialist',
+      title: isId ? 'Expedition Specialist' : 'Expedition Specialist',
       icon: '📍',
-      description: 'Surveyed and documented marine waste across 3+ unique coastal sites.',
+      description: isId ? 'Survei dan dokumentasi sampah di 3+ lokasi pesisir unik.' : 'Surveyed and documented marine waste across 3+ unique coastal sites.',
       category: 'exploration',
       color: 'text-purple-400',
       bgColor: 'bg-purple-500/10',
       borderColor: 'border-purple-500/30',
-      requirementText: '3 unique sites',
+      requirementText: isId ? '3 lokasi unik' : '3 unique sites',
       unlocked: uniqueSites >= 3,
       progressPercent: Math.min(100, (uniqueSites / 3) * 100),
     },
     {
       id: 'verification-hero',
-      title: 'Verification Hero',
+      title: isId ? 'Verification Hero' : 'Verification Hero',
       icon: '⚡',
-      description: 'Had observation data approved by expert moderators.',
+      description: isId ? 'Data observasi disetujui oleh moderator ahli.' : 'Had observation data approved by expert moderators.',
       category: 'quality',
       color: 'text-rose-400',
       bgColor: 'bg-rose-500/10',
       borderColor: 'border-rose-500/30',
-      requirementText: 'Passed expert review',
+      requirementText: isId ? 'Lulus tinjauan ahli' : 'Passed expert review',
       unlocked: verifiedReportsCount >= 1,
       progressPercent: verifiedReportsCount >= 1 ? 100 : 0,
     },
   ];
 }
 
-export function getUserTier(verifiedReportsCount: number): UserTier {
+export function getUserTier(verifiedReportsCount: number, lang: 'id' | 'en' = 'id'): UserTier {
+  const isId = lang === 'id';
   if (verifiedReportsCount >= 10) {
     return {
       name: 'Platinum Guardian',

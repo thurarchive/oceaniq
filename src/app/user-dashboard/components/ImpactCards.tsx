@@ -1,59 +1,13 @@
 'use client';
 import React from 'react';
-import { FileText, Scale, MapPin, CheckCircle2, TrendingUp, Trophy } from 'lucide-react';
+import { FileText, Scale, MapPin, CheckCircle2, TrendingUp } from 'lucide-react';
 import { UserContributionStats } from '@/types/citizen-reports';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface ImpactCardsProps {
   stats: UserContributionStats;
   loading?: boolean;
 }
-
-const cardDefs = [
-  {
-    id: 'card-submissions',
-    label: 'Total Submissions',
-    icon: <FileText size={18} />,
-    key: 'total_submissions' as keyof UserContributionStats,
-    unit: 'reports',
-    color: 'text-primary',
-    bgColor: 'bg-primary/8',
-    borderColor: 'border-primary/20',
-    trend: 'Total field logs',
-  },
-  {
-    id: 'card-verified',
-    label: 'Verified & Approved',
-    icon: <CheckCircle2 size={18} />,
-    key: 'verified_submissions' as keyof UserContributionStats,
-    unit: 'verified',
-    color: 'text-emerald-400',
-    bgColor: 'bg-emerald-500/8',
-    borderColor: 'border-emerald-500/20',
-    trend: 'Quality assured',
-  },
-  {
-    id: 'card-weight',
-    label: 'Debris Documented',
-    icon: <Scale size={18} />,
-    key: 'total_weight_kg' as keyof UserContributionStats,
-    unit: 'kg',
-    color: 'text-positive',
-    bgColor: 'bg-positive/8',
-    borderColor: 'border-positive/20',
-    trend: 'Estimated weight',
-  },
-  {
-    id: 'card-sites',
-    label: 'Sites Surveyed',
-    icon: <MapPin size={18} />,
-    key: 'unique_sites' as keyof UserContributionStats,
-    unit: 'locations',
-    color: 'text-accent',
-    bgColor: 'bg-accent/8',
-    borderColor: 'border-accent/20',
-    trend: 'Coastal hotspots',
-  },
-];
 
 function SkeletonCard() {
   return (
@@ -70,6 +24,56 @@ function SkeletonCard() {
 }
 
 export default function ImpactCards({ stats, loading = false }: ImpactCardsProps) {
+  const { language } = useLanguage();
+  const isId = language === 'id';
+
+  const cardDefs = [
+    {
+      id: 'card-submissions',
+      label: isId ? 'Total Laporan' : 'Total Submissions',
+      icon: <FileText size={18} />,
+      key: 'total_submissions' as keyof UserContributionStats,
+      unit: isId ? 'laporan' : 'reports',
+      color: 'text-primary',
+      bgColor: 'bg-primary/8',
+      borderColor: 'border-primary/20',
+      trend: isId ? 'Total catatan' : 'Total field logs',
+    },
+    {
+      id: 'card-verified',
+      label: isId ? 'Terverifikasi & Disetujui' : 'Verified & Approved',
+      icon: <CheckCircle2 size={18} />,
+      key: 'verified_submissions' as keyof UserContributionStats,
+      unit: isId ? 'terverifikasi' : 'verified',
+      color: 'text-emerald-400',
+      bgColor: 'bg-emerald-500/8',
+      borderColor: 'border-emerald-500/20',
+      trend: isId ? 'Tervalidasi' : 'Quality assured',
+    },
+    {
+      id: 'card-weight',
+      label: isId ? 'Sampah Terverifikasi' : 'Debris Documented',
+      icon: <Scale size={18} />,
+      key: 'total_weight_kg' as keyof UserContributionStats,
+      unit: 'kg',
+      color: 'text-positive',
+      bgColor: 'bg-positive/8',
+      borderColor: 'border-positive/20',
+      trend: isId ? 'Estimasi berat' : 'Estimated weight',
+    },
+    {
+      id: 'card-sites',
+      label: isId ? 'Lokasi Disurvei' : 'Sites Surveyed',
+      icon: <MapPin size={18} />,
+      key: 'unique_sites' as keyof UserContributionStats,
+      unit: isId ? 'lokasi' : 'locations',
+      color: 'text-accent',
+      bgColor: 'bg-accent/8',
+      borderColor: 'border-accent/20',
+      trend: isId ? 'Titik rawan' : 'Coastal hotspots',
+    },
+  ];
+
   if (loading) {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

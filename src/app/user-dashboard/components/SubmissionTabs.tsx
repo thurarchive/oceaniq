@@ -6,12 +6,13 @@ import { CitizenReport, CitizenReportStatus } from '@/types/citizen-reports';
 import { deleteDraftCitizenReport, updateCitizenReport } from '@/lib/citizen-reports';
 import { toast } from 'sonner';
 import { MapPin, Clock as ClockIcon, Scale, ExternalLink, Trash2 } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 // ─────────────────────────────────────────────
 // SubmissionRow (inlined for citizen_reports)
 // ─────────────────────────────────────────────
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString('en-US', {
+function formatDate(iso: string, lang: 'id' | 'en'): string {
+  return new Date(iso).toLocaleDateString(lang === 'id' ? 'id-ID' : 'en-US', {
     day: 'numeric',
     month: 'short',
     year: 'numeric',
@@ -29,12 +30,12 @@ function getStatusVariant(
   }
 }
 
-function getStatusLabel(status: CitizenReportStatus): string {
+function getStatusLabel(status: CitizenReportStatus, isId: boolean): string {
   switch (status) {
-    case 'approved': return 'Approved';
-    case 'pending_moderation': return 'Pending Review';
-    case 'rejected': return 'Rejected';
-    case 'draft': return 'Draft';
+    case 'approved': return isId ? 'Terverifikasi' : 'Approved';
+    case 'pending_moderation': return isId ? 'Dalam Peninjauan' : 'Pending Review';
+    case 'rejected': return isId ? 'Ditolak' : 'Rejected';
+    case 'draft': return isId ? 'Draft' : 'Draft';
   }
 }
 
@@ -48,11 +49,14 @@ interface RowProps {
 }
 
 function CitizenReportRow({ report, isModerator, onDelete, onEdit, onApprove, onReject }: RowProps) {
-  const title = report.site_name ?? report.volume_estimate ?? 'Untitled Report';
+  const { language } = useLanguage();
+  const isId = language === 'id';
+
+  const title = report.site_name ?? report.volume_estimate ?? (isId ? 'Laporan Tanpa Judul' : 'Untitled Report');
   const locationStr =
     report.lat && report.lng
       ? `${report.lat.toFixed(4)}°, ${report.lng.toFixed(4)}°`
-      : 'Location not recorded';
+      : (isId ? 'Lokasi tidak tercatat' : 'Location not recorded');
   const weightStr = report.weight_estimate_kg
     ? `~${report.weight_estimate_kg} kg`
     : report.weight_range ?? null;
@@ -74,7 +78,7 @@ function CitizenReportRow({ report, isModerator, onDelete, onEdit, onApprove, on
         <div className="flex items-center gap-2 flex-wrap">
           <p className="text-sm font-semibold text-foreground truncate">{title}</p>
           <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full border uppercase tracking-wide bg-primary/10 text-primary border-primary/20">
-            Citizen
+            {isId ? 'Warga' : 'Citizen'}
           </span>
         </div>
         <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground flex-wrap">
@@ -84,7 +88,7 @@ function CitizenReportRow({ report, isModerator, onDelete, onEdit, onApprove, on
           </span>
           <span className="flex items-center gap-1">
             <ClockIcon size={11} />
-            {formatDate(report.created_at)}
+            {formatDate(report.created_at, language)}
           </span>
           {weightStr && (
             <span className="flex items-center gap-1">
@@ -99,14 +103,14 @@ function CitizenReportRow({ report, isModerator, onDelete, onEdit, onApprove, on
       <div className="shrink-0 flex items-center gap-2">
         <StatusBadge
           variant={getStatusVariant(report.status)}
-          label={getStatusLabel(report.status)}
+          label={getStatusLabel(report.status, isId)}
         />
         {report.status === 'draft' && onEdit && (
           <button
             onClick={() => onEdit(report)}
             className="w-7 h-7 rounded-md flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-150 opacity-0 group-hover:opacity-100"
-            aria-label="Edit draft"
-            title="Edit draft"
+            aria-label={isId ? 'Ubah draft' : 'Edit draft'}
+            title={isId ? 'Ubah draft' : 'Edit draft'}
           >
             <FileEdit size={13} />
           </button>
@@ -115,8 +119,8 @@ function CitizenReportRow({ report, isModerator, onDelete, onEdit, onApprove, on
           <button
             onClick={() => onDelete(report.id)}
             className="w-7 h-7 rounded-md flex items-center justify-center text-muted-foreground hover:text-danger hover:bg-danger/10 transition-all duration-150 opacity-0 group-hover:opacity-100"
-            aria-label="Delete draft"
-            title="Delete draft"
+            aria-label={isId ? 'Hapus draft' : 'Delete draft'}
+            title={isId ? 'Hapus draft' : 'Delete draft'}
           >
             <Trash2 size={13} />
           </button>
@@ -125,8 +129,8 @@ function CitizenReportRow({ report, isModerator, onDelete, onEdit, onApprove, on
           <button
             onClick={() => onApprove(report.id)}
             className="w-7 h-7 rounded-md flex items-center justify-center text-muted-foreground hover:text-positive hover:bg-positive/10 transition-all duration-150 opacity-0 group-hover:opacity-100"
-            aria-label="Approve report"
-            title="Approve report"
+            aria-label={isId ? 'Setujui laporan' : 'Approve report'}
+            title={isId ? 'Setujui laporan' : 'Approve report'}
           >
             <CheckCircle2 size={13} />
           </button>
@@ -135,8 +139,8 @@ function CitizenReportRow({ report, isModerator, onDelete, onEdit, onApprove, on
           <button
             onClick={() => onReject(report.id)}
             className="w-7 h-7 rounded-md flex items-center justify-center text-muted-foreground hover:text-danger hover:bg-danger/10 transition-all duration-150 opacity-0 group-hover:opacity-100"
-            aria-label="Reject report"
-            title="Reject report"
+            aria-label={isId ? 'Tolak laporan' : 'Reject report'}
+            title={isId ? 'Tolak laporan' : 'Reject report'}
           >
             <XCircle size={13} />
           </button>
@@ -145,8 +149,8 @@ function CitizenReportRow({ report, isModerator, onDelete, onEdit, onApprove, on
           <a
             href={`/interactive-map?id=${report.id}&lat=${report.lat}&lng=${report.lng}`}
             className="w-7 h-7 rounded-md flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-150 opacity-0 group-hover:opacity-100"
-            aria-label="Show on Map"
-            title="Show on Map"
+            aria-label={isId ? 'Tampilkan di Peta' : 'Show on Map'}
+            title={isId ? 'Tampilkan di Peta' : 'Show on Map'}
           >
             <MapPin size={13} />
           </a>
@@ -155,8 +159,8 @@ function CitizenReportRow({ report, isModerator, onDelete, onEdit, onApprove, on
           <button
             onClick={() => onEdit(report)}
             className="w-7 h-7 rounded-md flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-150 opacity-0 group-hover:opacity-100"
-            aria-label="View details"
-            title="View details"
+            aria-label={isId ? 'Lihat rincian' : 'View details'}
+            title={isId ? 'Lihat rincian' : 'View details'}
           >
             <ExternalLink size={13} />
           </button>
@@ -171,12 +175,6 @@ function CitizenReportRow({ report, isModerator, onDelete, onEdit, onApprove, on
 // ─────────────────────────────────────────────
 type TabKey = 'approved' | 'pending' | 'draft';
 
-const TABS: { key: TabKey; label: string; icon: React.ReactNode }[] = [
-  { key: 'approved', label: 'Approved', icon: <CheckCircle2 size={14} /> },
-  { key: 'pending', label: 'Pending Moderation', icon: <Clock size={14} /> },
-  { key: 'draft', label: 'Drafts', icon: <FileEdit size={14} /> },
-];
-
 function filterByTab(reports: CitizenReport[], tab: TabKey): CitizenReport[] {
   switch (tab) {
     case 'approved': return reports.filter((r) => r.status === 'approved');
@@ -188,22 +186,31 @@ function filterByTab(reports: CitizenReport[], tab: TabKey): CitizenReport[] {
 // ─────────────────────────────────────────────
 // Empty & skeleton
 // ─────────────────────────────────────────────
-const EMPTY_MESSAGES: Record<TabKey, { title: string; subtitle: string }> = {
-  approved: {
-    title: 'No approved submissions yet',
-    subtitle: 'Submissions reviewed and accepted by moderators appear here.',
-  },
-  pending: {
-    title: 'Nothing awaiting review',
-    subtitle: "Submitted reports are checked by the moderation team — they'll show here.",
-  },
-  draft: {
-    title: 'No saved drafts',
-    subtitle: 'Unfinished reports you save will appear here.',
-  },
-};
-
 function EmptyState({ tab }: { tab: TabKey }) {
+  const { language } = useLanguage();
+  const isId = language === 'id';
+
+  const EMPTY_MESSAGES: Record<TabKey, { title: string; subtitle: string }> = {
+    approved: {
+      title: isId ? 'Belum ada laporan terverifikasi' : 'No approved submissions yet',
+      subtitle: isId
+        ? 'Laporan yang telah ditinjau dan disetujui oleh moderator akan muncul di sini.'
+        : 'Submissions reviewed and accepted by moderators appear here.',
+    },
+    pending: {
+      title: isId ? 'Tidak ada yang menunggu peninjauan' : 'Nothing awaiting review',
+      subtitle: isId
+        ? 'Laporan yang dikirimkan akan diperiksa oleh tim moderasi — laporan tersebut akan muncul di sini.'
+        : "Submitted reports are checked by the moderation team — they'll show here.",
+    },
+    draft: {
+      title: isId ? 'Tidak ada draft tersimpan' : 'No saved drafts',
+      subtitle: isId
+        ? 'Laporan belum selesai yang Anda simpan akan muncul di sini.'
+        : 'Unfinished reports you save will appear here.',
+    },
+  };
+
   const { title, subtitle } = EMPTY_MESSAGES[tab];
   return (
     <div className="flex flex-col items-center justify-center py-14 gap-3 text-center">
@@ -211,7 +218,7 @@ function EmptyState({ tab }: { tab: TabKey }) {
         <Inbox size={22} />
       </div>
       <p className="text-sm font-semibold text-foreground">{title}</p>
-      <p className="text-xs text-muted-foreground max-w-[260px]">{subtitle}</p>
+      <p className="text-xs text-muted-foreground max-w-[280px]">{subtitle}</p>
     </div>
   );
 }
@@ -252,9 +259,18 @@ export default function SubmissionTabs({
   onRefresh,
   onEdit,
 }: SubmissionTabsProps) {
+  const { language, t } = useLanguage();
+  const isId = language === 'id';
+
   const [activeTab, setActiveTab] = useState<TabKey>('approved');
 
   const isModerator = userRole === 'analyst' || userRole === 'admin';
+
+  const tabs: { key: TabKey; label: string; icon: React.ReactNode }[] = [
+    { key: 'approved', label: t.dashboard.tabApproved, icon: <CheckCircle2 size={14} /> },
+    { key: 'pending', label: t.dashboard.tabPending, icon: <Clock size={14} /> },
+    { key: 'draft', label: isId ? 'Draft' : 'Drafts', icon: <FileEdit size={14} /> },
+  ];
 
   const filtered = filterByTab(reports, activeTab);
   const counts: Record<TabKey, number> = {
@@ -266,10 +282,10 @@ export default function SubmissionTabs({
   const handleDelete = async (id: string) => {
     try {
       await deleteDraftCitizenReport(id, userId);
-      toast.success('Draft deleted');
+      toast.success(isId ? 'Draft berhasil dihapus' : 'Draft deleted');
       onRefresh?.();
     } catch {
-      toast.error('Could not delete draft');
+      toast.error(isId ? 'Gagal menghapus draft' : 'Could not delete draft');
     }
   };
 
@@ -282,10 +298,10 @@ export default function SubmissionTabs({
         reviewer_name,
         reviewed_at: new Date().toISOString(),
       });
-      toast.success('Report approved and published to map');
+      toast.success(isId ? 'Laporan disetujui dan dipublikasikan ke peta' : 'Report approved and published to map');
       onRefresh?.();
     } catch (err: any) {
-      toast.error(err?.message || 'Could not approve report');
+      toast.error(err?.message || (isId ? 'Gagal menyetujui laporan' : 'Could not approve report'));
     }
   };
 
@@ -298,10 +314,10 @@ export default function SubmissionTabs({
         reviewer_name,
         reviewed_at: new Date().toISOString(),
       });
-      toast.success('Report rejected');
+      toast.success(isId ? 'Laporan ditolak' : 'Report rejected');
       onRefresh?.();
     } catch (err: any) {
-      toast.error(err?.message || 'Could not reject report');
+      toast.error(err?.message || (isId ? 'Gagal menolak laporan' : 'Could not reject report'));
     }
   };
 
@@ -309,7 +325,7 @@ export default function SubmissionTabs({
     <div className="glass-card-elevated border border-border/40 rounded-2xl overflow-hidden">
       {/* Tab bar */}
       <div className="flex border-b border-border/50 bg-card/20">
-        {TABS.map((tab) => {
+        {tabs.map((tab) => {
           const isActive = activeTab === tab.key;
           return (
             <button

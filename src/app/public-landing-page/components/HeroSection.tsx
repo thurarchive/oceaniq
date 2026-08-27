@@ -1,10 +1,12 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Map, BarChart3, ChevronRight } from 'lucide-react';
+import { Map, BarChart3, ChevronRight, Waves } from 'lucide-react';
 import { getQuantitativeSubmissionStats, QuantitativeStats } from '@/lib/waste-observations';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function HeroSection() {
+  const { language, t } = useLanguage();
   const [stats, setStats] = useState<QuantitativeStats | null>(null);
 
   useEffect(() => {
@@ -19,21 +21,24 @@ export default function HeroSection() {
   const displayZoneCount = stats ? stats.totalZones.toLocaleString() : '847';
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center pt-16 px-6 overflow-hidden">
+    <section className="relative min-h-screen flex flex-col items-center justify-center pt-24 pb-16 px-6 overflow-hidden">
       {/* Decorative background elements */}
       <div className="absolute inset-0 hero-glow pointer-events-none" />
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full opacity-5 blur-3xl"
+      <div
+        className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full opacity-10 blur-3xl pointer-events-none"
         style={{ background: 'radial-gradient(circle, #0ea5e9, transparent)' }}
       />
-      <div className="absolute bottom-1/3 right-1/4 w-64 h-64 rounded-full opacity-5 blur-3xl"
+      <div
+        className="absolute bottom-1/3 right-1/4 w-64 h-64 rounded-full opacity-10 blur-3xl pointer-events-none"
         style={{ background: 'radial-gradient(circle, #06b6d4, transparent)' }}
       />
+
       {/* Animated wave rings */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        {[1, 2, 3]?.map((i) => (
+        {[1, 2, 3].map((i) => (
           <div
             key={`wave-ring-${i}`}
-            className="absolute rounded-full border border-primary/5"
+            className="absolute rounded-full border border-primary/10"
             style={{
               width: `${i * 280}px`,
               height: `${i * 280}px`,
@@ -43,162 +48,99 @@ export default function HeroSection() {
           />
         ))}
       </div>
+
       <div className="relative z-10 max-w-4xl mx-auto text-center">
         {/* Pill badge */}
-        <div className="inline-flex items-center gap-2 glass-card border border-primary/20 px-4 py-1.5 rounded-full mb-8">
+        <div className="inline-flex items-center gap-2 glass-card border border-primary/20 px-4 py-1.5 rounded-full mb-8 shadow-xs">
           <span className="w-2 h-2 bg-positive rounded-full animate-pulse"></span>
           <span className="text-xs font-semibold text-primary tracking-wider uppercase">
-            Verified Submissions — {displayRecordCount} records across {displayZoneCount} zones
+            {language === 'id'
+              ? `Laporan Terverifikasi — ${displayRecordCount} catatan di ${displayZoneCount} zona`
+              : `Verified Submissions — ${displayRecordCount} records across ${displayZoneCount} zones`}
           </span>
         </div>
 
-
-        <h1 className="text-5xl md:text-7xl font-extrabold leading-tight tracking-tight mb-6">
-          <span className="text-foreground">A Citizen Science Platform</span>
-          <br />
-          <span className="text-gradient-ocean">for Coastal Monitoring</span>
-          <br />
-          <span className="text-foreground">in Indonesia</span>
+        <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold leading-tight tracking-tight mb-6 text-foreground">
+          {language === 'id' ? (
+            <>
+              Platform Sains Warga
+              <br />
+              <span className="text-gradient-ocean">Untuk Pemantauan Sampah Pesisir</span>
+              <br />
+              di Indonesia
+            </>
+          ) : (
+            <>
+              A Citizen Science Platform
+              <br />
+              <span className="text-gradient-ocean">for Coastal Monitoring</span>
+              <br />
+              in Indonesia
+            </>
+          )}
         </h1>
 
-        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
-          Oceaniq combines field observations, citizen science reports, and
-          machine learning predictions to give you a complete picture of marine waste
-          distribution across Indonesian coastal and ocean zones.
+        <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
+          {t.landing.heroSubtitle}
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
           <Link
             href="/interactive-map"
-            className="btn-primary flex items-center gap-2.5 text-base px-8 py-3.5 teal-glow"
+            className="btn-primary flex items-center gap-2.5 text-base px-8 py-3.5 teal-glow w-full sm:w-auto justify-center"
           >
             <Map size={18} />
-            Explore the Map
+            {t.landing.exploreMap}
             <ChevronRight size={16} />
           </Link>
           <Link
-            href="/analytics-dashboard"
-            className="btn-ghost flex items-center gap-2.5 text-base px-8 py-3.5"
+            href="/contribute"
+            className="btn-ghost flex items-center gap-2.5 text-base px-8 py-3.5 w-full sm:w-auto justify-center"
           >
-            <BarChart3 size={18} />
-            View Analytics
+            <Waves size={18} />
+            {t.landing.reportWaste}
           </Link>
         </div>
 
         {/* Hero visual — stylized map preview */}
-        <div className="glass-card-elevated border border-primary/20 rounded-2xl overflow-hidden relative float-animation">
-          <div className="bg-linear-to-b from-primary/5 to-transparent px-4 py-2 border-b border-border flex items-center gap-2">
+        <div className="glass-card-elevated border border-primary/20 rounded-2xl overflow-hidden relative float-animation shadow-2xl">
+          <div className="bg-muted/40 px-4 py-2.5 border-b border-border flex items-center gap-2">
             <div className="flex gap-1.5">
-              {['bg-danger/60', 'bg-warning/60', 'bg-positive/60']?.map((c, i) => (
+              {['bg-danger/80', 'bg-warning/80', 'bg-positive/80'].map((c, i) => (
                 <div key={`dot-${i}`} className={`w-2.5 h-2.5 rounded-full ${c}`} />
               ))}
             </div>
-            <span className="text-xs text-muted-foreground font-mono ml-2">oceaniq.id/map — Verified View</span>
+            <span className="text-xs text-muted-foreground font-mono ml-2">oceaniq.id/map — {t.landing.liveBadge}</span>
             <div className="ml-auto flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 bg-positive rounded-full animate-pulse"></span>
-              <span className="text-xs text-positive font-medium">Verified</span>
+              <span className="text-xs text-positive font-medium">{t.common.verified}</span>
             </div>
           </div>
-          <div className="relative h-64 md:h-80 overflow-hidden">
-            {/* Simulated ocean map */}
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #041a2e 0%, #062440 50%, #041a2e 100%)' }}>
-              {/* Grid lines */}
-              {[...Array(8)]?.map((_, i) => (
-                <div
-                  key={`hgrid-${i}`}
-                  className="absolute w-full border-t border-primary/5"
-                  style={{ top: `${(i + 1) * 12.5}%` }}
-                />
-              ))}
-              {[...Array(12)]?.map((_, i) => (
-                <div
-                  key={`vgrid-${i}`}
-                  className="absolute h-full border-l border-primary/5"
-                  style={{ left: `${(i + 1) * 8.33}%` }}
-                />
-              ))}
 
-              {/* Simulated coastline */}
-              <svg className="absolute inset-0 w-full h-full" viewBox="0 0 800 320" preserveAspectRatio="none">
-                <path
-                  d="M0,200 Q100,160 200,180 Q300,200 400,150 Q500,100 600,140 Q700,180 800,160 L800,320 L0,320 Z"
-                  fill="rgba(14,165,233,0.08)"
-                  stroke="rgba(14,165,233,0.2)"
-                  strokeWidth="1"
-                />
-                <path
-                  d="M0,240 Q150,220 300,230 Q450,240 600,210 Q700,195 800,220 L800,320 L0,320 Z"
-                  fill="rgba(6,182,212,0.06)"
-                  stroke="rgba(6,182,212,0.15)"
-                  strokeWidth="0.5"
-                />
-              </svg>
-
-              {/* Waste hotspot markers */}
+          <div className="h-48 md:h-64 bg-linear-to-b from-card to-background p-6 flex flex-col justify-between">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
-                { x: '22%', y: '45%', size: 32, intensity: 'high', label: 'Jakarta Bay' },
-                { x: '45%', y: '38%', size: 24, intensity: 'medium', label: 'Bekasi Coast' },
-                { x: '65%', y: '52%', size: 20, intensity: 'medium', label: 'Karawang' },
-                { x: '78%', y: '35%', size: 14, intensity: 'low', label: 'Subang' },
-                { x: '33%', y: '60%', size: 18, intensity: 'low', label: 'Tangerang' },
-              ]?.map((marker) => (
-                <div
-                  key={`hero-marker-${marker?.label}`}
-                  className="absolute transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center"
-                  style={{ left: marker?.x, top: marker?.y }}
-                >
-                  <div
-                    className={`rounded-full flex items-center justify-center ${marker?.intensity === 'high' ? 'bg-danger/70 border border-danger/80'
-                      : marker?.intensity === 'medium' ? 'bg-warning/70 border border-warning/80' : 'bg-positive/70 border border-positive/80'
-                      }`}
-                    style={{ width: marker?.size, height: marker?.size }}
-                  >
-                    <div
-                      className="rounded-full bg-white/30"
-                      style={{ width: marker?.size * 0.4, height: marker?.size * 0.4 }}
-                    />
-                  </div>
-                  {marker?.intensity === 'high' && (
-                    <span className="mt-1 text-xs text-danger font-semibold whitespace-nowrap bg-background/80 px-1.5 py-0.5 rounded">
-                      {marker?.label}
-                    </span>
-                  )}
+                { label: language === 'id' ? 'Teluk Jakarta' : 'North Jakarta', status: 'Hotspot', val: '4.8 kg/m²', color: 'text-danger' },
+                { label: language === 'id' ? 'Selat Bali' : 'Bali Strait', status: 'Moderate', val: '2.3 kg/m²', color: 'text-warning' },
+                { label: language === 'id' ? 'Kep. Seribu' : 'Thousand Islands', status: 'Optimal', val: '0.6 kg/m²', color: 'text-positive' },
+                { label: language === 'id' ? 'Teluk Ambon' : 'Ambon Bay', status: 'Hotspot', val: '3.9 kg/m²', color: 'text-danger' },
+              ].map((loc) => (
+                <div key={loc.label} className="glass-card p-3 rounded-lg border border-border/80 text-left bg-card/60">
+                  <p className="text-xs text-muted-foreground">{loc.label}</p>
+                  <p className={`font-mono font-bold text-base ${loc.color}`}>{loc.val}</p>
+                  <span className="text-[10px] text-muted-foreground uppercase">{loc.status}</span>
                 </div>
               ))}
+            </div>
 
-              {/* Heatmap overlay blobs */}
-              <div className="absolute rounded-full blur-2xl"
-                style={{ left: '18%', top: '35%', width: 80, height: 60, background: 'rgba(239,68,68,0.25)' }}
-              />
-              <div className="absolute rounded-full blur-2xl"
-                style={{ left: '40%', top: '30%', width: 60, height: 45, background: 'rgba(245,158,11,0.2)' }}
-              />
-              <div className="absolute rounded-full blur-xl"
-                style={{ left: '60%', top: '42%', width: 50, height: 38, background: 'rgba(245,158,11,0.15)' }}
-              />
-
-              {/* Legend */}
-              <div className="absolute bottom-3 left-3 glass-card px-3 py-2 rounded-lg">
-                <p className="text-xs text-muted-foreground mb-1.5 font-semibold uppercase tracking-wider">Waste Density</p>
-                <div className="flex items-center gap-2">
-                  {[
-                    { color: 'bg-danger/80', label: 'High' },
-                    { color: 'bg-warning/80', label: 'Med' },
-                    { color: 'bg-positive/80', label: 'Low' },
-                  ]?.map((item) => (
-                    <div key={`legend-${item?.label}`} className="flex items-center gap-1">
-                      <div className={`w-2.5 h-2.5 rounded-full ${item?.color}`} />
-                      <span className="text-xs text-muted-foreground">{item?.label}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Data count overlay */}
-              <div className="absolute bottom-3 right-3 glass-card px-3 py-2 rounded-lg">
-                <p className="text-xs text-muted-foreground">Showing</p>
-                <p className="text-sm font-bold text-primary font-mono">2,847 points</p>
-              </div>
+            <div className="flex items-center justify-between text-xs text-muted-foreground border-t border-border/60 pt-3">
+              <span className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-primary animate-ping"></span>
+                {language === 'id' ? 'Stasiun BMKG & Model XGBoost Terhubung' : 'Connected to BMKG Sensors & XGBoost ML Engine'}
+              </span>
+              <Link href="/interactive-map" className="text-primary hover:underline flex items-center gap-1">
+                {t.landing.exploreMap} <ChevronRight size={12} />
+              </Link>
             </div>
           </div>
         </div>

@@ -4,40 +4,45 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import AppLogo from '@/components/ui/AppLogo';
-import { Map, BarChart3, Menu, X, Waves, BookOpen, Loader2, Home, LogOut, LayoutDashboard, Trophy } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
+import { useTheme } from '@/context/ThemeContext';
+import { Map, BarChart3, Menu, X, Waves, BookOpen, Loader2, Home, LogOut, LayoutDashboard, Trophy, Sun, Moon } from 'lucide-react';
 import { toast } from 'sonner';
 import { User as SupabaseUser } from '@supabase/supabase-js';
 
-const navLinks = [
-  { label: 'Home', href: '/', icon: <Home size={15} /> },
-  { label: 'About', href: '/about', icon: <BookOpen size={15} /> },
-  { label: 'Map', href: '/interactive-map', icon: <Map size={15} /> },
-  { label: 'Analytics', href: '/analytics-dashboard', icon: <BarChart3 size={15} /> },
-  { label: 'Leaderboard', href: '/leaderboard', icon: <Trophy size={15} /> },
-];
-
-const authNavLinks = [
-  { label: 'Dashboard', href: '/user-dashboard', icon: <LayoutDashboard size={15} /> },
-];
-
-function getRoleLabel(role?: string): string {
-  switch (role) {
-    case 'admin':
-      return 'Administrator';
-    case 'analyst':
-      return 'Verified Analyst';
-    default:
-      return 'Contributor';
-  }
-}
-
 export default function LandingTopbar() {
   const router = useRouter();
+  const { language, setLanguage, t } = useLanguage();
+  const { theme, toggleTheme } = useTheme();
+
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const navLinks = [
+    { label: t.nav.home, href: '/', icon: <Home size={15} /> },
+    { label: t.nav.about, href: '/about', icon: <BookOpen size={15} /> },
+    { label: t.nav.map, href: '/interactive-map', icon: <Map size={15} /> },
+    { label: t.nav.analytics, href: '/analytics-dashboard', icon: <BarChart3 size={15} /> },
+    { label: t.nav.leaderboard, href: '/leaderboard', icon: <Trophy size={15} /> },
+  ];
+
+  const authNavLinks = [
+    { label: t.nav.dashboard, href: '/user-dashboard', icon: <LayoutDashboard size={15} /> },
+  ];
+
+  function getRoleLabel(role?: string): string {
+    switch (role) {
+      case 'admin':
+        return t.roles.administrator;
+      case 'analyst':
+        return t.roles.analyst;
+      default:
+        return t.roles.contributor;
+    }
+  }
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -67,7 +72,7 @@ export default function LandingTopbar() {
     try {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
-      toast.success('Signed out successfully');
+      toast.success(language === 'id' ? 'Berhasil keluar' : 'Signed out successfully');
       router.push('/');
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Error signing out');
@@ -113,6 +118,47 @@ export default function LandingTopbar() {
         </nav>
 
         <div className="hidden md:flex items-center gap-3">
+          {/* ID / EN Language Toggle */}
+          <div className="flex items-center text-xs font-semibold tracking-wider px-1.5 py-1 rounded-lg border border-border/80 bg-muted/40 text-muted-foreground shadow-xs">
+            <button
+              onClick={() => setLanguage('id')}
+              className={`px-1.5 py-0.5 rounded transition-all cursor-pointer ${language === 'id'
+                  ? 'text-primary font-bold bg-primary/15'
+                  : 'text-muted-foreground/70 hover:text-foreground'
+                }`}
+              title="Bahasa Indonesia"
+              aria-label="Switch to Indonesian"
+            >
+              ID
+            </button>
+            <span className="text-muted-foreground/40 mx-0.5 select-none">/</span>
+            <button
+              onClick={() => setLanguage('en')}
+              className={`px-1.5 py-0.5 rounded transition-all cursor-pointer ${language === 'en'
+                  ? 'text-primary font-bold bg-primary/15'
+                  : 'text-muted-foreground/70 hover:text-foreground'
+                }`}
+              title="English"
+              aria-label="Switch to English"
+            >
+              EN
+            </button>
+          </div>
+
+          {/* Light / Dark Mode Toggle */}
+          <button
+            onClick={toggleTheme}
+            className="w-9 h-9 rounded-lg border border-border/80 bg-muted/40 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/70 hover:border-primary/40 transition-all duration-200 cursor-pointer shadow-xs"
+            title={theme === 'dark' ? t.nav.themeLight : t.nav.themeDark}
+            aria-label="Toggle Theme"
+          >
+            {theme === 'dark' ? (
+              <Sun size={17} className="text-amber-400 hover:rotate-45 transition-transform duration-300" />
+            ) : (
+              <Moon size={17} className="text-sky-600 hover:-rotate-12 transition-transform duration-300" />
+            )}
+          </button>
+
           {loading ? (
             <div className="w-9 h-9 flex items-center justify-center">
               <Loader2 size={16} className="animate-spin text-muted-foreground" />
@@ -134,7 +180,7 @@ export default function LandingTopbar() {
                   <div className="absolute right-0 top-11 w-56 glass-card-elevated border border-border rounded-xl shadow-2xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                     <div className="px-4 py-3 border-b border-border bg-card/50 text-left">
                       <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
-                        Signed in as {getRoleLabel(user.app_metadata?.role || user.user_metadata?.role)}
+                        {t.nav.signedInAs} {getRoleLabel(user.app_metadata?.role || user.user_metadata?.role)}
                       </p>
                       <p className="text-sm font-semibold text-foreground truncate mt-0.5">
                         {user.user_metadata?.full_name || 'User'}
@@ -150,7 +196,7 @@ export default function LandingTopbar() {
                         className="w-full flex items-center gap-2 px-3 py-2 text-sm text-danger hover:bg-danger/10 hover:text-danger rounded-lg transition-colors cursor-pointer text-left font-medium"
                       >
                         <LogOut size={14} />
-                        Sign Out
+                        {t.nav.signOut}
                       </button>
                     </div>
                   </div>
@@ -158,7 +204,7 @@ export default function LandingTopbar() {
               </div>
               <Link href="/contribute" className="btn-primary flex items-center gap-2 text-sm">
                 <Waves size={14} />
-                Contribute
+                {t.nav.contribute}
               </Link>
             </>
           ) : (
@@ -167,11 +213,11 @@ export default function LandingTopbar() {
                 href="/auth"
                 className="text-sm px-4 py-2 rounded-lg border border-primary/20 hover:border-primary/40 hover:bg-primary/5 text-muted-foreground hover:text-foreground transition-all duration-200"
               >
-                Sign In
+                {t.nav.signIn}
               </Link>
               <Link href="/contribute" className="btn-primary flex items-center gap-2 text-sm">
                 <Waves size={14} />
-                Contribute
+                {t.nav.contribute}
               </Link>
             </>
           )}
@@ -202,6 +248,48 @@ export default function LandingTopbar() {
                 {link?.label}
               </Link>
             ))}
+            {/* Mobile Language and Theme Row */}
+            <div className="flex items-center justify-between gap-2 p-3 mt-2 rounded-lg bg-muted/40 border border-border/70">
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-muted-foreground font-medium">Bahasa:</span>
+                <div className="flex items-center text-xs font-semibold px-2 py-1 rounded-md border border-border bg-card">
+                  <button
+                    onClick={() => setLanguage('id')}
+                    className={`px-2 py-0.5 rounded ${language === 'id' ? 'text-primary font-bold bg-primary/15' : 'text-muted-foreground'}`}
+                  >
+                    ID
+                  </button>
+                  <span className="text-muted-foreground/40 mx-0.5">/</span>
+                  <button
+                    onClick={() => setLanguage('en')}
+                    className={`px-2 py-0.5 rounded ${language === 'en' ? 'text-primary font-bold bg-primary/15' : 'text-muted-foreground'}`}
+                  >
+                    EN
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-muted-foreground font-medium">Tema:</span>
+                <button
+                  onClick={toggleTheme}
+                  className="px-2.5 py-1 rounded-md border border-border bg-card flex items-center gap-1.5 text-xs text-foreground font-medium"
+                >
+                  {theme === 'dark' ? (
+                    <>
+                      <Sun size={14} className="text-amber-400" />
+                      <span>{t.nav.themeDark}</span>
+                    </>
+                  ) : (
+                    <>
+                      <Moon size={14} className="text-sky-600" />
+                      <span>{t.nav.themeLight}</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+
             <div className="flex flex-col gap-2 mt-2">
               {loading ? (
                 <div className="flex justify-center py-3">
@@ -211,7 +299,7 @@ export default function LandingTopbar() {
                 <div className="border-t border-border mt-3 pt-3 flex flex-col gap-2">
                   <div className="px-4 py-2 bg-muted/20 rounded-lg text-left">
                     <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
-                      Signed in as {getRoleLabel(user.app_metadata?.role || user.user_metadata?.role)}
+                      {t.nav.signedInAs} {getRoleLabel(user.app_metadata?.role || user.user_metadata?.role)}
                     </p>
                     <p className="text-sm font-semibold text-foreground truncate mt-0.5">
                       {user.user_metadata?.full_name || 'User'}
@@ -226,7 +314,7 @@ export default function LandingTopbar() {
                     className="w-full flex items-center justify-center gap-2 py-2.5 text-sm text-danger hover:bg-danger/10 border border-danger/20 rounded-lg transition-colors cursor-pointer font-medium"
                   >
                     <LogOut size={14} />
-                    Sign Out
+                    {t.nav.signOut}
                   </button>
                   <Link
                     href="/contribute"
@@ -234,7 +322,7 @@ export default function LandingTopbar() {
                     className="btn-primary flex items-center justify-center gap-2 text-sm mt-2 py-2.5"
                   >
                     <Waves size={15} />
-                    Contribute a Report
+                    {t.nav.contribute}
                   </Link>
                 </div>
               ) : (
@@ -244,7 +332,7 @@ export default function LandingTopbar() {
                     onClick={() => setMobileOpen(false)}
                     className="w-full flex items-center justify-center gap-2 py-2.5 text-sm border border-primary/20 hover:bg-primary/5 rounded-lg transition-colors text-center font-medium text-muted-foreground hover:text-foreground"
                   >
-                    Sign In
+                    {t.nav.signIn}
                   </Link>
                   <Link
                     href="/contribute"
@@ -252,7 +340,7 @@ export default function LandingTopbar() {
                     className="btn-primary flex items-center justify-center gap-2 text-sm py-2.5"
                   >
                     <Waves size={15} />
-                    Contribute a Report
+                    {t.nav.contribute}
                   </Link>
                 </div>
               )}

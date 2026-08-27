@@ -2,6 +2,8 @@ import React from 'react';
 import type { Metadata, Viewport } from 'next';
 import { Plus_Jakarta_Sans, IBM_Plex_Mono } from 'next/font/google';
 import { Toaster } from 'sonner';
+import { LanguageProvider } from '@/context/LanguageContext';
+import { ThemeProvider } from '@/context/ThemeContext';
 import '../styles/tailwind.css';
 
 const plusJakarta = Plus_Jakarta_Sans({
@@ -36,19 +38,29 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${plusJakarta.variable} ${ibmPlexMono.variable} dark`} suppressHydrationWarning>
-      <body className={plusJakarta.className} suppressHydrationWarning>
-        {children}
-        <Toaster
-          position="bottom-right"
-          toastOptions={{
-            style: {
-              background: 'var(--card)',
-              border: '1px solid var(--border)',
-              color: 'var(--foreground)',
-            },
-          }}
-        />
+    <html
+      lang="id"
+      className={`${plusJakarta.variable} ${ibmPlexMono.variable} dark`}
+      data-theme="dark"
+      suppressHydrationWarning
+    >
+      <body className={plusJakarta.className}>
+        <ThemeProvider>
+          <LanguageProvider>
+            {children}
+
+            <Toaster
+              position="bottom-right"
+              toastOptions={{
+                style: {
+                  background: 'var(--card)',
+                  border: '1px solid var(--border)',
+                  color: 'var(--foreground)',
+                },
+              }}
+            />
+          </LanguageProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

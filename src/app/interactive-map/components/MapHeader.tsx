@@ -3,13 +3,15 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Search, Download, RefreshCw, Clock, ChevronDown, MapPin, Brain } from 'lucide-react';
 import { ZONES } from '@/constants/zones';
 import { supabase } from '@/lib/supabase';
+import { useLanguage } from '@/context/LanguageContext';
 
-const formatDateToWIB = (dateString: string) => {
+const formatDateToWIB = (dateString: string, lang: 'id' | 'en') => {
   const date = new Date(dateString);
   if (isNaN(date.getTime())) return dateString;
 
   try {
-    const formatter = new Intl.DateTimeFormat('en-GB', {
+    const locale = lang === 'id' ? 'id-ID' : 'en-GB';
+    const formatter = new Intl.DateTimeFormat(locale, {
       timeZone: 'Asia/Jakarta',
       day: 'numeric',
       month: 'short',
@@ -47,6 +49,7 @@ type MapHeaderProps = {
 };
 
 export default function MapHeader({ selectedZone, onZoneChange, onRefresh, isExperimental, onToggleExperimental }: MapHeaderProps) {
+  const { language, t } = useLanguage();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -86,7 +89,7 @@ export default function MapHeader({ selectedZone, onZoneChange, onRefresh, isExp
       }
 
       if (latestTime) {
-        setLastUpdatedText(formatDateToWIB(latestTime));
+        setLastUpdatedText(formatDateToWIB(latestTime, language));
       }
     } catch (err) {
       console.warn('Error fetching observation time:', err);
@@ -123,7 +126,7 @@ export default function MapHeader({ selectedZone, onZoneChange, onRefresh, isExp
   useEffect(() => {
     fetchLastUpdated();
     fetchSiteNames();
-  }, [isExperimental]);
+  }, [isExperimental, language]);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
@@ -186,7 +189,7 @@ export default function MapHeader({ selectedZone, onZoneChange, onRefresh, isExp
             setDropdownOpen(!dropdownOpen);
             setSearchQuery('');
           }}
-          className="w-full flex items-center justify-between gap-2 bg-muted/60 border border-border rounded-lg px-3 py-1.5 text-sm text-foreground hover:border-primary/45 hover:bg-muted/70 focus:outline-none transition-all duration-200 cursor-pointer"
+          className="w-full flex items-center justify-between gap-2 bg-muted/60 border border-border rounded-lg px-3 py-1.5 text-sm text-foreground hover:border-primary/45 hover:bg-muted/70 focus:outline-none transition-all duration-200 cursor-pointer shadow-xs"
         >
           <span className="flex items-center gap-2 truncate">
             <MapPin size={14} className="text-primary shrink-0 animate-pulse" />
@@ -205,7 +208,7 @@ export default function MapHeader({ selectedZone, onZoneChange, onRefresh, isExp
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search monitoring zones and recorded sites..."
+                  placeholder={t.map.searchPrompt}
                   className="w-full bg-muted/80 border border-border rounded-md pl-7 pr-3 py-1.5 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary/40 focus:border-primary/30"
                   autoFocus
                 />
@@ -223,7 +226,7 @@ export default function MapHeader({ selectedZone, onZoneChange, onRefresh, isExp
                       setDropdownOpen(false);
                     }}
                     className={`w-full text-left px-3 py-2 text-xs flex items-center gap-2 transition-colors cursor-pointer ${selectedZone === option.name
-                      ? 'bg-primary/10 text-primary font-semibold font-medium'
+                      ? 'bg-primary/10 text-primary font-semibold'
                       : 'text-muted-foreground hover:bg-muted/40 hover:text-foreground'
                       }`}
                   >
@@ -231,14 +234,14 @@ export default function MapHeader({ selectedZone, onZoneChange, onRefresh, isExp
                     <span className="truncate flex-1">{option.name}</span>
                     {option.isSite && (
                       <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground shrink-0 scale-90 origin-right">
-                        Recorded Site
+                        {t.map.recordedSite}
                       </span>
                     )}
                   </button>
                 ))
               ) : (
                 <div className="px-3 py-3 text-xs text-muted-foreground text-center">
-                  No zones or sites match search
+                  {t.map.noDataFound}
                 </div>
               )}
             </div>
@@ -249,7 +252,7 @@ export default function MapHeader({ selectedZone, onZoneChange, onRefresh, isExp
       {/* Last updated */}
       <div className="hidden md:flex items-center gap-1.5 text-xs text-muted-foreground">
         <Clock size={14} />
-        <span>Updated {lastUpdatedText}</span>
+        <span>{t.map.lastUpdated} {lastUpdatedText}</span>
         <span className="w-1.5 h-1.5 bg-positive rounded-full animate-pulse ml-1"></span>
       </div>
       <div className="ml-auto flex items-center gap-2">
@@ -263,7 +266,7 @@ export default function MapHeader({ selectedZone, onZoneChange, onRefresh, isExp
           title="Toggle Experimental ML Pipeline mode"
         >
           <Brain size={13} className={isExperimental ? 'animate-pulse' : ''} />
-          <span>{isExperimental ? 'ML Mode (Active) (Experimental)' : 'ML Mode (Experimental)'}</span>
+          <span>{isExperimental ? `${t.map.experimentalMode} (${t.map.activeMode})` : t.map.experimentalMode}</span>
         </button>
         <button
           onClick={handleRefresh}
@@ -272,14 +275,14 @@ export default function MapHeader({ selectedZone, onZoneChange, onRefresh, isExp
           title="Refresh map data"
         >
           <RefreshCw size={13} className={isRefreshing ? 'animate-spin' : ''} />
-          <span className="hidden sm:inline">{isRefreshing ? 'Refreshing...' : 'Refresh'}</span>
+          <span className="hidden sm:inline">{isRefreshing ? t.common.loading : t.common.refresh}</span>
         </button>
         <button
           className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground bg-muted/40 hover:bg-muted/70 border border-border rounded-lg px-3 py-1.5 transition-all duration-200 cursor-pointer"
           title="Export visible data as GeoJSON"
         >
           <Download size={13} />
-          <span className="hidden sm:inline">Export</span>
+          <span className="hidden sm:inline">{t.common.export}</span>
         </button>
       </div>
     </div>

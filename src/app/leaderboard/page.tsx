@@ -3,11 +3,13 @@
 import React, { useState, useEffect } from 'react';
 import AppLayout from '@/components/AppLayout';
 import { getCommunityLeaderboard, LeaderboardEntry } from '@/lib/leaderboard';
-import { getAllBadges, getUserTier } from '@/lib/badges';
-import { Trophy, Award, Medal, ShieldCheck, MapPin, Scale, Sparkles, Filter, ChevronRight, Info, Lock } from 'lucide-react';
+import { getAllBadges } from '@/lib/badges';
+import { Trophy, Medal, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function LeaderboardPage() {
+  const { language, t } = useLanguage();
   const [timeframe, setTimeframe] = useState<'all_time' | 'this_month'>('all_time');
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
@@ -23,7 +25,6 @@ export default function LeaderboardPage() {
   }, [timeframe]);
 
   const top3 = entries.slice(0, 3);
-  const remaining = entries.slice(3);
 
   return (
     <AppLayout currentPath="/leaderboard">
@@ -32,36 +33,36 @@ export default function LeaderboardPage() {
         <div className="text-center max-w-3xl mx-auto space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-semibold uppercase tracking-widest">
             <Trophy size={14} />
-            Community Leaderboard & Badges
+            {t.leaderboard.badge}
           </div>
           <h1 className="text-3xl md:text-5xl font-bold text-foreground tracking-tight">
-            Indonesia Coastal <span className="text-gradient-sky">Defenders</span>
+            {t.leaderboard.title}
           </h1>
           <p className="text-muted-foreground text-sm md:text-base leading-relaxed">
-            Recognizing dedicated citizen scientists, coastal monitors, and environmental advocates turn field reports into actionable ocean data.
+            {t.leaderboard.subtitle}
           </p>
 
           {/* Timeframe Filter */}
-          <div className="inline-flex items-center p-1 rounded-xl bg-card border border-border mt-4">
+          <div className="inline-flex items-center p-1 rounded-xl bg-card border border-border mt-4 shadow-xs">
             <button
               onClick={() => setTimeframe('all_time')}
-              className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+              className={`px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                 timeframe === 'all_time'
                   ? 'bg-primary text-primary-foreground shadow-md'
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >
-              All-Time Leaders
+              {t.leaderboard.allTime}
             </button>
             <button
               onClick={() => setTimeframe('this_month')}
-              className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+              className={`px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                 timeframe === 'this_month'
                   ? 'bg-primary text-primary-foreground shadow-md'
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >
-              This Month
+              {t.leaderboard.thisMonth}
             </button>
           </div>
         </div>
@@ -78,21 +79,21 @@ export default function LeaderboardPage() {
             {top3.map((entry, idx) => {
               const podiumStyles = [
                 {
-                  rankText: '1st Place',
+                  rankText: language === 'id' ? 'Juara 1' : '1st Place',
                   badge: '🥇',
                   border: 'border-amber-500/50',
                   glow: 'from-amber-500/20 via-card to-card',
                   badgeBg: 'bg-amber-500 text-black',
                 },
                 {
-                  rankText: '2nd Place',
+                  rankText: language === 'id' ? 'Juara 2' : '2nd Place',
                   badge: '🥈',
                   border: 'border-slate-400/50',
                   glow: 'from-slate-400/20 via-card to-card',
                   badgeBg: 'bg-slate-300 text-black',
                 },
                 {
-                  rankText: '3rd Place',
+                  rankText: language === 'id' ? 'Juara 3' : '3rd Place',
                   badge: '🥉',
                   border: 'border-amber-700/50',
                   glow: 'from-amber-700/20 via-card to-card',
@@ -104,7 +105,7 @@ export default function LeaderboardPage() {
               return (
                 <div
                   key={entry.id}
-                  className={`glass-card-elevated border ${p.border} bg-gradient-to-b ${p.glow} p-7 rounded-2xl flex flex-col justify-between relative overflow-hidden group hover:scale-[1.02] transition-all`}
+                  className={`glass-card-elevated border ${p.border} bg-gradient-to-b ${p.glow} p-7 rounded-2xl flex flex-col justify-between relative overflow-hidden group hover:scale-[1.02] transition-all shadow-md`}
                 >
                   <div className="flex items-start justify-between mb-5">
                     <div className="flex items-center gap-3">
@@ -128,17 +129,17 @@ export default function LeaderboardPage() {
                   </div>
 
                   <div className="grid grid-cols-3 gap-2 pt-4 border-t border-border/40 text-center">
-                    <div className="bg-background/40 p-2.5 rounded-xl border border-border/30">
-                      <span className="text-[10px] text-muted-foreground block uppercase font-mono">Reports</span>
+                    <div className="bg-background/50 p-2.5 rounded-xl border border-border/40">
+                      <span className="text-[10px] text-muted-foreground block uppercase font-mono">{t.leaderboard.reports}</span>
                       <span className="font-bold text-foreground text-sm">{entry.verified_reports}</span>
                     </div>
-                    <div className="bg-background/40 p-2.5 rounded-xl border border-border/30">
-                      <span className="text-[10px] text-muted-foreground block uppercase font-mono">Waste kg</span>
+                    <div className="bg-background/50 p-2.5 rounded-xl border border-border/40">
+                      <span className="text-[10px] text-muted-foreground block uppercase font-mono">Sampah kg</span>
                       <span className="font-bold text-positive text-sm">{entry.total_weight_kg}</span>
                     </div>
-                    <div className="bg-background/40 p-2.5 rounded-xl border border-border/30">
-                      <span className="text-[10px] text-muted-foreground block uppercase font-mono">Sites</span>
-                      <span className="font-bold text-sky-400 text-sm">{entry.unique_sites}</span>
+                    <div className="bg-background/50 p-2.5 rounded-xl border border-border/40">
+                      <span className="text-[10px] text-muted-foreground block uppercase font-mono">Lokasi</span>
+                      <span className="font-bold text-sky-500 text-sm">{entry.unique_sites}</span>
                     </div>
                   </div>
                 </div>
@@ -148,14 +149,14 @@ export default function LeaderboardPage() {
         )}
 
         {/* Full Leaderboard Table */}
-        <div className="glass-card-elevated border border-border rounded-2xl p-6 space-y-4">
+        <div className="glass-card-elevated border border-border rounded-2xl p-6 space-y-4 shadow-sm">
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
               <Medal size={20} className="text-primary" />
-              Community Rankings
+              {language === 'id' ? 'Klasemen Kontributor Pesisir' : 'Community Rankings'}
             </h3>
             <span className="text-xs text-muted-foreground font-mono">
-              Showing top {entries.length} contributors
+              {language === 'id' ? `Menampilkan ${entries.length} kontributor teratas` : `Showing top ${entries.length} contributors`}
             </span>
           </div>
 
@@ -163,12 +164,12 @@ export default function LeaderboardPage() {
             <table className="w-full text-left text-sm border-collapse">
               <thead>
                 <tr className="border-b border-border/60 text-xs font-mono uppercase text-muted-foreground bg-muted/20">
-                  <th className="py-3 px-4 rounded-l-xl">Rank</th>
-                  <th className="py-3 px-4">Contributor</th>
-                  <th className="py-3 px-4">Tier Rank</th>
-                  <th className="py-3 px-4 text-center">Verified Reports</th>
-                  <th className="py-3 px-4 text-center">Waste Documented</th>
-                  <th className="py-3 px-4 text-center rounded-r-xl">Unique Sites</th>
+                  <th className="py-3 px-4 rounded-l-xl">{t.leaderboard.rank}</th>
+                  <th className="py-3 px-4">{t.leaderboard.user}</th>
+                  <th className="py-3 px-4">{t.leaderboard.tier}</th>
+                  <th className="py-3 px-4 text-center">{t.leaderboard.reports}</th>
+                  <th className="py-3 px-4 text-center">{language === 'id' ? 'Total Sampah Tercatat' : 'Waste Documented'}</th>
+                  <th className="py-3 px-4 text-center rounded-r-xl">{language === 'id' ? 'Lokasi Unik' : 'Unique Sites'}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border/40 font-sans">
@@ -178,7 +179,7 @@ export default function LeaderboardPage() {
                       {entry.rank === 1 ? (
                         <span className="text-amber-400">🥇 #1</span>
                       ) : entry.rank === 2 ? (
-                        <span className="text-slate-300">🥈 #2</span>
+                        <span className="text-slate-400">🥈 #2</span>
                       ) : entry.rank === 3 ? (
                         <span className="text-amber-600">🥉 #3</span>
                       ) : (
@@ -192,7 +193,7 @@ export default function LeaderboardPage() {
                           <span>{entry.display_name}</span>
                           {!entry.is_public_name && (
                             <span className="block text-[10px] text-muted-foreground font-mono font-normal">
-                              Anonymized Handle
+                              {language === 'id' ? 'Nama Disamarkan' : 'Anonymized Handle'}
                             </span>
                           )}
                         </div>
@@ -210,8 +211,8 @@ export default function LeaderboardPage() {
                     <td className="py-4 px-4 text-center font-bold text-positive">
                       {entry.total_weight_kg} kg
                     </td>
-                    <td className="py-4 px-4 text-center font-bold text-sky-400">
-                      {entry.unique_sites} sites
+                    <td className="py-4 px-4 text-center font-bold text-sky-500">
+                      {entry.unique_sites} {language === 'id' ? 'lokasi' : 'sites'}
                     </td>
                   </tr>
                 ))}
@@ -224,11 +225,11 @@ export default function LeaderboardPage() {
         <div className="space-y-6 pt-6">
           <div className="text-center max-w-2xl mx-auto space-y-2">
             <span className="text-xs font-mono font-bold text-sky-400 uppercase tracking-wider">
-              Achievement Gallery
+              {language === 'id' ? 'Galeri Prestasi' : 'Achievement Gallery'}
             </span>
-            <h2 className="text-2xl font-bold text-foreground">Unlockable Contributor Badges</h2>
+            <h2 className="text-2xl font-bold text-foreground">{t.leaderboard.allBadgesTitle}</h2>
             <p className="text-xs text-muted-foreground">
-              Every verified submission brings you closer to unlocking specialized badges and elevating your community standing.
+              {t.leaderboard.allBadgesSub}
             </p>
           </div>
 
@@ -236,16 +237,16 @@ export default function LeaderboardPage() {
             {sampleBadges.map((badge) => (
               <div
                 key={badge.id}
-                className={`glass-card-elevated border ${badge.borderColor} ${badge.bgColor} p-5 rounded-2xl space-y-3`}
+                className={`glass-card-elevated border ${badge.borderColor} ${badge.bgColor} p-5 rounded-2xl space-y-3 shadow-sm`}
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-xl bg-background/80 border border-border flex items-center justify-center text-2xl shrink-0">
+                  <div className="w-12 h-12 rounded-xl bg-background/80 border border-border flex items-center justify-center text-2xl shrink-0 shadow-xs">
                     {badge.icon}
                   </div>
                   <div>
                     <h4 className="font-bold text-base text-foreground">{badge.title}</h4>
                     <span className={`text-[11px] font-mono font-semibold ${badge.color}`}>
-                      Requirement: {badge.requirementText}
+                      {language === 'id' ? 'Syarat:' : 'Requirement:'} {badge.requirementText}
                     </span>
                   </div>
                 </div>
@@ -258,17 +259,21 @@ export default function LeaderboardPage() {
         </div>
 
         {/* Bottom CTA */}
-        <div className="glass-card-elevated border border-primary/30 p-8 rounded-2xl text-center space-y-4 bg-gradient-to-r from-primary/10 via-background to-accent/10">
-          <h3 className="text-2xl font-bold text-foreground">Want to see your name on the Leaderboard?</h3>
+        <div className="glass-card-elevated border border-primary/30 p-8 rounded-2xl text-center space-y-4 bg-gradient-to-r from-primary/10 via-card to-accent/10 shadow-md">
+          <h3 className="text-2xl font-bold text-foreground">
+            {language === 'id' ? 'Ingin nama Anda tercatat di Papan Peringkat?' : 'Want to see your name on the Leaderboard?'}
+          </h3>
           <p className="text-sm text-muted-foreground max-w-xl mx-auto">
-            Log your coastal observations, help map marine debris hotspots, and get recognized as an official Ocean Defender.
+            {language === 'id'
+              ? 'Kirimkan laporan sampah pantai Anda, bantu petakan titik rawan, dan raih gelar resmi Penjaga Laut Indonesia.'
+              : 'Log your coastal observations, help map marine debris hotspots, and get recognized as an official Ocean Defender.'}
           </p>
           <div className="pt-2">
             <Link
               href="/contribute"
               className="btn-primary inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm shadow-lg shadow-primary/20 hover:scale-105 transition-transform"
             >
-              Submit a Coastal Report
+              {t.landing.reportWaste}
               <ChevronRight size={16} />
             </Link>
           </div>

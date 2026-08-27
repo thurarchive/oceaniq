@@ -186,5 +186,5 @@ Unless otherwise indicated, verified observation data published on Oceaniq can b
 ---
 
 <p align="center">
-  Built with ❤️ for cleaner oceans and healthier marine ecosystems.
+  Built with ❤️ for cleaner oceans and data-driven marine conservation.
 </p>

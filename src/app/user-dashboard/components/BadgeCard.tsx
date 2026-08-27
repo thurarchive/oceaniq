@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { getAllBadges, getUserTier, Badge } from '@/lib/badges';
-import { Trophy, Award, Eye, EyeOff, CheckCircle2, Lock, Sparkles } from 'lucide-react';
+import { getAllBadges, getUserTier } from '@/lib/badges';
+import { Trophy, Eye, EyeOff, CheckCircle2, Lock } from 'lucide-react';
 import { toast } from 'sonner';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface BadgeCardProps {
   verifiedReportsCount: number;
@@ -18,8 +19,11 @@ export default function BadgeCard({
   uniqueSites,
   hasPlastic = true,
 }: BadgeCardProps) {
-  const badges = getAllBadges(verifiedReportsCount, totalWeightKg, uniqueSites, hasPlastic);
-  const tier = getUserTier(verifiedReportsCount);
+  const { language } = useLanguage();
+  const isId = language === 'id';
+
+  const badges = getAllBadges(verifiedReportsCount, totalWeightKg, uniqueSites, hasPlastic, language);
+  const tier = getUserTier(verifiedReportsCount, language);
   const [isPublicName, setIsPublicName] = useState(true);
 
   const unlockedCount = badges.filter((b) => b.unlocked).length;
@@ -28,9 +32,9 @@ export default function BadgeCard({
     const nextState = !isPublicName;
     setIsPublicName(nextState);
     if (nextState) {
-      toast.success('Leaderboard visibility updated: Public Display Name');
+      toast.success(isId ? 'Visibilitas peringkat: Nama Profil Publik' : 'Leaderboard visibility updated: Public Display Name');
     } else {
-      toast.info('Leaderboard visibility updated: Anonymized Handle');
+      toast.info(isId ? 'Visibilitas peringkat: Nama Anonim' : 'Leaderboard visibility updated: Anonymized Handle');
     }
   };
 
@@ -45,14 +49,23 @@ export default function BadgeCard({
           <div>
             <div className="flex items-center gap-2">
               <span className="text-xs font-mono font-bold text-accent uppercase tracking-wider">
-                Contributor Tier • Level {tier.level}
+                {isId ? 'Tingkat Kontributor' : 'Contributor Tier'} • Level {tier.level}
               </span>
             </div>
             <h3 className="text-xl font-bold text-foreground">{tier.name}</h3>
             {tier.nextTierName && (
               <p className="text-xs text-muted-foreground mt-0.5">
-                {tier.reportsNeededForNextTier} more verified report{tier.reportsNeededForNextTier > 1 ? 's' : ''} to unlock{' '}
-                <strong className="text-foreground">{tier.nextTierName}</strong>
+                {isId ? (
+                  <>
+                    {tier.reportsNeededForNextTier} laporan terverifikasi lagi untuk membuka{' '}
+                    <strong className="text-foreground">{tier.nextTierName}</strong>
+                  </>
+                ) : (
+                  <>
+                    {tier.reportsNeededForNextTier} more verified report{tier.reportsNeededForNextTier > 1 ? 's' : ''} to unlock{' '}
+                    <strong className="text-foreground">{tier.nextTierName}</strong>
+                  </>
+                )}
               </p>
             )}
           </div>
@@ -61,9 +74,13 @@ export default function BadgeCard({
         {/* Privacy Toggle */}
         <div className="flex items-center gap-3 bg-muted/30 p-2.5 rounded-xl border border-border/40 shrink-0 self-start sm:self-auto">
           <div className="text-left">
-            <span className="text-[11px] text-muted-foreground block">Leaderboard Privacy</span>
+            <span className="text-[11px] text-muted-foreground block">
+              {isId ? 'Privasi Papan Peringkat' : 'Leaderboard Privacy'}
+            </span>
             <span className="text-xs font-semibold text-foreground">
-              {isPublicName ? 'Public Profile' : 'Anonymized Handle'}
+              {isPublicName
+                ? (isId ? 'Profil Publik' : 'Public Profile')
+                : (isId ? 'Nama Anonim' : 'Anonymized Handle')}
             </span>
           </div>
           <button
@@ -73,7 +90,7 @@ export default function BadgeCard({
                 ? 'bg-primary/15 text-primary border border-primary/30'
                 : 'bg-muted text-muted-foreground border border-border'
             }`}
-            title="Toggle leaderboard display name privacy"
+            title={isId ? 'Ganti privasi nama tampilan papan peringkat' : 'Toggle leaderboard display name privacy'}
           >
             {isPublicName ? <Eye size={16} /> : <EyeOff size={16} />}
           </button>
@@ -85,11 +102,11 @@ export default function BadgeCard({
         <div className="flex items-center gap-2">
           <Trophy size={18} className="text-amber-400" />
           <h4 className="text-sm font-bold text-foreground uppercase tracking-wider">
-            Achievement Badges ({unlockedCount}/{badges.length})
+            {isId ? 'Lencana Pencapaian' : 'Achievement Badges'} ({unlockedCount}/{badges.length})
           </h4>
         </div>
         <span className="text-xs font-mono text-muted-foreground">
-          {Math.round((unlockedCount / badges.length) * 100)}% Unlocked
+          {Math.round((unlockedCount / badges.length) * 100)}% {isId ? 'Terbuka' : 'Unlocked'}
         </span>
       </div>
 
@@ -109,11 +126,11 @@ export default function BadgeCard({
                 <span className="text-2xl">{badge.icon}</span>
                 {badge.unlocked ? (
                   <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
-                    <CheckCircle2 size={10} /> Unlocked
+                    <CheckCircle2 size={10} /> {isId ? 'Terbuka' : 'Unlocked'}
                   </span>
                 ) : (
                   <span className="inline-flex items-center gap-1 text-[10px] font-medium text-muted-foreground bg-muted/40 px-2 py-0.5 rounded-full border border-border">
-                    <Lock size={10} /> Locked
+                    <Lock size={10} /> {isId ? 'Terkunci' : 'Locked'}
                   </span>
                 )}
               </div>

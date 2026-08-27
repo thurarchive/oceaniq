@@ -1,32 +1,36 @@
+'use client';
 import React from 'react';
 import Link from 'next/link';
 import AppLogo from '@/components/ui/AppLogo';
 import AppImage from '@/components/ui/AppImage';
 import { Mail } from 'lucide-react';
-
-const footerLinks = {
-  Platform: [
-    { label: 'Interactive Map', href: '/interactive-map' },
-    { label: 'Analytics Dashboard', href: '/analytics-dashboard' },
-    { label: 'ML Estimation', href: '/estimate' },
-    { label: 'Contribute Report', href: '/contribute' },
-  ],
-  About: [
-    { label: 'Methodology', href: '/about' },
-    { label: 'Data Sources', href: '/about#data' },
-    { label: 'Model Versions', href: '/about#models' },
-    { label: 'API Access', href: '/about#api' },
-  ],
-  Legal: [
-    { label: 'Privacy Policy', href: '/privacy' },
-    { label: 'Terms of Use', href: '/terms' },
-    { label: 'Data Attribution', href: '/attribution' },
-  ],
-};
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function LandingFooter() {
+  const { language, t } = useLanguage();
+
+  const footerLinks = {
+    [t.landing.footer.navigation]: [
+      { label: t.nav.map, href: '/interactive-map' },
+      { label: t.nav.analytics, href: '/analytics-dashboard' },
+      { label: t.nav.leaderboard, href: '/leaderboard' },
+      { label: t.nav.contribute, href: '/contribute' },
+    ],
+    [t.landing.footer.resources]: [
+      { label: t.landing.footer.methodology, href: '/about' },
+      { label: language === 'id' ? 'Sumber Data' : 'Data Sources', href: '/about#data' },
+      { label: language === 'id' ? 'Versi Model AI' : 'Model Versions', href: '/about#models' },
+      { label: language === 'id' ? 'Akses API' : 'API Access', href: '/about#api' },
+    ],
+    [t.landing.footer.legal]: [
+      { label: t.landing.footer.privacyPolicy, href: '/privacy' },
+      { label: t.landing.footer.terms, href: '/terms' },
+      { label: t.landing.footer.dataLicense, href: '/DATA_LICENSE.md' },
+    ],
+  };
+
   return (
-    <footer className="border-t border-border px-6 lg:px-10 py-12 mt-4">
+    <footer className="border-t border-border px-6 lg:px-10 py-12 mt-4 bg-background/50">
       <div className="max-w-screen-2xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-8 mb-10">
           {/* Brand */}
@@ -36,46 +40,45 @@ export default function LandingFooter() {
               <span className="font-bold text-base tracking-tight text-gradient-ocean">Oceaniq</span>
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed mb-5 max-w-xs">
-              Marine waste monitoring platform for Indonesian coastal zones. Combining
-              field data, citizen science, and ML-powered prediction for environmental action.
+              {t.landing.footer.tagline}
             </p>
             <div className="flex items-center gap-2">
               <a
                 href="https://github.com/"
-                className="w-8 h-8 rounded-lg glass-card flex items-center justify-center text-muted-foreground hover:text-primary transition-colors"
+                className="w-8 h-8 rounded-lg glass-card flex items-center justify-center text-muted-foreground hover:text-primary transition-colors border border-border"
                 aria-label="Github"
               >
                 <AppImage
                   src="/assets/images/github.svg"
                   alt="GitHub"
-                  width={20}
-                  height={20}
-                  className="h-5 w-5"
+                  width={18}
+                  height={18}
+                  className="h-4 w-4"
                   unoptimized
                 />
               </a>
               <a
-                href="mailto:john.doe@example.com"
-                className="w-8 h-8 rounded-lg glass-card flex items-center justify-center text-muted-foreground hover:text-primary transition-colors"
+                href="mailto:contact@oceaniq.id"
+                className="w-8 h-8 rounded-lg glass-card flex items-center justify-center text-muted-foreground hover:text-primary transition-colors border border-border"
                 aria-label="Email"
               >
-                <Mail size={20} />
+                <Mail size={18} />
               </a>
             </div>
           </div>
 
           {/* Links */}
-          {Object.entries(footerLinks)?.map(([category, links]) => (
+          {Object.entries(footerLinks).map(([category, links]) => (
             <div key={`footer-${category}`}>
-              <h4 className="text-xs font-semibold text-foreground uppercase tracking-widest mb-4">{category}</h4>
+              <h4 className="text-xs font-bold text-foreground uppercase tracking-widest mb-4">{category}</h4>
               <ul className="space-y-2.5">
-                {links?.map((link) => (
-                  <li key={`footer-link-${link?.href}`}>
+                {links.map((link) => (
+                  <li key={`footer-link-${link.href}`}>
                     <Link
-                      href={link?.href}
+                      href={link.href}
                       className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-1"
                     >
-                      {link?.label}
+                      {link.label}
                     </Link>
                   </li>
                 ))}
@@ -86,15 +89,15 @@ export default function LandingFooter() {
 
         <div className="border-t border-border pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-muted-foreground">
-            © 2026 Oceaniq. Data provided under{' '}
-            <a href="/DATA_LICENSE.md" className="text-primary hover:underline">CC BY 4.0</a>.
-            Environmental data credited to <strong>OceanKita</strong>.
+            © 2026 Oceaniq. {language === 'id' ? 'Data dilisensikan di bawah' : 'Data provided under'}{' '}
+            <a href="/DATA_LICENSE.md" className="text-primary hover:underline">CC BY 4.0</a>.{' '}
+            {language === 'id' ? 'Kemitraan data lingkungan oleh' : 'Environmental data credited to'} <strong>OceanKita</strong>.
           </p>
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
             <span>Model: XGBoost (Tuned Tabular)</span>
             <span className="flex items-center gap-1">
               <span className="w-1.5 h-1.5 bg-positive rounded-full animate-pulse"></span>
-              All systems operational
+              {language === 'id' ? 'Semua sistem normal' : 'All systems operational'}
             </span>
           </div>
         </div>
