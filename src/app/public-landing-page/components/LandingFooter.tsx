@@ -21,11 +21,13 @@ export default function LandingFooter() {
       { label: language === 'id' ? 'Sumber Data' : 'Data Sources', href: '/about#data' },
       { label: language === 'id' ? 'Versi Model AI' : 'Model Versions', href: '/about#models' },
       { label: language === 'id' ? 'Akses API' : 'API Access', href: '/about#api' },
+      { label: language === 'id' ? 'FAQ' : 'FAQ', href: '/faq' },
+      { label: language === 'id' ? 'Laporkan Masalah' : 'Report a Problem', href: '/report-a-problem' },
     ],
     [t.landing.footer.legal]: [
       { label: t.landing.footer.privacyPolicy, href: '/privacy' },
       { label: t.landing.footer.terms, href: '/terms' },
-      { label: t.landing.footer.dataLicense, href: '/DATA_LICENSE.md' },
+      { label: t.landing.footer.dataLicense, href: '/open-data-license' },
     ],
   };
 
@@ -90,8 +92,8 @@ export default function LandingFooter() {
         <div className="border-t border-border pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-muted-foreground">
             © 2026 Oceaniq. {language === 'id' ? 'Data dilisensikan di bawah' : 'Data provided under'}{' '}
-            <a href="/DATA_LICENSE.md" className="text-primary hover:underline">CC BY 4.0</a>.{' '}
-            {language === 'id' ? 'Kemitraan data lingkungan oleh' : 'Environmental data credited to'} <strong>OceanKita</strong>.
+            <Link href="/open-data-license" className="text-primary hover:underline">CC BY 4.0</Link>.{' '}
+            {language === 'id' ? 'Kemitraan data lingkungan oleh' : 'Dataset and Environmental data credited to'} <strong>OceanKita</strong>.
           </p>
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
             <span>Model: XGBoost (Tuned Tabular)</span>

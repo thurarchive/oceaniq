@@ -323,12 +323,16 @@ export default function MapPointDetail({ point, onClose }: MapPointDetailProps) 
             <div className="p-4 space-y-4 text-xs">
               <div className="space-y-2">
                 <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider block">
-                  {language === 'id' ? 'Metadata Metadata Observasi' : 'Observation Metadata'}
+                  {language === 'id' ? 'Metadata Observasi' : 'Observation Metadata'}
                 </span>
                 <div className="bg-muted/10 border border-border/60 rounded-lg p-3 space-y-2">
                   <div className="flex justify-between py-1 border-b border-border/30">
                     <span className="text-muted-foreground">{language === 'id' ? 'ID Titik' : 'Point ID'}</span>
-                    <span className="font-mono text-foreground">{point.id}</span>
+                    <span className="font-mono text-foreground text-right break-all">{point.id}</span>
+                  </div>
+                  <div className="flex justify-between py-1 border-b border-border/30">
+                    <span className="text-muted-foreground shrink-0">{language === 'id' ? 'Sumber Data' : 'Data Source'}</span>
+                    <span className="font-medium text-foreground text-right ml-2 break-words">{point.source}</span>
                   </div>
                   <div className="flex justify-between py-1 border-b border-border/30">
                     <span className="text-muted-foreground">{t.common.status}</span>

@@ -3,6 +3,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import AppLayout from '@/components/AppLayout';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import {
   ShieldCheck, Users, Loader2, Lock, CheckCircle2,
   Mail, Calendar, Clock, ChevronDown,
@@ -21,9 +22,9 @@ interface AdminUser {
 }
 
 const ROLE_OPTIONS: { value: UserRole; label: string; color: string }[] = [
-  { value: 'user',     label: 'User',     color: 'text-muted-foreground' },
-  { value: 'analyst',  label: 'Analyst',  color: 'text-accent' },
-  { value: 'admin',    label: 'Admin',    color: 'text-danger' },
+  { value: 'user', label: 'User', color: 'text-muted-foreground' },
+  { value: 'analyst', label: 'Analyst', color: 'text-accent' },
+  { value: 'admin', label: 'Admin', color: 'text-danger' },
 ];
 
 function getRoleBadge(role: string) {
@@ -227,9 +228,9 @@ export default function AdminPage() {
   );
 
   const roleCounts = {
-    admin:   users.filter((u) => u.role === 'admin').length,
+    admin: users.filter((u) => u.role === 'admin').length,
     analyst: users.filter((u) => u.role === 'analyst').length,
-    user:    users.filter((u) => u.role === 'user').length,
+    user: users.filter((u) => u.role === 'user').length,
   };
 
   if (authLoading) {
@@ -247,14 +248,19 @@ export default function AdminPage() {
       <div className="max-w-screen-xl mx-auto px-4 lg:px-8 py-8 wave-bg min-h-screen">
 
         {/* Header */}
-        <div className="flex items-center gap-3 mb-2">
-          <div className="w-10 h-10 rounded-xl bg-danger/10 border border-danger/20 flex items-center justify-center text-danger">
-            <ShieldCheck size={20} />
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-2">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-danger/10 border border-danger/20 flex items-center justify-center text-danger">
+              <ShieldCheck size={20} />
+            </div>
+            <div>
+              <h1 className="text-xl font-bold text-foreground">Admin Panel</h1>
+              <p className="text-xs text-muted-foreground">Manage user accounts and role access</p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-xl font-bold text-foreground">Admin Panel</h1>
-            <p className="text-xs text-muted-foreground">Manage user accounts and role access</p>
-          </div>
+          <Link href="/admin/feedback" className="btn-primary text-xs shrink-0">
+            Issue Feedback Queue
+          </Link>
         </div>
 
         {/* Role summary cards */}

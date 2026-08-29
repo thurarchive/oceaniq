@@ -167,6 +167,30 @@ export default function UserDashboardPage() {
           onRefresh={() => loadData(user.id, role)}
           onEdit={(r) => setSelectedDraft(r)}
         />
+
+        {/* Dashboard Footer / Legal */}
+        <div className="mt-12 pt-6 border-t border-border flex flex-col sm:flex-row gap-4 items-center justify-between text-xs text-muted-foreground">
+          <div>
+            &copy; 2026 Oceaniq. {language === 'id' ? 'Seluruh hak cipta dilindungi.' : 'All rights reserved.'}
+          </div>
+          <div className="flex items-center gap-4 flex-wrap">
+            <Link href="/privacy" className="hover:text-primary transition-colors">
+              {language === 'id' ? 'Kebijakan Privasi' : 'Privacy Policy'}
+            </Link>
+            <Link href="/terms" className="hover:text-primary transition-colors">
+              {language === 'id' ? 'Syarat & Ketentuan' : 'Terms of Service'}
+            </Link>
+            <Link href="/open-data-license" className="hover:text-primary transition-colors">
+              {language === 'id' ? 'Lisensi Data Terbuka' : 'Open Data License'}
+            </Link>
+            <Link href="/faq" className="hover:text-primary transition-colors">
+              FAQ
+            </Link>
+            <Link href="/my-reports" className="hover:text-primary transition-colors">
+              {language === 'id' ? 'Laporan Saya' : 'My Reports'}
+            </Link>
+          </div>
+        </div>
       </div>
 
       {/* Modal */}
