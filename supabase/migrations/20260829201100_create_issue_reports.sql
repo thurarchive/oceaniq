@@ -84,22 +84,28 @@ ALTER TABLE public.issue_reports ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.faqs ENABLE ROW LEVEL SECURITY;
 
 -- Policies for Sprints
+DROP POLICY IF EXISTS "Admins can do everything on sprints" ON public.sprints;
 CREATE POLICY "Admins can do everything on sprints" ON public.sprints
   FOR ALL USING (public.is_admin());
 
 -- Policies for Issue Reports
+DROP POLICY IF EXISTS "Anyone can insert issue reports" ON public.issue_reports;
 CREATE POLICY "Anyone can insert issue reports" ON public.issue_reports
   FOR INSERT WITH CHECK (true);
 
+DROP POLICY IF EXISTS "Users can read their own issue reports" ON public.issue_reports;
 CREATE POLICY "Users can read their own issue reports" ON public.issue_reports
   FOR SELECT USING (auth.uid() = reporter_user_id);
 
+DROP POLICY IF EXISTS "Admins can do everything on issue reports" ON public.issue_reports;
 CREATE POLICY "Admins can do everything on issue reports" ON public.issue_reports
   FOR ALL USING (public.is_admin());
 
 -- Policies for FAQs
+DROP POLICY IF EXISTS "Anyone can read published FAQs" ON public.faqs;
 CREATE POLICY "Anyone can read published FAQs" ON public.faqs
   FOR SELECT USING (is_published = true);
 
+DROP POLICY IF EXISTS "Admins can do everything on FAQs" ON public.faqs;
 CREATE POLICY "Admins can do everything on FAQs" ON public.faqs
   FOR ALL USING (public.is_admin());
