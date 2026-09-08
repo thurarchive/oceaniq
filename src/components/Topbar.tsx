@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import AppLogo from '@/components/ui/AppLogo';
 import { useLanguage } from '@/context/LanguageContext';
 import { useTheme } from '@/context/ThemeContext';
@@ -17,6 +17,7 @@ interface TopbarProps {
 
 export default function Topbar({ currentPath = '/' }: TopbarProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const { language, setLanguage, t } = useLanguage();
   const { theme, toggleTheme } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -76,14 +77,23 @@ export default function Topbar({ currentPath = '/' }: TopbarProps) {
   }, []);
 
   useEffect(() => {
-    const handlePointerDown = (event: MouseEvent) => {
+    setProfileOpen(false);
+    setMobileOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    const handlePointerDown = (event: MouseEvent | TouchEvent) => {
       if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
         setProfileOpen(false);
       }
     };
 
     document.addEventListener('mousedown', handlePointerDown);
-    return () => document.removeEventListener('mousedown', handlePointerDown);
+    document.addEventListener('touchstart', handlePointerDown);
+    return () => {
+      document.removeEventListener('mousedown', handlePointerDown);
+      document.removeEventListener('touchstart', handlePointerDown);
+    };
   }, []);
 
   const handleHomeClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {

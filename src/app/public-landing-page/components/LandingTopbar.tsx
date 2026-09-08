@@ -1,7 +1,7 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import AppLogo from '@/components/ui/AppLogo';
 import { useLanguage } from '@/context/LanguageContext';
@@ -20,6 +20,8 @@ export default function LandingTopbar() {
   const [profileOpen, setProfileOpen] = useState(false);
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [loading, setLoading] = useState(true);
+  const profileRef = useRef<HTMLDivElement | null>(null);
+  const pathname = usePathname();
 
   const navLinks = [
     { label: t.nav.home, href: '/', icon: <Home size={15} /> },
@@ -54,7 +56,7 @@ export default function LandingTopbar() {
     supabase.auth.getSession().then(({ data: { session } }) => {
       const nextUser = session?.user ?? null;
       setUser(nextUser);
-      setProfileOpen(Boolean(nextUser));
+      setProfileOpen(false);
       setLoading(false);
     });
 
@@ -62,12 +64,32 @@ export default function LandingTopbar() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       const nextUser = session?.user ?? null;
       setUser(nextUser);
-      setProfileOpen(Boolean(nextUser));
+      setProfileOpen(false);
       setLoading(false);
     });
 
     return () => {
       subscription.unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
+    setProfileOpen(false);
+    setMobileOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    const handlePointerDown = (event: MouseEvent | TouchEvent) => {
+      if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
+        setProfileOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handlePointerDown);
+    document.addEventListener('touchstart', handlePointerDown);
+    return () => {
+      document.removeEventListener('mousedown', handlePointerDown);
+      document.removeEventListener('touchstart', handlePointerDown);
     };
   }, []);
 
@@ -126,8 +148,8 @@ export default function LandingTopbar() {
             <button
               onClick={() => setLanguage('id')}
               className={`px-1.5 py-0.5 rounded transition-all cursor-pointer ${language === 'id'
-                  ? 'text-primary font-bold bg-primary/15'
-                  : 'text-muted-foreground/70 hover:text-foreground'
+                ? 'text-primary font-bold bg-primary/15'
+                : 'text-muted-foreground/70 hover:text-foreground'
                 }`}
               title="Bahasa Indonesia"
               aria-label="Switch to Indonesian"
@@ -138,8 +160,8 @@ export default function LandingTopbar() {
             <button
               onClick={() => setLanguage('en')}
               className={`px-1.5 py-0.5 rounded transition-all cursor-pointer ${language === 'en'
-                  ? 'text-primary font-bold bg-primary/15'
-                  : 'text-muted-foreground/70 hover:text-foreground'
+                ? 'text-primary font-bold bg-primary/15'
+                : 'text-muted-foreground/70 hover:text-foreground'
                 }`}
               title="English"
               aria-label="Switch to English"
@@ -168,7 +190,7 @@ export default function LandingTopbar() {
             </div>
           ) : user ? (
             <>
-              <div className="relative">
+              <div ref={profileRef} className="relative">
                 <button
                   onClick={() => setProfileOpen((open) => !open)}
                   className="w-9 h-9 rounded-full bg-linear-to-r from-sky-500/20 to-cyan-500/20 border border-primary/30 flex items-center justify-center text-sm font-semibold text-primary hover:border-primary/60 transition-all duration-200 cursor-pointer"
