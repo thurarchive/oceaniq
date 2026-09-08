@@ -26,7 +26,6 @@ export default function LandingTopbar() {
     { label: t.nav.about, href: '/about', icon: <BookOpen size={15} /> },
     { label: t.nav.map, href: '/interactive-map', icon: <Map size={15} /> },
     { label: t.nav.analytics, href: '/analytics-dashboard', icon: <BarChart3 size={15} /> },
-    { label: t.nav.leaderboard, href: '/leaderboard', icon: <Trophy size={15} /> },
   ];
 
   const authNavLinks = [
@@ -53,13 +52,17 @@ export default function LandingTopbar() {
   useEffect(() => {
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
+      const nextUser = session?.user ?? null;
+      setUser(nextUser);
+      setProfileOpen(Boolean(nextUser));
       setLoading(false);
     });
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user ?? null);
+      const nextUser = session?.user ?? null;
+      setUser(nextUser);
+      setProfileOpen(Boolean(nextUser));
       setLoading(false);
     });
 
@@ -167,8 +170,8 @@ export default function LandingTopbar() {
             <>
               <div className="relative">
                 <button
-                  onClick={() => setProfileOpen(!profileOpen)}
-                  className="w-9 h-9 rounded-full bg-gradient-to-r from-sky-500/20 to-cyan-500/20 border border-primary/30 flex items-center justify-center text-sm font-semibold text-primary hover:border-primary/60 transition-all duration-200 cursor-pointer"
+                  onClick={() => setProfileOpen((open) => !open)}
+                  className="w-9 h-9 rounded-full bg-linear-to-r from-sky-500/20 to-cyan-500/20 border border-primary/30 flex items-center justify-center text-sm font-semibold text-primary hover:border-primary/60 transition-all duration-200 cursor-pointer"
                   aria-label="User Profile"
                 >
                   {user.user_metadata?.full_name

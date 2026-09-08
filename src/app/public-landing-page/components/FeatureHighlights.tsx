@@ -49,12 +49,12 @@ export default function FeatureHighlights() {
       icon: Users,
       title: t.landing.features.f4Title,
       description: t.landing.features.f4Desc,
-      href: '/leaderboard',
-      cta: language === 'id' ? 'Lihat Peringkat' : 'Explore Community',
+      href: '/contribute',
+      cta: language === 'id' ? 'Mulai Kontribusi' : 'Start Contributing',
       accent: 'text-warning',
       accentBg: 'bg-warning/10',
       borderColor: 'border-warning/20 hover:border-warning/40',
-      tags: language === 'id' ? ['Standar UNEP', 'Sains Warga', 'Gamifikasi'] : ['UNEP Standard', 'Citizen Science', 'Gamification'],
+      tags: language === 'id' ? ['Standar ICC', 'Sains Warga', 'Data Terbuka'] : ['ICC Standard', 'Citizen Science', 'Open Data'],
     },
   ];
 

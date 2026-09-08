@@ -40,7 +40,7 @@ export default function LiveStatsBar() {
     {
       id: 'stat-predictions',
       label: t.landing.stats.mlAccuracy,
-      value: '86.4%',
+      value: '249.2',
       change: language === 'id' ? 'Model XGBoost v1.3' : 'XGBoost Tuned Model',
       trend: 'up',
       icon: Brain,

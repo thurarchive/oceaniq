@@ -4,15 +4,17 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { Loader2 } from 'lucide-react';
+import { safeInternalPath } from '@/lib/safe-next-path';
 
 export default function AuthCallback() {
   const router = useRouter();
 
   useEffect(() => {
-    // Check if we already have a session on mount
+    const next = safeInternalPath(new URLSearchParams(window.location.search).get('next'), '/user-dashboard');
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
-        router.replace('/interactive-map');
+        router.replace(next);
       }
     });
 
@@ -20,7 +22,7 @@ export default function AuthCallback() {
       if (event === 'PASSWORD_RECOVERY') {
         router.replace('/auth/reset-password');
       } else if (session) {
-        router.replace('/interactive-map');
+        router.replace(next);
       } else {
         // Give client a small window to resolve auth state, otherwise go to auth page
         const timeout = setTimeout(() => {

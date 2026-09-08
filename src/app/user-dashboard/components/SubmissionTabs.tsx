@@ -248,6 +248,7 @@ interface SubmissionTabsProps {
   loading?: boolean;
   onRefresh?: () => void;
   onEdit?: (report: CitizenReport) => void;
+  reviewOnly?: boolean;
 }
 
 export default function SubmissionTabs({
@@ -258,19 +259,22 @@ export default function SubmissionTabs({
   loading = false,
   onRefresh,
   onEdit,
+  reviewOnly = false,
 }: SubmissionTabsProps) {
   const { language, t } = useLanguage();
   const isId = language === 'id';
 
-  const [activeTab, setActiveTab] = useState<TabKey>('approved');
+  const [activeTab, setActiveTab] = useState<TabKey>(reviewOnly ? 'pending' : 'approved');
 
   const isModerator = userRole === 'analyst' || userRole === 'admin';
 
-  const tabs: { key: TabKey; label: string; icon: React.ReactNode }[] = [
-    { key: 'approved', label: t.dashboard.tabApproved, icon: <CheckCircle2 size={14} /> },
-    { key: 'pending', label: t.dashboard.tabPending, icon: <Clock size={14} /> },
-    { key: 'draft', label: isId ? 'Draft' : 'Drafts', icon: <FileEdit size={14} /> },
-  ];
+  const tabs: { key: TabKey; label: string; icon: React.ReactNode }[] = reviewOnly
+    ? [{ key: 'pending', label: t.dashboard.tabPending, icon: <Clock size={14} /> }]
+    : [
+        { key: 'approved', label: t.dashboard.tabApproved, icon: <CheckCircle2 size={14} /> },
+        { key: 'pending', label: t.dashboard.tabPending, icon: <Clock size={14} /> },
+        { key: 'draft', label: isId ? 'Draft' : 'Drafts', icon: <FileEdit size={14} /> },
+      ];
 
   const filtered = filterByTab(reports, activeTab);
   const counts: Record<TabKey, number> = {

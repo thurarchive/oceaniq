@@ -13,11 +13,11 @@ export default function LandingFooter() {
     [t.landing.footer.navigation]: [
       { label: t.nav.map, href: '/interactive-map' },
       { label: t.nav.analytics, href: '/analytics-dashboard' },
-      { label: t.nav.leaderboard, href: '/leaderboard' },
       { label: t.nav.contribute, href: '/contribute' },
     ],
     [t.landing.footer.resources]: [
-      { label: t.landing.footer.methodology, href: '/about' },
+      { label: t.landing.footer.aboutUs, href: '/about' },
+      { label: t.landing.footer.methodology, href: '/about#methodology' },
       { label: language === 'id' ? 'Sumber Data' : 'Data Sources', href: '/about#data' },
       { label: language === 'id' ? 'Versi Model AI' : 'Model Versions', href: '/about#models' },
       { label: language === 'id' ? 'Akses API' : 'API Access', href: '/about#api' },
@@ -60,7 +60,7 @@ export default function LandingFooter() {
                 />
               </a>
               <a
-                href="mailto:contact@oceaniq.id"
+                href="mailto:frstudyacc@gmail.com"
                 className="w-8 h-8 rounded-lg glass-card flex items-center justify-center text-muted-foreground hover:text-primary transition-colors border border-border"
                 aria-label="Email"
               >
@@ -75,10 +75,10 @@ export default function LandingFooter() {
               <h4 className="text-xs font-bold text-foreground uppercase tracking-widest mb-4">{category}</h4>
               <ul className="space-y-2.5">
                 {links.map((link) => (
-                  <li key={`footer-link-${link.href}`}>
+                  <li key={`footer-link-${link.href}-${link.label}`}>
                     <Link
                       href={link.href}
-                      className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-1"
+                      className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-1 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                     >
                       {link.label}
                     </Link>

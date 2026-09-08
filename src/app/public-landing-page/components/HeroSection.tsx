@@ -136,7 +136,7 @@ export default function HeroSection() {
             <div className="flex items-center justify-between text-xs text-muted-foreground border-t border-border/60 pt-3">
               <span className="flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-primary animate-ping"></span>
-                {language === 'id' ? 'Stasiun BMKG & Model XGBoost Terhubung' : 'Connected to BMKG Sensors & XGBoost ML Engine'}
+                {language === 'id' ? 'Data Lingkungan OceanKita & Model XGBoost Terhubung' : 'OceanKita Environmental Records & XGBoost ML Engine'}
               </span>
               <Link href="/interactive-map" className="text-primary hover:underline flex items-center gap-1">
                 {t.landing.exploreMap} <ChevronRight size={12} />

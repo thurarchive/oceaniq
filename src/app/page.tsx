@@ -5,7 +5,6 @@ import LiveStatsBar from './public-landing-page/components/LiveStatsBar';
 import FeatureHighlights from './public-landing-page/components/FeatureHighlights';
 import HowItWorks from './public-landing-page/components/HowItWorks';
 import ContributorBenefits from './public-landing-page/components/ContributorBenefits';
-import LeaderboardPreview from './public-landing-page/components/LeaderboardPreview';
 import HotspotBanner from './public-landing-page/components/HotspotBanner';
 import MethodologyNote from './public-landing-page/components/MethodologyNote';
 import LandingCTA from './public-landing-page/components/LandingCTA';
@@ -20,11 +19,10 @@ export default function LandingPage() {
       <FeatureHighlights />
       <HowItWorks />
       <ContributorBenefits />
-      <LeaderboardPreview />
       <HotspotBanner />
       <MethodologyNote />
       <LandingCTA />
       <LandingFooter />
     </div>
   );
-}
+}

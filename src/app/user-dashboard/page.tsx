@@ -7,10 +7,15 @@ import {
   getCitizenContributionStats,
   getAllModeratedCitizenReports,
 } from '@/lib/citizen-reports';
+import { getCommunityLeaderboard, LeaderboardEntry } from '@/lib/leaderboard';
 import { CitizenReport, UserContributionStats } from '@/types/citizen-reports';
 import DashboardHeader from './components/DashboardHeader';
+import DashboardActions from './components/DashboardActions';
 import ImpactCards from './components/ImpactCards';
-import BadgeCard from './components/BadgeCard';
+
+import MapContextCard from './components/MapContextCard';
+import DashboardHelpCard from './components/DashboardHelpCard';
+import CommunityProgress from './components/CommunityProgress';
 import SubmissionTabs from './components/SubmissionTabs';
 import NewReportModal from './components/NewReportModal';
 import { User as SupabaseUser } from '@supabase/supabase-js';
@@ -27,16 +32,19 @@ export default function UserDashboardPage() {
     total_submissions: 0,
     total_weight_kg: 0,
     unique_sites: 0,
+    verified_submissions: 0,
   });
   const [reports, setReports] = useState<CitizenReport[]>([]);
+  const [reviewQueue, setReviewQueue] = useState<CitizenReport[]>([]);
   const [dataLoading, setDataLoading] = useState(false);
+  const [leaderboardEntries, setLeaderboardEntries] = useState<LeaderboardEntry[]>([]);
+  const [viewerRank, setViewerRank] = useState<number | null>(null);
+  const [leaderboardLoading, setLeaderboardLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedDraft, setSelectedDraft] = useState<CitizenReport | null>(null);
 
   const role = (user?.app_metadata?.role || user?.user_metadata?.role) as string | undefined;
-  const verifiedCount = reports.filter((r) => r.status === 'approved').length || (reports.length > 0 ? 1 : 0);
 
-  // ── Auth ──
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
@@ -53,27 +61,26 @@ export default function UserDashboardPage() {
     return () => subscription.unsubscribe();
   }, []);
 
-  // ── Load data ──
-  const loadData = useCallback(async (userId: string, role?: string) => {
+  const loadData = useCallback(async (userId: string, userRole?: string) => {
     setDataLoading(true);
     try {
-      const isModerator = role === 'analyst' || role === 'admin';
+      const isModerator = userRole === 'analyst' || userRole === 'admin';
       const [fetchedStats, fetchedReports] = await Promise.all([
         getCitizenContributionStats(userId),
         getUserCitizenReports(userId),
       ]);
 
-      let finalReports = [...fetchedReports];
+      const verifiedCount = fetchedReports.filter((r) => r.status === 'approved').length;
+
+      setStats({ ...fetchedStats, verified_submissions: verifiedCount });
+      setReports(fetchedReports);
 
       if (isModerator) {
         const allModerated = await getAllModeratedCitizenReports();
-        const moderatedMap = new Map(allModerated.map(r => [r.id, r]));
-        finalReports = finalReports.filter(r => !moderatedMap.has(r.id));
-        finalReports = [...finalReports, ...allModerated];
+        setReviewQueue(allModerated.filter((r) => r.status === 'pending_moderation'));
+      } else {
+        setReviewQueue([]);
       }
-
-      setStats(fetchedStats);
-      setReports(finalReports);
     } catch (err) {
       console.error('Failed to load dashboard data:', err);
     } finally {
@@ -87,18 +94,49 @@ export default function UserDashboardPage() {
     }
   }, [user, role, loadData]);
 
-  // ── Auth loading state ──
+  useEffect(() => {
+    if (!user) {
+      setLeaderboardEntries([]);
+      setViewerRank(null);
+      return;
+    }
+
+    let isMounted = true;
+    setLeaderboardLoading(true);
+
+    getCommunityLeaderboard('all_time')
+      .then((data) => {
+        if (!isMounted) return;
+        setLeaderboardEntries(data.entries.slice(0, 3));
+        setViewerRank(data.viewerRank ?? null);
+      })
+      .catch((error) => {
+        console.error('Failed to load leaderboard preview:', error);
+        if (isMounted) {
+          setLeaderboardEntries([]);
+          setViewerRank(null);
+        }
+      })
+      .finally(() => {
+        if (isMounted) setLeaderboardLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [user]);
+
   if (authLoading) {
     return (
       <AppLayout currentPath="/user-dashboard">
         <div className="flex items-center justify-center min-h-[60vh]">
           <Loader2 size={32} className="animate-spin text-primary" />
+          <span className="sr-only">{t.common.loading}</span>
         </div>
       </AppLayout>
     );
   }
 
-  // ── Not signed in ──
   if (!user) {
     return (
       <AppLayout currentPath="/user-dashboard">
@@ -107,16 +145,16 @@ export default function UserDashboardPage() {
             <Lock size={28} />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-foreground mb-2">
+            <h1 className="text-xl font-bold text-foreground mb-2">
               {language === 'id' ? 'Masuk untuk melihat dasbor Anda' : 'Sign in to view your dashboard'}
-            </h2>
-            <p className="text-sm text-muted-foreground max-w-[340px]">
+            </h1>
+            <p className="text-sm text-muted-foreground max-w-85">
               {language === 'id'
                 ? 'Dasbor kontribusi hanya dapat diakses saat Anda telah masuk ke akun Anda.'
-                : 'Your contribution dashboard is only visible when you\'re logged in.'}
+                : 'Your contribution dashboard is only visible when you are logged in.'}
             </p>
           </div>
-          <Link href="/auth" className="btn-primary flex items-center gap-2 text-sm">
+          <Link href="/auth?next=/user-dashboard" className="btn-primary flex items-center gap-2 text-sm">
             {t.nav.signIn}
           </Link>
         </div>
@@ -124,76 +162,65 @@ export default function UserDashboardPage() {
     );
   }
 
-  // ── Dashboard ──
+  const isModerator = role === 'analyst' || role === 'admin';
+
   return (
     <AppLayout currentPath="/user-dashboard">
-      <div className="max-w-screen-2xl mx-auto px-4 lg:px-8 xl:px-10 2xl:px-12 py-6 wave-bg min-h-screen space-y-6">
-        {/* Header */}
-        <DashboardHeader
-          user={user}
-          onNewReport={() => setModalOpen(true)}
-          verifiedReportsCount={verifiedCount}
-        />
+      <div className="max-w-5xl mx-auto px-4 lg:px-8 py-6 wave-bg min-h-screen space-y-6">
+        <DashboardHeader user={user} />
 
-        {/* Impact cards */}
-        <ImpactCards stats={{ ...stats, verified_submissions: verifiedCount }} loading={dataLoading} />
+        <DashboardActions onSubmit={() => setModalOpen(true)} />
 
-        {/* Badges and Gamification */}
-        <BadgeCard
-          verifiedReportsCount={verifiedCount}
-          totalWeightKg={stats.total_weight_kg}
-          uniqueSites={stats.unique_sites}
-        />
+        <ImpactCards stats={stats} loading={dataLoading} />
 
-        {/* Section heading */}
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider">
-            {role === 'analyst' || role === 'admin'
-              ? (language === 'id' ? 'Moderasi & Laporan Masuk' : 'Moderation & Reports')
-              : t.dashboard.mySubmissions}
-          </h2>
-          <span className="text-xs text-muted-foreground">
-            {reports.length} {language === 'id' ? 'total laporan' : 'total'}
-          </span>
-        </div>
-
-        {/* Submissions */}
-        <SubmissionTabs
-          reports={reports}
-          userId={user.id}
-          user={user}
-          userRole={role}
-          loading={dataLoading}
-          onRefresh={() => loadData(user.id, role)}
-          onEdit={(r) => setSelectedDraft(r)}
-        />
-
-        {/* Dashboard Footer / Legal */}
-        <div className="mt-12 pt-6 border-t border-border flex flex-col sm:flex-row gap-4 items-center justify-between text-xs text-muted-foreground">
-          <div>
-            &copy; 2026 Oceaniq. {language === 'id' ? 'Seluruh hak cipta dilindungi.' : 'All rights reserved.'}
+        <section className="space-y-3" aria-labelledby="my-submissions-heading">
+          <div className="flex items-center justify-between gap-3">
+            <h2 id="my-submissions-heading" className="text-sm font-semibold text-foreground uppercase tracking-wider">
+              {language === 'id' ? 'MY SUBMISSIONS' : 'MY SUBMISSIONS'}
+            </h2>
+            <span className="text-xs text-muted-foreground">{reports.length} total</span>
           </div>
-          <div className="flex items-center gap-4 flex-wrap">
-            <Link href="/privacy" className="hover:text-primary transition-colors">
-              {language === 'id' ? 'Kebijakan Privasi' : 'Privacy Policy'}
-            </Link>
-            <Link href="/terms" className="hover:text-primary transition-colors">
-              {language === 'id' ? 'Syarat & Ketentuan' : 'Terms of Service'}
-            </Link>
-            <Link href="/open-data-license" className="hover:text-primary transition-colors">
-              {language === 'id' ? 'Lisensi Data Terbuka' : 'Open Data License'}
-            </Link>
-            <Link href="/faq" className="hover:text-primary transition-colors">
-              FAQ
-            </Link>
-            <Link href="/my-reports" className="hover:text-primary transition-colors">
-              {language === 'id' ? 'Laporan Saya' : 'My Reports'}
-            </Link>
-          </div>
-        </div>
+          <SubmissionTabs
+            reports={reports}
+            userId={user.id}
+            user={user}
+            userRole={role}
+            loading={dataLoading}
+            onRefresh={() => loadData(user.id, role)}
+            onEdit={(r) => setSelectedDraft(r)}
+            reviewOnly={false}
+          />
+        </section>
+
+        <CommunityProgress
+          topEntries={leaderboardEntries}
+          viewerRank={viewerRank}
+          loading={leaderboardLoading}
+        />
+
+        {isModerator && (
+          <section className="space-y-3" aria-labelledby="review-queue-heading">
+            <h2 id="review-queue-heading" className="text-sm font-semibold text-foreground uppercase tracking-wider">
+              {language === 'id' ? 'Antrian tinjauan' : 'Review queue'}
+            </h2>
+            <SubmissionTabs
+              reports={reviewQueue}
+              userId={user.id}
+              user={user}
+              userRole={role}
+              loading={dataLoading}
+              onRefresh={() => loadData(user.id, role)}
+              onEdit={(r) => setSelectedDraft(r)}
+              reviewOnly
+            />
+          </section>
+        )}
+
+        <MapContextCard />
+
+        <DashboardHelpCard />
       </div>
 
-      {/* Modal */}
       {(modalOpen || selectedDraft) && (
         <NewReportModal
           user={user}

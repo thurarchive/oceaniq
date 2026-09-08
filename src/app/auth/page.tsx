@@ -8,8 +8,14 @@ import { Waves, Mail, Lock, User, Eye, EyeOff, ArrowLeft, Loader2 } from 'lucide
 import AppLogo from '@/components/ui/AppLogo';
 import { toast } from 'sonner';
 import { useLanguage } from '@/context/LanguageContext';
+import { safeInternalPath } from '@/lib/safe-next-path';
 
 type AuthMode = 'login' | 'signup' | 'forgot';
+
+function postAuthPath(): string {
+    if (typeof window === 'undefined') return '/user-dashboard';
+    return safeInternalPath(new URLSearchParams(window.location.search).get('next'));
+}
 
 interface WaveButtonProps {
     children: React.ReactNode;
@@ -92,7 +98,7 @@ export default function AuthPage() {
         const checkUser = async () => {
             const { data: { session } } = await supabase.auth.getSession();
             if (session) {
-                router.replace('/interactive-map');
+                router.replace(postAuthPath());
             }
         };
         checkUser();
@@ -128,7 +134,7 @@ export default function AuthPage() {
                 });
                 if (error) throw error;
                 toast.success(language === 'id' ? 'Berhasil masuk!' : 'Signed in successfully!');
-                router.push('/interactive-map');
+                router.push(postAuthPath());
             } else if (mode === 'forgot') {
                 const { error } = await supabase.auth.resetPasswordForEmail(email, {
                     redirectTo: `${window.location.origin}/auth/reset-password`,
@@ -152,14 +158,14 @@ export default function AuthPage() {
                             privacyAcceptedAt: new Date().toISOString(),
                             legalVersion: '2026-08-29'
                         },
-                        emailRedirectTo: `${window.location.origin}/auth/callback`,
+                        emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(postAuthPath())}`,
                     },
                 });
                 if (error) throw error;
 
                 if (data.session) {
                     toast.success(language === 'id' ? 'Akun berhasil dibuat dan Anda telah masuk!' : 'Account created and signed in successfully!');
-                    router.push('/interactive-map');
+                    router.push(postAuthPath());
                 } else {
                     toast.success(language === 'id' ? 'Akun dibuat! Silakan periksa email Anda untuk konfirmasi pendaftaran.' : 'Account created! Please check your email to confirm registration.');
                 }
@@ -177,7 +183,7 @@ export default function AuthPage() {
             const { error } = await supabase.auth.signInWithOAuth({
                 provider: 'google',
                 options: {
-                    redirectTo: `${window.location.origin}/auth/callback`,
+                    redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(postAuthPath())}`,
                 },
             });
             if (error) throw error;
